@@ -1,0 +1,195 @@
+/*
+ * Geometry measured off the reference at 1440x900 — see the component's doc
+ * comment. Vertical positions there: contact block 308–592 (centred on the
+ * 900px panel), legal/credits row 791–857, bottom padding 43 (`u-48`).
+ */
+
+/*
+ * The reference pulls this block up over the CTA by 230.4px at 1440 —
+ * `u-96 + u-160` — so the sky rises behind the render as the CTA's own clip
+ * contracts it. Without the overlap the two sections meet on a hard edge and
+ * the page runs 230px long.
+ */
+.section {
+  --footer-overlap: calc(var(--u-96) + var(--u-160));
+  position: relative;
+  min-height: var(--vh100);
+  margin-top: calc(var(--footer-overlap) * -1);
+  overflow: clip;
+  /*
+   * Painted in the first dome's sky rather than left to <PageCanvas> alone, so
+   * the footer always matches the arch under the hero. The strip that overlaps
+   * the CTA stays transparent, so the CTA's render is never covered.
+   */
+  background-image: linear-gradient(transparent var(--footer-overlap), var(--c-sky) var(--footer-overlap));
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: var(--vh100);
+  padding-block: var(--u-48);
+}
+
+/* ------------------------------------------------------------- contact ---- */
+
+/* Centred on the full panel — the reference centres this block on the whole
+   900px footer, ignoring the legal row, which is anchored to the baseline. */
+.contact {
+  position: absolute;
+  inset: var(--u-48) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.mark { width: var(--u-64); height: var(--u-64); }
+
+/*
+ * The number is set `nowrap`, so at narrow viewports its line box can exceed
+ * the gutter. Clipping the wrapper keeps that from widening the layout
+ * viewport — the same guard the other nowrap display lines use.
+ */
+.phoneWrap { width: 100%; overflow: clip; }
+
+.phone { white-space: nowrap; }
+
+.strap { margin: 0; }
+
+/*
+ * Two offices side by side under the number — the headquarters and then the
+ * branches, which is why the right column carries two addresses and the left
+ * one. Both range centre, as the reference sets everything in this block.
+ */
+.offices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--u-24) var(--u-96);
+  width: min(100%, calc(var(--u-272) * 2.2));
+  font-style: normal;
+}
+
+.office {
+  display: flex;
+  flex-direction: column;
+  gap: var(--u-8);
+}
+
+.place { margin: 0; }
+
+/* the direct lines, set as one row that wraps rather than a stack */
+.reach {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--u-8) var(--u-32);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reachLink {
+  display: block;
+  text-underline-offset: 0.25em;
+}
+
+@media (min-width: 992px) {
+  .reachLink:hover { text-decoration: underline; }
+}
+
+/* -------------------------------------------------------------- bottom ---- */
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--grid-gap);
+  /* the row is a centred block, not the full gutter width */
+  width: 59.5%;
+  margin-inline: auto;
+}
+
+.info { display: flex; flex-direction: column; }
+
+.legal { margin: 0; }
+.legal a { text-underline-offset: 0.25em; }
+
+.credits { display: flex; }
+
+.creditsLink {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--u-4);
+}
+
+.creditsMark {
+  display: block;
+  width: var(--u-24);
+  height: var(--u-24);
+  margin-bottom: var(--u-12);
+  transition: transform var(--dur-m) var(--ease-out);
+}
+
+@media (min-width: 992px) {
+  .creditsLink:hover .creditsMark { transform: rotate(90deg); }
+}
+
+.creditsName { letter-spacing: 0.12em; }
+
+/* -------------------------------------------------------------- to top ---- */
+
+.toTop {
+  position: absolute;
+  left: var(--offset);
+  bottom: var(--u-48);
+  /* same column width as the fixed scroll rail, so the two line up */
+  width: var(--u-136);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--u-24);
+  color: var(--ink);
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  /* Square box: a rotated child still reserves its unrotated footprint, so
+     rotating the wrapper itself would collapse this column's height. */
+  width: var(--u-48);
+  height: var(--u-48);
+}
+.arrow > svg {
+  width: var(--u-48);
+  /* the long arrow points left by default; 90deg aims it up the page */
+  transform: rotate(90deg);
+}
+
+.toTop > span:last-child {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* ---------------------------------------------------------- responsive ---- */
+
+@media (max-width: 991px) {
+  /* a full screen on the reference at 390 too */
+  .section { min-height: var(--vh100); }
+
+  .inner { min-height: var(--vh100); padding-block: var(--u-96) var(--u-48); gap: var(--u-96); }
+
+  .contact { position: static; inset: auto; }
+
+  /* the two offices stack rather than squeeze into half a phone screen */
+  .offices { grid-template-columns: 1fr; gap: var(--u-32); width: 100%; }
+
+  /* the reference keeps the legal/credits row side by side at the full gutter
+     width on mobile, and drops the "To top" control entirely */
+  .bottom { width: 100%; }
+
+  .toTop { display: none; }
+}

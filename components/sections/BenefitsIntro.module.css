@@ -1,0 +1,59 @@
+.section {
+  /*
+   * The arch does not merely tuck under the hero — it scrolls up over the
+   * hero's pinned tail. On the reference the hero occupies 5.8 screens but this
+   * section begins at 4.0, so it overlaps the last 1.8 screens of it.
+   */
+  margin-top: -180vh;
+  /* Measured against the target frame: the text arc sits 2.2vw under the crown
+     and the lockup 2.8vw under the arc, both tighter than the 4vw this section
+     carried before. */
+  padding-block: 2.2vw var(--u-32);
+  /* the arch is a shape, not a colour change: it needs its own fill to cut
+     against the hero behind it */
+  background: var(--c-sky);
+  position: relative;
+  z-index: 2;
+  /*
+   * This dome is rounder than the shared `.arch` default (26vw): measured off
+   * the target design, its crown is an ellipse of 50% x 47vw — near a half
+   * circle — so the crest rises much higher above the shoulders. Scoped to this
+   * section so the other arched sections keep the shared curve.
+   */
+  border-top-left-radius: 50% 47vw;
+  border-top-right-radius: 50% 47vw;
+}
+
+/* --------------------------------------------------------- curved title ---- */
+
+.curved { margin: 0 0 2.8vw; }
+
+.curvedSvg { width: 100%; height: auto; overflow: visible; }
+
+.curvedText {
+  font-family: var(--font-display);
+  font-size: 23px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  fill: var(--ink);
+}
+
+/* --------------------------------------------------------------- lockup ---- */
+
+.lockup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--u-48);
+  text-align: center;
+}
+
+.mark { width: var(--u-48); height: var(--u-48); }
+
+@media (max-width: 991px) {
+  /* the arch climbs the hero here too — 1.23 screens on the reference */
+  .section { margin-top: -123vh; padding-block: 26vw var(--u-64); }
+  .lockup { gap: var(--u-24); }
+  .curvedText { font-size: 42px; }
+  .curved { margin-bottom: var(--u-48); }
+}

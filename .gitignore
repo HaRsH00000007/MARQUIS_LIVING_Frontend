@@ -1,0 +1,8 @@
+node_modules
+.next
+out
+tools/node_modules
+reference-download
+docs/comparison-full
+*.tsbuildinfo
+next-env.d.ts

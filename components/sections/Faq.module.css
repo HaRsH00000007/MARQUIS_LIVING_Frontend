@@ -1,0 +1,117 @@
+/*
+ * The FAQ: a centred display-scale title, then a photograph beside a column of
+ * accordion rows. Question and answer both range right, against the marks that
+ * open them; the hairlines carry the eye across the gap the ragged left edge
+ * leaves behind.
+ */
+.section {
+  position: relative;
+  padding-block: var(--u-96) var(--u-120);
+}
+
+/* centred, and clear of the scroll rail that runs down the left gutter */
+.title {
+  max-width: 18ch;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 31% 1fr;
+  gap: var(--u-72);
+  /* stretch, so the photograph ends on the same line as the last hairline
+     however many rows there are and whichever one is open */
+  align-items: stretch;
+  margin-top: var(--u-80);
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+  /* no intrinsic height on desktop: the column of questions sets it, and the
+     crop follows. The reference's upright panel is roughly what seven rows
+     give. */
+  overflow: hidden;
+}
+
+.img { object-fit: cover; }
+
+.list { margin: 0; }
+
+.row {
+  border-top: 1px solid var(--line);
+}
+
+.row:last-of-type { border-bottom: 1px solid var(--line); }
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u-32);
+  width: 100%;
+  padding-block: var(--u-24);
+  /* the questions range right, ending against the mark that opens them */
+  text-align: right;
+  color: var(--ink);
+  transition: opacity var(--dur-m) var(--ease-out);
+}
+
+@media (min-width: 992px) {
+  .trigger:hover { opacity: 0.55; }
+}
+
+.q {
+  display: block;
+  flex: 1;
+}
+
+/* four dots closed, a cross open — the reference's own pair */
+.mark {
+  flex: none;
+  width: var(--u-16);
+  height: var(--u-16);
+  color: var(--ink);
+}
+
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Grid-rows animates cleanly from zero without a measured height. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin: 0;
+  transition: grid-template-rows var(--dur-m) var(--ease-in-out);
+}
+
+.panel[data-open] { grid-template-rows: 1fr; }
+
+.panelInner {
+  overflow: hidden;
+  text-align: right;
+  color: var(--ink-muted);
+}
+
+.panel[data-open] .panelInner { padding-bottom: var(--u-32); }
+
+.answer {
+  max-width: 52ch;
+  /* held to the right edge under the question it answers */
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 991px) {
+  .section { padding-block: var(--u-64) var(--u-80); }
+  .title { max-width: none; }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--u-40);
+    margin-top: var(--u-48);
+  }
+  .figure { aspect-ratio: 1.25; }
+  .answer { max-width: none; }
+}

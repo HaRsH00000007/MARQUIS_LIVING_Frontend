@@ -1,0 +1,4 @@
+.section { padding-block: var(--u-160); }
+.body { max-width: var(--col-7); margin-inline: auto; display: flex; flex-direction: column; gap: var(--u-64); }
+.block { display: block; }
+@media (max-width: 991px) { .body { max-width: 100%; } }

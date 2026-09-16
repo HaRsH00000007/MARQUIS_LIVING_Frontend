@@ -1,0 +1,11 @@
+{
+  // Console Ninja rewrites the JS that `next dev` serves (wrapping console.* in
+  // its oo_oo() tracers) but leaves the original Content-Length header intact.
+  // The injected bytes push the real end of each chunk past that length, so the
+  // browser receives a truncated file -> "Unexpected end of input" /
+  // "Invalid regular expression: missing /" on every Turbopack chunk.
+  // Turning it off for next.js keeps the extension usable elsewhere.
+  "console-ninja.toolsToEnableSupportAutomaticallyFor": {
+    "next.js": false
+  }
+}

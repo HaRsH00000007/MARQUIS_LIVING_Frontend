@@ -1,0 +1,279 @@
+.section {
+  position: relative;
+  overflow: clip;
+}
+
+/*
+ * The quote render above ends on a clean edge, but this section is
+ * transparent, so what shows directly under that edge is <PageCanvas> — and
+ * the canvas is still finishing its sky-to-cream dissolve for the first 6vh
+ * below the seam (BAND 0.2 x the 0.3 of it that sits below). That taupe tail
+ * would read as a muddy band under the render.
+ *
+ * Holding this section's top band at cream keeps the ground directly below the
+ * render clean cream. Past 6vh the canvas is already cream, so the fade-out is
+ * invisible. No z-index: it paints under the track, and while
+ * the section is pinned it only ever sits over cream canvas.
+ */
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 12vh;
+  pointer-events: none;
+  background: linear-gradient(var(--c-cream) 50%, var(--cream-00));
+}
+
+/*
+ * The scroll area spans the full viewport, and so do the two outer panels.
+ *
+ * The reference insets this box from the LEFT edge (43 of 1440) and sizes the
+ * outer panels 1354 against it. The pin stops with the track's right edge on
+ * the area's right edge, so whatever the last panel does not cover — exactly
+ * `area width - panel width`, 86 of 1440 — stays uncovered on the LEFT for the
+ * whole of that panel. With the middle panel carrying the burgundy ground,
+ * that leftover read as a dull strip down the left of the screen (and the
+ * mirror of it down the right while the first panel was at rest).
+ *
+ * Sizing the area and the outer panels to the viewport closes both ends: the
+ * first panel rests flush at the start, the last rests flush at the finish,
+ * and the burgundy card is fully off-screen before either comes to rest.
+ */
+.screen {
+  width: 100%;
+  height: var(--vh100);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+}
+
+.panel {
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
+  padding: 0;
+  overflow: visible;
+}
+
+/* The reference measures 1354 / 1764 / 1354 at a 1440 viewport. The outer two
+   are widened to the full 1440 so the track closes on both viewport edges (see
+   `.screen`); every panel-local percentage in them is scaled by 1354/1440 so
+   their contents keep the reference's own measures, and the left offsets carry
+   a further +3% for the panel's extra half-gutter. The middle panel is
+   untouched — it carries four columns and never meets a viewport edge. */
+.panelIntro { width: 100vw; }
+/*
+ * The middle panel carries its own ground — the same deep burgundy as the
+ * brand band — so it reads as a coloured card the track slides past.
+ *
+ * Two things are needed, not one. `.section` already resolved `color` from the
+ * page's light theme and every descendant inherits that, so remapping the
+ * semantic tokens alone would leave the type navy: the panel has to re-assert
+ * `color: var(--ink)` for the remap to reach it. The token remap then carries
+ * the rest for free — the muted country label, the rules, and the circle CTA,
+ * which draws its border and hover fill from `--ink` / `--ink-invert`.
+ */
+.panelPlace {
+  width: calc(1960 * var(--u));
+  background: var(--c-sky);
+  --ink: var(--c-cream);
+  --ink-muted: var(--cream-60);
+  --ink-disabled: var(--cream-30);
+  --line: var(--cream-10);
+  --surface: var(--cream-05);
+  --ink-invert: var(--c-navy);
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------- panel 1 ---- */
+
+/*
+ * Three bands: an empty upper band, the eyebrow + lead, and a foot that hangs
+ * its copy off the bottom. Equal flex on the outer two puts the lead just
+ * above the panel's centre line, which is where the reference holds it.
+ */
+.introInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.introTop { flex: 1 1 0; }
+
+.introMid { flex: 0 0 auto; }
+
+.introFoot {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: var(--u-48);
+}
+
+/* 259 of 1440 — a deliberately narrow centred column, not a full measure */
+.eyebrow { width: 17.98%; margin-inline: auto; }
+.introBody { width: 17.98%; color: var(--ink-muted); }
+
+/*
+ * Held clear of the photo reels either side, which is what sets this measure
+ * now rather than the reference's own 806 of 1440 (55.96%).
+ *
+ * The reels are laid out in FlipGallery.module.css: the left one starts at
+ * 13.5% and the right one ends at 88%, each `min(10vw, 21vh)` wide — so at
+ * their widest they reach 23.5% in from the left and 78% across from the
+ * left. Centred copy of this width spans 26% to 74%, which leaves 2.5% of
+ * clear panel between the type and either reel at every viewport shape.
+ *
+ * Widening it past 48% puts the first and last words of each line back under
+ * the photographs; if the reels move, this has to move with them.
+ */
+.leadWrap { width: 48%; margin-inline: auto; }
+
+.mark { width: var(--u-48); height: auto; display: block; }
+
+/* -------------------------------------------------------------- panel 2 ---- */
+/* A four-column composition across 1764: title, portrait, copy, circle CTA.
+   Every offset below is the reference's own panel-local geometry. */
+
+.country {
+  position: absolute;
+  left: 7.77%;
+  top: 48.56%;
+  width: 14.68%;
+  color: var(--ink-muted);
+}
+
+.placeTitleWrap {
+  position: absolute;
+  left: 15.53%;
+  top: 24.89%;
+  width: 37.98%;
+}
+
+.placeTitle { margin: 0; }
+
+/* each line is its own block so the reference's per-line indents — and the
+   scroll-driven shift already implemented in the component — still apply */
+.placeLine { display: block; white-space: nowrap; }
+.placeWord1 { margin-left: 9.13%; }
+.placeWord2 { margin-left: 20.42%; }
+.placeWord3 { margin-left: 0; }
+
+.placeImg {
+  position: absolute;
+  left: 38.78%;
+  top: 4.78%;
+  width: 30.21%;
+  height: 90.44%;
+  overflow: hidden;
+}
+.placeImgTag { width: 100%; height: 100%; object-fit: cover; }
+
+.placeCopy {
+  position: absolute;
+  left: 69.78%;
+  top: 82.44%;
+  width: 22.45%;
+}
+
+/* fills its 396-wide column and sets on one line, as the reference does */
+.placeCaption { display: block; }
+
+.placeBtn {
+  position: absolute;
+  left: 87.36%;
+  top: 39.56%;
+  width: 10.6%;
+  aspect-ratio: 1;
+}
+/* the circle's intrinsic size is smaller than the reference's 187 here */
+.placeBtn > * { width: 100%; height: 100%; }
+
+/* ----------------------------------------------------------- page flip ---- */
+
+/*
+ * Set by `useFlipPin` while it runs (desktop, motion allowed). The sliding row
+ * becomes a stack: every panel fills the screen at the same spot and the hook
+ * turns them over one another on Y. Without the attribute — phones, reduced
+ * motion, before hydration — the rules above stand untouched.
+ *
+ * Perspective matches the photo gallery on the first panel, so the pages and
+ * the cards swing with the same depth.
+ */
+.track[data-flip] {
+  position: relative;
+  width: 100%;
+  perspective: 83.333vw;
+  will-change: auto;
+}
+
+.track[data-flip] > .panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/*
+ * At one screen wide the middle panel's copy column is narrower, wraps to more
+ * lines and ran off the foot of the panel from its fixed top. Anchored to the
+ * same bottom margin as the portrait beside it, it grows upward instead and
+ * stays clear of the circle CTA above.
+ */
+.track[data-flip] .placeCopy {
+  top: auto;
+  bottom: 4.78%;
+}
+
+/* ----------------------------------------------------------- responsive ---- */
+
+@media (max-width: 991px) {
+  .screen { height: auto; }
+  .track { display: block; width: 100%; height: auto; }
+
+  .panel,
+  .panelIntro,
+  .panelPlace {
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    padding: var(--u-96) var(--offset);
+  }
+
+  .introInner { height: auto; }
+  .introTop { display: none; }
+  .introFoot { padding-bottom: 0; margin-top: var(--u-64); }
+  .eyebrow,
+  .introBody { width: 100%; }
+  .leadWrap { width: 100%; }
+
+  .panelPlace {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--u-32);
+  }
+  .country,
+  .placeTitleWrap,
+  .placeImg,
+  .placeCopy,
+  .placeBtn {
+    position: static;
+    width: 100%;
+  }
+  .placeBtn { aspect-ratio: auto; }
+  /* Each word is its own span, so nowrap only stops mid-word breaks
+     ("GOLDE / N"); any overhang is clipped by the panel. */
+  .placeWord1,
+  .placeWord2,
+  .placeWord3 { margin-left: 0; }
+  .placeImg { height: auto; aspect-ratio: 3 / 4; }
+
+}

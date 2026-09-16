@@ -1,0 +1,245 @@
+/* =============================================================================
+   Design tokens — reverse-engineered from era-residence.com
+   -----------------------------------------------------------------------------
+   The reference sizes everything off a root font-size of exactly 1vw, so 1rem
+   always equals 1% of the viewport width. Each size token is written as the
+   pixel value it should have on a nominal design canvas, divided by the ratio
+   between that canvas and 100 (--scale-ratio). Desktop canvas = 1600px
+   (ratio 16); below 992px the canvas switches to 416px (ratio 4.16).
+   ========================================================================== */
+
+:root {
+  /* ---- raw palette ---- */
+  --c-navy: #17233b;
+  --c-cream: #f3f3ec;
+  --c-plum: #340c24;
+  --c-sky: #260004;
+  --c-blush: #f8bbcb;
+  --c-white: #ffffff;
+
+  --navy-80: #17233bcc;
+  --navy-60: #17233b99;
+  --navy-30: #17233b4d;
+  --navy-10: #17233b1a;
+  --navy-05: #17233b0d;
+  --navy-00: #17233b00;
+
+  --cream-80: #f3f3eccc;
+  --cream-60: #f3f3ec99;
+  --cream-30: #f3f3ec4d;
+  --cream-10: #f3f3ec1a;
+  --cream-05: #f3f3ec0d;
+  --cream-00: #f3f3ec00;
+
+  --white-80: #ffffffcc;
+  --white-40: #ffffff66;
+  --white-20: #ffffff33;
+  --white-10: #ffffff1a;
+
+  --c-red: #b03a2b;
+
+  /* ---- scale ----
+   *
+   * `--u` is one "design pixel": 1rem is 1vw (see components.css), so the raw
+   * value is the viewport width over the band's canvas — width/1600 here.
+   *
+   * It is clamped because that raw value alone only lands correctly near the
+   * canvas it was drawn on. Unclamped it read 0.74 on an iPad in landscape and
+   * 0.92 on a 13" MacBook — 10px and 12px body copy — while an ultrawide took
+   * it to 1.6. The floor and ceiling hold the design inside the range it was
+   * actually composed for, and the band's ratio still drives everything
+   * between them.
+   *
+   * The bounds are chosen so the two sizes that matter most are untouched:
+   * 1600 (the canvas itself) sits on the floor and 1920 at 1.2, exactly where
+   * they were before.
+   */
+  --scale-ratio: 16;
+  --u-floor: 1px;
+  --u-ceil: 1.3px;
+  --u: clamp(var(--u-floor), calc(1rem / var(--scale-ratio)), var(--u-ceil));
+
+  --u-0: 0;
+  --u-2: calc(2 * var(--u));
+  --u-4: calc(4 * var(--u));
+  --u-6: calc(6 * var(--u));
+  --u-8: calc(8 * var(--u));
+  --u-10: calc(10 * var(--u));
+  --u-12: calc(12 * var(--u));
+  --u-16: calc(16 * var(--u));
+  --u-20: calc(20 * var(--u));
+  --u-24: calc(24 * var(--u));
+  --u-32: calc(32 * var(--u));
+  --u-40: calc(40 * var(--u));
+  --u-48: calc(48 * var(--u));
+  --u-56: calc(56 * var(--u));
+  --u-64: calc(64 * var(--u));
+  --u-72: calc(72 * var(--u));
+  --u-80: calc(80 * var(--u));
+  --u-96: calc(96 * var(--u));
+  --u-120: calc(120 * var(--u));
+  --u-136: calc(136 * var(--u));
+  --u-160: calc(160 * var(--u));
+  --u-192: calc(192 * var(--u));
+  --u-240: calc(240 * var(--u));
+  --u-272: calc(272 * var(--u));
+
+  /* ---- layout ---- */
+  /* Column widths as a share of the 12-column container, for the text measures
+     the reference sets by spanning grid columns. */
+  --col-3: 25%;
+  --col-4: 33.333%;
+  --col-5: 41.666%;
+  --col-6: 50%;
+  --col-7: 58.333%;
+  --col-8: 66.666%;
+  --col-10: 83.333%;
+
+  --offset: calc(48 * var(--u));
+  --grid-gap: calc(16 * var(--u));
+  --cell-h: calc(136 * var(--u));
+  --cell-v: calc(96 * var(--u));
+  --vh100: 100vh;
+
+  /* ---- type families ----
+     The reference's own three families, in its own fallback order. The two
+     Adobe faces arrive from the kit linked in app/layout.tsx; Maison Neue
+     Extended is self-hosted from /public/fonts and is byte-identical to the
+     file production serves. Everything after the first name is a last-resort
+     fallback only — nothing in the layout is calibrated against it. */
+  --display-weight: 400;
+  --font-display: "ambroise-francois-std", "Didot", "Times New Roman", serif;
+  --font-accent: "sloop-script-three", "Snell Roundhand", cursive;
+  --font-body: "Maison Neue Extended", Arial, sans-serif;
+
+  /* ---- type scale (desktop canvas 1600) ---- */
+  --h1-size: calc(192 * var(--u));  --h1-lh: 87.5%;   --h1-ls: -0.024em;
+  --h2-size: calc(136 * var(--u));  --h2-lh: 88.235%; --h2-ls: -0.024em;
+  --h3-size: calc(96 * var(--u));   --h3-lh: 91.667%; --h3-ls: -0.024em;
+  --h4-size: calc(63 * var(--u));   --h4-lh: 88.889%; --h4-ls: -0.016em;
+  --h5-size: calc(40 * var(--u));   --h5-lh: 100%;    --h5-ls: -0.008em;
+  --h6-size: calc(28 * var(--u));   --h6-lh: 100%;    --h6-ls: 0em;
+  --a1-size: calc(192 * var(--u));  --a1-lh: 100%;
+  --a2-size: calc(120 * var(--u));  --a2-lh: 100%;
+  --c1-size: calc(25 * var(--u));   --c1-lh: 112%;    --c1-ls: 0.8em;
+  /*
+   * The reading sizes carry an absolute floor on top of the scale. Display
+   * type can shrink with the canvas and still work; body copy and labels
+   * cannot, and these four were landing at 9-12px on phones and small
+   * laptops. The floors only ever engage below the desktop canvas — at 1920
+   * the scaled value wins on every one of them, so nothing moves there.
+   */
+  --p1-size: max(15px, calc(13 * var(--u)));  --p1-lh: 138.462%; --p1-ls: -0.024em;
+  --p2-size: max(14px, calc(11 * var(--u)));  --p2-lh: 145.455%; --p2-ls: -0.024em;
+  --l1-size: max(12px, calc(11 * var(--u)));  --l1-lh: 145.455%; --l1-ls: 0.048em;
+  --l2-size: max(11px, calc(9 * var(--u)));   --l2-lh: 133.333%; --l2-ls: 0.32em;
+
+  /* ---- motion ---- */
+  --dur-s: 0.4s;
+  --dur-m: 0.8s;
+  --dur-l: 1.2s;
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-write: cubic-bezier(0.333, 0, 0.667, 1);
+
+  /* ---- semantic (default = on light / cream) ---- */
+  --ink: var(--c-navy);
+  --ink-muted: var(--navy-60);
+  --ink-disabled: var(--navy-30);
+  --line: var(--navy-10);
+  --surface: var(--navy-05);
+  --bg: var(--c-cream);
+  --ink-invert: var(--c-cream);
+}
+
+@media (max-width: 991px) {
+  :root {
+    /*
+     * Canvas 416. The band runs to 991px, so the raw value reached 2.03 on a
+     * landscape phone and 2.38 at the breakpoint — type more than twice the
+     * size it is in portrait, which is what made rotating the phone look like
+     * a different site. The ceiling stops that; the floor catches small
+     * phones. A 390 portrait sits at 0.9375, between the two, so the phone
+     * layout this band was drawn for is unchanged.
+     */
+    --scale-ratio: 4.16;
+    --u-floor: 0.9px;
+    --u-ceil: 1.1px;
+    --offset: calc(24 * var(--u));
+    --cell-h: calc(80 * var(--u));
+    --cell-v: calc(80 * var(--u));
+    --vh100: 100svh;
+
+    --u-24: calc(16 * var(--u));
+    --u-32: calc(24 * var(--u));
+    --u-48: calc(32 * var(--u));
+    --u-64: calc(48 * var(--u));
+    --u-96: calc(64 * var(--u));
+    --u-160: calc(96 * var(--u));
+    --u-272: calc(120 * var(--u));
+
+    --col-3: 100%;
+    --col-4: 100%;
+    --col-5: 100%;
+    --col-6: 100%;
+    --col-7: 100%;
+    --col-8: 100%;
+    --col-10: 100%;
+
+    --h1-size: calc(96 * var(--u));  --h1-lh: 91.667%;
+    --h2-size: calc(73 * var(--u));  --h2-lh: 87.671%;
+    --h3-size: calc(56 * var(--u));  --h3-lh: 92.857%;
+    --h4-size: calc(40 * var(--u));  --h4-lh: 100%;
+    --h5-size: calc(28 * var(--u));  --h5-lh: 100%;
+    --h6-size: calc(28 * var(--u));
+    --a1-size: calc(96 * var(--u));
+    --a2-size: calc(72 * var(--u));
+    --c1-size: calc(19 * var(--u));  --c1-lh: 126.316%;
+  }
+}
+
+/* =============================================================================
+   Themes — remap the semantic layer; every component reads only the semantics.
+   ========================================================================== */
+
+.theme_on-light {
+  --ink: var(--c-navy);
+  --ink-muted: var(--navy-60);
+  --ink-disabled: var(--navy-30);
+  --line: var(--navy-10);
+  --surface: var(--navy-05);
+  --bg: var(--c-cream);
+  --ink-invert: var(--c-cream);
+}
+
+.theme_on-color,
+.theme_on-dark {
+  --ink: var(--c-cream);
+  --ink-muted: var(--cream-60);
+  --ink-disabled: var(--cream-30);
+  --line: var(--cream-10);
+  --surface: var(--cream-05);
+  --bg: var(--c-plum);
+  --ink-invert: var(--c-navy);
+}
+
+.theme_on-brand {
+  --ink: var(--c-cream);
+  --ink-muted: var(--cream-60);
+  --ink-disabled: var(--cream-30);
+  --line: var(--cream-10);
+  --surface: var(--cream-05);
+  --bg: var(--c-sky);
+  --ink-invert: var(--c-navy);
+}
+
+.theme_on-image {
+  --ink: var(--c-white);
+  --ink-muted: var(--white-80);
+  --ink-disabled: var(--white-40);
+  --line: var(--white-20);
+  --surface: var(--white-10);
+  --ink-invert: var(--c-navy);
+}

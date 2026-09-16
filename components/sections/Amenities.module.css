@@ -1,0 +1,178 @@
+.section {
+  /*
+   * One screen of sticky frame, then the pinned scroll: the four options first,
+   * 0.46 of a screen each as they always had, then a hold on the last frame
+   * while the Interiors dome climbs over it — exactly as the hero holds under
+   * the benefits dome. `HOLD` in Amenities.tsx must match `--amenity-hold`.
+   * The total, 4.64 screens, is what the page below is measured against.
+   */
+  --amenity-options: 184vh;
+  --amenity-hold: 180vh;
+  height: calc(100vh + var(--amenity-options) + var(--amenity-hold));
+  /* the render arrives out of the sky the apartment sections leave behind */
+  --bleed-from: var(--c-sky);
+  /* keep the pinned render below the arch that climbs over it */
+  isolation: isolate;
+  z-index: 0;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: var(--vh100);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: calc(var(--u-96) + var(--u-96)) var(--u-48);
+  overflow: hidden;
+}
+
+.stage { position: absolute; inset: 0; z-index: 0; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-l) var(--ease-out);
+}
+.on { opacity: 1; }
+
+/* The looping videos fill the frame exactly as the renders did. */
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+ * Set by the component when motion is allowed. Slides stop cross-fading and
+ * are shown or hidden outright; the one arriving is revealed by a horizontal
+ * wipe rising from the bottom edge, which GSAP runs on its `clip-path`. Without the
+ * attribute — reduced motion, before hydration — the cross-fade above stands.
+ */
+.stage[data-wipe] .slide {
+  opacity: 1;
+  transition: none;
+  visibility: hidden;
+}
+.stage[data-wipe] .on { visibility: visible; }
+
+/* Lighter than before: the reference keeps its renders legible rather than
+   washing them plum. Enough contrast for the copy, no more. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(20, 10, 24, 0.38), rgba(20, 10, 24, 0) 30%),
+    linear-gradient(rgba(20, 10, 24, 0) 52%, rgba(20, 10, 24, 0.58));
+}
+
+/*
+ * 399 of 1354, offset 270 from the container's left edge — two grid columns in,
+ * three wide. It was running the full half-width, which made the copy read as a
+ * paragraph rather than the narrow caption the reference sets.
+ *
+ * The min-height reserves the tallest body so advancing a tab swaps the copy
+ * without reflowing the block — the only layout shift left on the page.
+ */
+/*
+ * Anchored to the reference's own 672 of 900 rather than pushed to the bottom
+ * of the screen by `margin-top: auto`. Bottom-anchoring meant every tab change
+ * moved the block's top edge by the difference in copy length — the only
+ * layout shift left on the page (CLS 0.022, all of it here). Top-anchoring
+ * lets a longer body grow downward instead, and matches where the reference
+ * puts the block anyway.
+ */
+.copy {
+  position: absolute;
+  inset: 74.67% 0 auto;
+  z-index: 2;
+}
+
+/* The measure lives on this wrapper, not on `.copy`: `.copy` carries the
+   `container` gutter, so a percentage there would be taken against the full
+   1440 and land the block 17px right of the reference's 313. */
+/* Widened from the reference's 29.47% so every caption sets on two lines; it
+   still ends well short of the amenity list on the right. */
+.copyInner { width: 45%; margin-left: 19.94%; }
+.body { color: var(--ink); }
+
+/*
+ * The reference does not use a tab bar. Measured, the list is a 259px column
+ * pinned to the top-right of the render — four 36px rows, the active one at full
+ * strength and the rest dimmed. Position and axis both had to change.
+ */
+.foot {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  /* 144 from the top on the reference — one `u-160`, not `u-96 + u-48`,
+     which lands 14px short */
+  padding: var(--u-160) var(--offset) 0;
+  pointer-events: none;
+}
+
+/* 259 of 1354, right edge inset 137 (one grid column) from the gutter — not
+   flush to it, which is where this column had been sitting. */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 19.13%;
+  margin-right: 10.12%;
+  pointer-events: auto;
+}
+
+.tab {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  color: var(--ink);
+  opacity: 0.4;
+  transition: opacity var(--dur-m) var(--ease-out);
+  cursor: pointer;
+}
+.tabOn { opacity: 1; }
+
+@media (min-width: 992px) {
+  .tab:hover { opacity: 0.75; }
+  .tabOn:hover { opacity: 1; }
+}
+
+/* the reference parks this on the right edge, roughly at the render's midline */
+.cta {
+  position: absolute;
+  right: var(--offset);
+  top: 50%;
+  translate: 0 -50%;
+  pointer-events: auto;
+}
+
+@media (max-width: 991px) {
+  .section { height: auto; }
+
+  .sticky {
+    position: static;
+    height: auto;
+    display: block;
+    padding-block: var(--u-96);
+  }
+
+  .stage { position: relative; height: 60vh; margin-bottom: var(--u-32); }
+  .copy { position: static; inset: auto; }
+  .copyInner { width: 100%; margin-left: 0; }
+
+  .foot {
+    position: static;
+    display: block;
+    padding: 0;
+    margin-top: var(--u-48);
+  }
+  .tabs { width: 100%; margin-right: 0; }
+  .tab { min-height: 44px; }
+}

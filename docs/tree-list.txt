@@ -1,0 +1,14 @@
+SECTIONS:0:section clip theme_on-color
+1:section arch clip theme_on-brand
+2:section z-2 theme_on-brand
+3:section z-2 theme_on-brand
+4:section clip
+5:section clip theme_on-color
+6:section theme_on-brand
+7:section clip theme_on-brand
+8:section clip theme_on-color
+9:section arch clip
+10:section clip
+11:section clip
+12:section theme_on-color
+13:section theme_on-dark

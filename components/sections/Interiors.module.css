@@ -1,0 +1,162 @@
+.section {
+  /*
+   * Like the hero/benefits pair, this arch does not sit below the section above
+   * it — it climbs over it, the same way: 1.8 screens of overlap, rising across a
+   * render that stays pinned and on screen until the dome has covered it.
+   * Amenities holds its last frame for 1.8 screens after its four options (see
+   * `--amenity-hold`), so the crown only appears once the last option, Spa &
+   * gym, has had its full turn — no video is covered while its option is
+   * active — reaches the top of the screen one screen later, and the pin runs
+   * on 0.8 of a screen past that, as the hero's does under the benefits dome.
+   */
+  --dome-overlap: 180vh;
+  /*
+   * The gap either side of the dome as its crown first appears. It closes as
+   * the dome climbs — `--dome-open` runs 0 -> 1 from the crown entering at the
+   * bottom of the screen to it reaching the top (set in Interiors.tsx) — so the
+   * dome covers the full width by the time it fills the screen.
+   */
+  --dome-gap: 6vw;
+  /* the dome's own curve, the same as the shared `.arch` */
+  --dome-rise: 26vw;
+  margin-top: calc(var(--dome-overlap) * -1);
+  /* The reference lets the title sit high inside the dome rather than clearing
+     it — measured, its whole section is 2979 with only ~575 of padding. */
+  padding-top: calc(20vw + var(--u-24));
+  /* painted by the two layers below instead, so the dome can be narrower than
+     the section */
+  background: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+/*
+ * The cream ground, in two layers behind the content.
+ *
+ * `::before` is the dome: inset from both edges, with the arch's curve on top,
+ * running the section's full height so the curve is never squashed to fit.
+ * `::after` fills the full width from the point where Amenities ends. Above
+ * that line the side gaps show the Amenities render; the line reaches the
+ * screen just as the Amenities pin releases, and from there the render's lower
+ * edge and the cream below it scroll away together.
+ */
+.section::before,
+.section::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--c-cream);
+  pointer-events: none;
+}
+
+.section::before {
+  inset: 0 calc(var(--dome-gap) * (1 - var(--dome-open, 0)));
+  border-top-left-radius: 50% var(--dome-rise);
+  border-top-right-radius: 50% var(--dome-rise);
+}
+
+.section::after {
+  top: var(--dome-overlap);
+  inset-inline: 0;
+  bottom: 0;
+}
+
+.title { position: relative; width: 100%; margin: 0; overflow: clip; }
+
+.accent {
+  display: block;
+  margin-top: calc(var(--u-96) * -1);
+  text-transform: none;
+}
+
+/* ------------------------------------------------------------- feature ---- */
+
+.feature {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--u-96);
+  align-items: start;
+}
+
+/*
+ * The reference does not float these two images on cream — it lays a plum plate
+ * under the left half of the feature (measured 677x756 at the container's left
+ * gutter, bleeding to the viewport edge) and stands the garden render on it.
+ * That two-tone split is most of this block's composition; without it the
+ * section reads as two pictures on a blank page.
+ */
+.featureLeft { position: relative; z-index: 0; }
+
+.featureLeft::before {
+  content: "";
+  position: absolute;
+  /* 575 of 1440 on the reference — 40% of the viewport, not the full half */
+  left: calc(var(--offset) * -1);
+  right: 15%;
+  top: calc(var(--u-96) * -1);
+  /* runs under the founder caption and lead too, so light text never
+     spills onto the cream */
+  bottom: calc(var(--u-48) * -1);
+  min-height: 756px;
+  background: var(--c-plum);
+  z-index: -1;
+}
+
+.featureMedia { display: block; width: 100%; overflow: hidden; }
+
+/* the render stands inside the plate with plum showing around it. Its indent is
+   deliberately deeper than the 8% on the caption and lead below it, so the
+   portrait steps in from the text column rather than sitting flush with it */
+.featureLeft .featureMedia {
+  width: 62%;
+  margin-left: 16%;
+}
+
+.img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ------------------------------------------------------------ founders ---- */
+
+.founder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--u-8);
+  padding-top: var(--u-24);
+}
+
+/* the left portrait stands on the plum plate, so its caption does too */
+.founderLeft {
+  width: 62%;
+  margin-left: 8%;
+  color: var(--c-cream);
+}
+.founderLeft .founderBio { color: inherit; opacity: 0.75; }
+
+/* the lead line sits under the left portrait's caption, on the plum plate */
+.leadLeft {
+  width: 62%;
+  margin-left: 8%;
+  color: var(--c-cream);
+}
+
+/* the right column's punchline: same display face and red rule as `.leadLeft`,
+   but it sits on the cream page rather than the burgundy card, so it keeps the
+   section's own ink colour */
+.leadRight {
+  width: 88%;
+}
+
+.founderName { margin: 0; font-size: 1.75rem; line-height: 1.2; }
+.founderRole { margin: 0; font-size: 1.125rem; line-height: 1.4; opacity: 0.8; }
+.founderBio { margin: 0; }
+
+@media (max-width: 991px) {
+  /* the reference does not overlap these two on mobile — the pin is gone,
+     so the arch simply follows the amenity stack */
+  .section {
+    --dome-overlap: 18vw;
+    --dome-rise: 45vw;
+    padding-top: calc(45vw + var(--u-64));
+  }
+  .accent { margin-top: calc(var(--u-64) * -1); }
+  .feature { grid-template-columns: 1fr; gap: var(--u-64); }
+}

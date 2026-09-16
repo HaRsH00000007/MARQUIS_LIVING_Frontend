@@ -1,0 +1,396 @@
+/* =============================================================================
+   Layout + component primitives
+   ========================================================================== */
+
+/* ---- reset ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* The whole responsive strategy: 1rem === 1vw. */
+  font-size: 1vw;
+  /* the page opens and closes on plum, so overscroll at either end matches */
+  background-color: var(--c-plum);
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  /* Nowrap display lines and the bleeding decorative videos can lay out wider
+     than the gutter at narrow viewports. Clipping here (rather than only on
+     body) stops that from widening the layout viewport. */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--p1-size);
+  line-height: 1;
+  color: var(--ink);
+  /*
+   * Deliberately unpainted. <PageCanvas> is a fixed layer at z-index -1, and a
+   * negative-z-index child paints *below* its parent's background — so any fill
+   * here would hide it. The ground colour lives on <html>, which is propagated
+   * to the viewport canvas and painted beneath everything.
+   */
+  background: transparent;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg { display: block; max-width: 100%; }
+
+/* A component's own `display` would otherwise beat the UA rule for [hidden],
+   leaving invisible overlays intercepting pointer events. */
+[hidden] { display: none !important; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* ---- structure ---- */
+.section {
+  position: relative;
+  width: 100%;
+  color: var(--ink);
+  background-color: var(--bg);
+}
+.section.is-transparent { background-color: transparent; }
+
+/*
+ * Opts a section out of painting its own fill so <PageCanvas> shows through.
+ * Used for every block whose only background was a flat theme colour — the
+ * palette then changes across a screen of scroll rather than on one edge.
+ */
+.bleed { background-color: transparent; }
+
+/*
+ * A single sheet of grain over the whole page. It is what stops three large
+ * flat fields of colour from reading as three separate panels: the same noise
+ * runs across every one of them, so the eye takes the page as one surface. Kept
+ * under the header and modals (z 40+) so UI stays crisp.
+ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain { display: none; }
+}
+
+/*
+ * Dissolves the top or bottom edge of a section into the ground it meets, so a
+ * change of palette happens over a band of the page rather than on a single
+ * line. `--bleed-from` / `--bleed-to` name that ground; `--bleed-h` sizes the
+ * band, and wants to be shorter than the section's own top padding so the
+ * veil has cleared before any text starts.
+ */
+.bleed-top::before,
+.bleed-bottom::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: var(--bleed-h, 26vh);
+  z-index: 1;
+  pointer-events: none;
+}
+.bleed-top::before {
+  top: 0;
+  background: linear-gradient(var(--bleed-from, transparent), transparent);
+}
+.bleed-bottom::after {
+  bottom: 0;
+  background: linear-gradient(transparent, var(--bleed-to, transparent));
+}
+.clip { overflow: clip; }
+.z-2 { z-index: 2; }
+
+.container {
+  position: relative;
+  width: 100%;
+  padding-inline: var(--offset);
+}
+.container.flush { padding-inline: 0; }
+
+/* The giant arched top edge used by the benefits + interiors sections: a wide,
+   shallow dome measured off the reference at roughly 26vw of vertical radius. */
+.arch {
+  border-top-left-radius: 50% 26vw;
+  border-top-right-radius: 50% 26vw;
+}
+@media (max-width: 991px) {
+  .arch { border-top-left-radius: 50% 45vw; border-top-right-radius: 50% 45vw; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+}
+.grid._13-columns { grid-template-columns: repeat(13, minmax(0, 1fr)); }
+.grid._5-columns  { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.grid._4-columns  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 991px) {
+  .grid, .grid._13-columns, .grid._5-columns, .grid._4-columns {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* the reference's own height: two vertical grid cells plus one gap — 187px at
+   1440, where this had been a single cell */
+.divider {
+  display: flex;
+  justify-content: center;
+  height: calc(var(--cell-v) * 2 + var(--grid-gap));
+}
+.line-v { width: 1px; height: 100%; background: var(--line); }
+.line-h { width: 100%; height: 1px; background: var(--line); }
+.red-line { width: var(--u-48); height: 2px; background: var(--c-red); }
+
+/* ---- breakpoint visibility (matches Webflow's .b-desk / .b-mob) ---- */
+@media (max-width: 991px) { .b-desk { display: none !important; } }
+@media (min-width: 992px) { .b-mob  { display: none !important; } }
+
+/* ---- image wrappers ---- */
+.img-w { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.img-w img { width: 100%; height: 100%; object-fit: cover; }
+.img-w.h-auto img { height: auto; }
+
+.img-over-grad { position: absolute; inset: 0; pointer-events: none; }
+.img-over-grad.from-top {
+  inset: 0 0 auto; height: 60%;
+  background: linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,0));
+}
+.img-over-grad.from-bot {
+  inset: auto 0 0; height: 60%;
+  background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.45));
+}
+
+/* =============================================================================
+   Hover system — attribute-scoped custom properties, desktop only.
+   Mirrors the technique used by the reference so hover state cascades to
+   arbitrarily nested children without extra selectors.
+   ========================================================================== */
+
+[hover-btn] {
+  --btn-dur: var(--dur-m);
+  --btn-ease: var(--ease-in-out);
+  --btn-text-c: var(--ink);
+  --btn-bg-t: 100%;
+  --btn-bg-br: 100%;
+  transition: var(--btn-dur) var(--btn-ease);
+}
+[hover-btn] [hover="text"],
+[hover-btn] .ico { color: var(--btn-text-c); transition: var(--btn-dur) var(--btn-ease); }
+[hover-btn] [hover="bg"] {
+  inset: var(--btn-bg-t) 0% auto;
+  border-radius: var(--btn-bg-br);
+  transition: var(--btn-dur) var(--btn-ease);
+}
+@media (min-width: 992px) {
+  [hover-btn]:hover,
+  [hover-btn-trigger]:hover [hover-btn] {
+    --btn-text-c: var(--ink-invert);
+    --btn-bg-t: 0%;
+    --btn-bg-br: 0%;
+  }
+}
+
+[hover-nav-item] {
+  --nav-dur: var(--dur-m);
+  --nav-ease: var(--ease-out);
+  --nav-t1-y: 0%;   --nav-t1-o: 1;
+  --nav-t2-y: 100%; --nav-t2-o: 0;
+}
+[hover-nav-item] [hover="text"]:nth-child(1) {
+  transform: translateY(var(--nav-t1-y));
+  opacity: var(--nav-t1-o);
+  transition: var(--nav-dur) var(--nav-ease);
+}
+[hover-nav-item] [hover="text"]:nth-child(2) {
+  transform: translateY(var(--nav-t2-y));
+  opacity: var(--nav-t2-o);
+  transition: var(--nav-dur) var(--nav-ease);
+}
+@media (min-width: 992px) {
+  [hover-nav-item]:hover {
+    --nav-t1-y: -100%; --nav-t1-o: 0;
+    --nav-t2-y: 0%;    --nav-t2-o: 1;
+  }
+}
+
+[hover-img-card] { --img-sc: 1; }
+[hover-img-card] [hover="img"] {
+  transform: scale(var(--img-sc));
+  transition: transform var(--dur-l) var(--ease-out);
+}
+@media (min-width: 992px) { [hover-img-card]:hover { --img-sc: 1.15; } }
+
+[data-hover-item] { transition: opacity var(--dur-m) var(--ease-out); }
+@media (min-width: 992px) {
+  [data-hover-group]:has([data-hover-item]:hover)
+    [data-hover-item]:not(:hover):not(.is-active) { opacity: 0.2; }
+}
+
+/* =============================================================================
+   Reveal primitives
+   ========================================================================== */
+
+.split-line-mask { display: block; overflow: hidden; }
+
+/* Word/char masks must stay inline so they keep the heading's line flow;
+   the extra bottom padding gives descenders room inside the clip. */
+.split-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.split-line,
+.split-word,
+.split-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Unmasked wrapper used by the `fade` motion. */
+.split-plain { display: inline-block; }
+
+[data-reveal="rise"] .split-line,
+[data-reveal="rise"] .split-word,
+[data-reveal="rise"] .split-char {
+  transform: translateY(110%);
+  opacity: 0;
+}
+[data-reveal="rise"].is-revealed .split-line,
+[data-reveal="rise"].is-revealed .split-word,
+[data-reveal="rise"].is-revealed .split-char {
+  transform: translateY(0);
+  opacity: 1;
+  transition:
+    transform var(--dur-l) var(--ease-out) var(--reveal-delay, 0s),
+    opacity var(--dur-m) var(--ease-out) var(--reveal-delay, 0s);
+}
+
+/* The hero wordmark resolves in place, left to right — no mask, no travel. */
+[data-reveal="fade"] .split-word,
+[data-reveal="fade"] .split-char { opacity: 0; }
+
+[data-reveal="fade"].is-revealed .split-word,
+[data-reveal="fade"].is-revealed .split-char {
+  opacity: 1;
+  transition: opacity var(--dur-m) var(--ease-out) var(--reveal-delay, 0s);
+}
+
+/* =============================================================================
+   Script write-on
+   -----------------------------------------------------------------------------
+   The accent word starts at a wide tracking and collapses to zero while its
+   characters fade in left to right, so the glyphs draw together — the further
+   into the word a letter sits, the further it travels. Timed off a screen
+   recording of the reference (~0.7s).
+   ========================================================================== */
+
+[data-accent-reveal] {
+  --accent-track: 0.14em;
+  display: inline-block;
+  letter-spacing: var(--accent-track);
+  /* letter-spacing also pads after the final glyph, which would shift centred
+     text as it collapses — cancel that so the word stays put */
+  margin-right: calc(var(--accent-track) * -1);
+  transition:
+    letter-spacing 0.75s var(--ease-write) var(--reveal-delay, 0s),
+    margin-right 0.75s var(--ease-write) var(--reveal-delay, 0s);
+}
+
+[data-accent-reveal].is-revealed { --accent-track: 0em; }
+
+.accent-char {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity var(--dur-m) var(--ease-out) var(--reveal-delay, 0s);
+}
+
+[data-accent-reveal].is-revealed .accent-char { opacity: 1; }
+
+[data-fade] { opacity: 0; transform: translateY(var(--u-32)); }
+[data-fade].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-l) var(--ease-out) var(--reveal-delay, 0s),
+    transform var(--dur-l) var(--ease-out) var(--reveal-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  [data-reveal] .split-line,
+  [data-reveal] .split-word,
+  [data-reveal] .split-char { transform: none; opacity: 1; }
+  [data-accent-reveal] { letter-spacing: 0; }
+  [data-accent-reveal] .accent-char { opacity: 1; }
+  [data-fade] { opacity: 1; transform: none; }
+}
+
+/* =============================================================================
+   Spacers (u-*) — used exactly like the reference's utility divs
+   ========================================================================== */
+.u-4   { height: var(--u-4); }
+.u-8   { height: var(--u-8); }
+.u-12  { height: var(--u-12); }
+.u-16  { height: var(--u-16); }
+.u-24  { height: var(--u-24); }
+.u-32  { height: var(--u-32); }
+.u-48  { height: var(--u-48); }
+.u-64  { height: var(--u-64); }
+.u-96  { height: var(--u-96); }
+.u-160 { height: var(--u-160); }
+.u-272 { height: var(--u-272); }
+
+/* Visually-hidden but available to assistive technology. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard-only skip link. */
+.skip-link {
+  position: fixed;
+  top: var(--u-16);
+  left: 50%;
+  translate: -50% -200%;
+  z-index: 200;
+  padding: var(--u-12) var(--u-24);
+  background: var(--c-plum);
+  color: var(--c-cream);
+  font-family: var(--font-body);
+  font-size: var(--l1-size);
+  letter-spacing: var(--l1-ls);
+  text-transform: uppercase;
+  border-radius: 100vw;
+  transition: translate var(--dur-s) var(--ease-out);
+}
+.skip-link:focus-visible { translate: -50% 0; }

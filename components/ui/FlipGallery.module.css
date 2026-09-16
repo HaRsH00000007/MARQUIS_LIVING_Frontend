@@ -1,0 +1,146 @@
+/*
+ * The gallery fills the panel and places a reel in each of its gutters. It
+ * paints before the panel's copy, so the heading always sits on top of it.
+ */
+.gallery {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* one full turn of a reel */
+  --roll: 34s;
+  /* how much of each reel's head and tail is faded out; see `.strip` */
+  --fade: 12%;
+  /*
+   * The space under every card; see `.reel` for why it is a margin, not a gap.
+   *
+   * `svh`, not `vh`, for the same reason as `.strip`'s width — and declared
+   * twice so a browser without `svh` keeps the `vh` line.
+   */
+  --step: min(2.2vw, 4.6vh);
+  --step: min(2.2vw, 4.6svh);
+}
+
+/*
+ * The window a reel runs behind. It is the full height of the panel, so a card
+ * enters and leaves at the screen's own top and bottom edge rather than
+ * appearing to vanish against an invisible line partway down.
+ *
+ * The width is capped against the viewport height as well as its width, so on
+ * a short, wide screen the reel stops growing before the cards swamp the copy.
+ * 2.1 is the height-to-width ratio the layout was set against.
+ *
+ * That cap is measured in `svh` — the viewport at its *smallest*, with the
+ * browser's own chrome showing. Plain `vh` is the largest viewport, so on a
+ * tablet or a landscape phone, where this rule still applies, the reel would
+ * resize every time Safari's toolbar collapsed or came back. The `vh` line
+ * stays underneath it as the fallback for anything without `svh`.
+ */
+.strip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(10vw, 21vh);
+  width: min(10vw, 21svh);
+  overflow: hidden;
+
+  /*
+   * A card arrives and leaves through a short fade at each end of the window
+   * rather than on a cut. Masking the window, not the reel, is what keeps the
+   * fade still while the roll travels under it — a mask on `.reel` would be
+   * carried along by its own transform and the soft ends would scroll away.
+   */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+}
+
+/* Clear of the scroll rail down the far left, and of the nav in the top
+   right — the reels only ever occupy the empty gutters either side. */
+.stripLeft { left: 13.5%; }
+.stripRight { right: 12%; }
+
+/*
+ * The roll itself: the three photos, then the same three again. It travels
+ * exactly -50% — one whole set — and repeats, which lands the second set
+ * precisely where the first started, so the loop has no seam.
+ *
+ * The spacing has to be a margin under each card rather than a flex `gap`.
+ * With a gap of G and six cards the reel is 6H + 5G tall, and half of that is
+ * 3H + 2.5G — half a gap short of one set's pitch, which drifts the loop by
+ * half a gap on every repeat. As a margin the reel is 6(H + G), and -50% is
+ * exactly 3(H + G).
+ */
+.reel {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: roll var(--roll) linear infinite;
+}
+
+.stripRight .reel { animation-direction: reverse; }
+
+@keyframes roll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -50%, 0); }
+}
+
+/*
+ * One size for every card, whatever the crop: the renders are a mix of
+ * portrait and landscape, and at their natural heights the right-hand strip
+ * read as three unrelated pictures rather than one roll. The frame is fixed
+ * and the image covers it.
+ */
+.card {
+  flex: none;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  margin-bottom: var(--step);
+  overflow: hidden;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+ * Below 992px the panel stacks and its copy fills it edge to edge, so there is
+ * no margin left to run reels down. The gallery drops into the flow above the
+ * heading instead, as a window of its own with the two reels side by side
+ * inside it, still rolling.
+ */
+@media (max-width: 991px) {
+  .gallery {
+    position: relative;
+    inset: auto;
+    height: 92vw;
+    --step: 4vw;
+  }
+
+  .strip {
+    position: absolute;
+    width: 42%;
+  }
+
+  .stripLeft { left: 4%; }
+  .stripRight { right: 4%; }
+}
+
+/* The roll is decoration; without it the first three photos simply sit there. */
+@media (prefers-reduced-motion: reduce) {
+  .reel { animation: none; will-change: auto; }
+}

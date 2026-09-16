@@ -1,0 +1,295 @@
+.section {
+  /* ~5.8 screens of scroll, as measured on the reference */
+  height: 580vh;
+  background: var(--c-plum);
+  /* Keep the layer z-indexes below local to this section, so the arch section
+     that scrolls over the hero's tail still paints above all of them. */
+  isolation: isolate;
+  z-index: 0;
+}
+
+/* ---------------------------------------------------------------- render */
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: var(--vh100);
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.bgInner {
+  position: absolute;
+  /*
+   * Taller than the viewport on purpose. The reference's render box is ~144vh,
+   * anchored at the top, so at rest you see the sky-heavy upper frame and the
+   * parallax slides the pool into view — and the layer still covers the screen
+   * once it has travelled its 44vh.
+   */
+  inset: 0 0 auto;
+  height: 144vh;
+  overflow: hidden;
+  /* Full-bleed throughout: parallaxes up, then swells to 2x. Both values are
+     pre-eased in JS, so this stays a straight multiply. */
+  /* `--hero-intro` is the preloader's entry scale (0.75 -> 1); it multiplies the
+     scroll zoom rather than replacing the whole transform. */
+  transform:
+    translateY(calc(var(--parallax-travel) * var(--hero-parallax, 0)))
+    scale(calc((1 + var(--zoom-range) * var(--hero-zoom, 0)) * var(--hero-intro, 1)));
+  transform-origin: 50% var(--zoom-origin-y, 50%);
+  will-change: transform;
+}
+
+/*
+ * Both washes live inside the render box, stacked directly over the photograph,
+ * so they inherit its transform and can never drift out of step with it: one
+ * element moves, and the image and its gradients move with it. Same colours,
+ * stops and alphas as before — only the layer they hang from has changed.
+ */
+.bgInner::before,
+.bgInner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bgInner::before {
+  z-index: 1;
+  background:
+    linear-gradient(
+      rgba(12, 10, 9, 0.66),
+      rgba(12, 10, 9, 0.22) 38%,
+      rgba(12, 10, 9, 0.28) 62%,
+      rgba(12, 10, 9, 0.62)
+    );
+}
+
+.bgInner::after {
+  z-index: 2;
+  background:
+    radial-gradient(115% 42% at 50% 17%, rgba(8, 6, 5, 0.62), rgba(8, 6, 5, 0) 72%),
+    radial-gradient(80% 22% at 50% 47%, rgba(8, 6, 5, 0.5), rgba(8, 6, 5, 0) 72%),
+    linear-gradient(to top, rgba(8, 6, 5, 0.6), rgba(8, 6, 5, 0) 24%);
+}
+
+.render {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-l) var(--ease-out);
+}
+
+.renderOn { opacity: 1; }
+
+/* ------------------------------------------------------------------ copy */
+
+/*
+ * The header (badge top-left, nav top-right) is fixed, while the copy layer
+ * slides up beneath it — so the corner statements used to run straight through
+ * the logo. This layer does not move: it hides the two top corners down to the
+ * header's depth (padding + badge) and feathers back in below, leaving the
+ * centre column, where the wordmark and tagline sit, untouched.
+ */
+.copyMask {
+  --header-clear: calc(var(--u-24) * 2 + var(--u-136));
+  --mask-center: 50%;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(transparent var(--header-clear), #000 calc(var(--header-clear) + var(--u-48)));
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(transparent var(--header-clear), #000 calc(var(--header-clear) + var(--u-48)));
+  -webkit-mask-size: var(--mask-center) 100%, 100% 100%;
+  mask-size: var(--mask-center) 100%, 100% 100%;
+  -webkit-mask-position: center, 0 0;
+  mask-position: center, 0 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.screen {
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--vh100);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: var(--u-48) calc(var(--u-96) + var(--u-48));
+  color: var(--c-white);
+  z-index: 10;
+  pointer-events: none;
+  /* The reference never fades this layer — it slides the whole screen of copy
+     up and out, finishing well before the pin ends. */
+  transform: translateY(calc(var(--copy-travel) * var(--hero-copy, 0)));
+  will-change: transform;
+}
+.screen a,
+.screen button { pointer-events: auto; }
+
+/*
+ * The MARQUIS LIVING composition, laid out against the 100vh copy layer. Every
+ * block is placed as a share of that frame — title on the upper third, the
+ * tagline on the centre line, the statement repeated in both bottom corners —
+ * so the whole screen still travels on the single `--hero-copy` transform.
+ */
+
+.title {
+  position: absolute;
+  inset: 9% 0 auto;
+  text-align: center;
+}
+
+.titleLine {
+  white-space: nowrap;
+  font-size: 10vw;
+  letter-spacing: 0.02em;
+  color: var(--c-white);
+  /* The plate is a bright interior, so every line carries a soft shadow rather
+     than a heavier wash over the photograph. */
+  text-shadow:
+    0 1px 3px rgba(8, 6, 5, 0.85),
+    0 2px 22px rgba(8, 6, 5, 0.65);
+}
+
+/*
+ * The script closes over the wordmark's lower half, as it does on the plate.
+ * It writes on letter by letter: each glyph slides in from the left and fades
+ * up on its own staggered delay (set per character by AccentReveal), so
+ * "Living" appears to be drawn across the wordmark one letter at a time.
+ */
+.script {
+  display: block;
+  margin-top: -0.38em;
+  line-height: 1;
+  font-size: 6.4vw;
+  color: #f4dcb4;
+  text-shadow:
+    0 1px 3px rgba(8, 6, 5, 0.85),
+    0 2px 20px rgba(8, 6, 5, 0.6);
+}
+
+/* Raised specificity so these beat the shared [data-accent-reveal] rules.
+   The tracking collapse is switched off — the per-letter slide carries the
+   motion here, and the two together read as drift. */
+.script:global([data-accent-reveal]) {
+  --accent-track: 0em;
+  margin-right: 0;
+  transition: none;
+}
+
+.script :global(.accent-char) {
+  opacity: 0;
+  /* each letter starts a little to the left of, and just below, its seat */
+  transform: translate3d(-0.5em, 0.14em, 0);
+  transition:
+    opacity 0.55s var(--ease-out) var(--reveal-delay, 0s),
+    transform 0.8s var(--ease-write) var(--reveal-delay, 0s);
+  will-change: transform, opacity;
+}
+
+.script:global(.is-revealed) :global(.accent-char) {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .script :global(.accent-char) { opacity: 1; transform: none; }
+}
+
+.tagline {
+  position: absolute;
+  inset: 44% 0 auto;
+  font-size: 2.5vw;
+  letter-spacing: 0.01em;
+  color: var(--c-white);
+  text-shadow:
+    0 1px 3px rgba(8, 6, 5, 0.85),
+    0 2px 20px rgba(8, 6, 5, 0.6);
+}
+
+.straps {
+  position: absolute;
+  inset: auto 0 7%;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--u-48);
+  padding-inline: var(--offset);
+}
+
+.strapCol { max-width: var(--col-4); }
+.left { text-align: left; }
+.right { text-align: right; }
+
+.strapSmall {
+  color: var(--c-white);
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 1px 2px rgba(8, 6, 5, 0.9),
+    0 2px 14px rgba(8, 6, 5, 0.6);
+}
+
+.strapLarge {
+  margin-top: var(--u-8);
+  color: var(--c-white);
+  font-size: 1.5vw;
+  text-shadow:
+    0 1px 3px rgba(8, 6, 5, 0.9),
+    0 2px 16px rgba(8, 6, 5, 0.6);
+}
+
+/* Centred circular CTA with the strapline beneath it, as on the reference.
+   It rises in from below the fold on the same ease as the copy. */
+.foot {
+  position: absolute;
+  inset: auto 0 var(--u-48);
+  z-index: 12;
+  transform: translateY(calc(28vh * (1 - var(--hero-copy, 0))));
+  padding-inline: var(--offset);
+  color: var(--c-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--u-24);
+}
+
+.footDesc {
+  max-width: var(--col-4);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 991px) {
+  .section { height: 320vh; }
+
+  /* The mobile header is shorter (16u padding, 96u badge) and the wordmark runs
+     nearly edge to edge, so the clear zone shrinks and the centre band widens. */
+  .copyMask {
+    --header-clear: calc(var(--u-16) * 2 + var(--u-96));
+    --mask-center: 44%;
+  }
+
+  /* Portrait: one column of statement — the right-hand repeat has nowhere to
+     sit once the frame is narrower than the type — and the display sizes step
+     up, since the root font-size is 1vw and a desktop vw reads tiny at 390. */
+  .titleLine { font-size: 20vw; }
+  .script { font-size: 13.3vw; }
+  .tagline { font-size: 5vw; }
+  .strapSmall { font-size: 2.9vw; }
+  .strapLarge { font-size: 4.4vw; }
+  .straps { flex-direction: column; gap: var(--u-24); }
+  .right { text-align: left; }
+  .title { inset: 14% 0 auto; }
+  .tagline { inset: 42% 0 auto; }
+
+  .footDesc { max-width: 100%; }
+}

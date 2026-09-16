@@ -1,0 +1,267 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--c-plum);
+  color: var(--c-cream);
+  overflow: hidden;
+
+  --arch-w: 36vw;
+  --arch-h: calc(var(--arch-w) / (560 / 2592));
+  --arch-y: 104vh;
+
+  mask-image: linear-gradient(white, white), linear-gradient(white, white), linear-gradient(white, white), url('/icons/preloader-arch.svg');
+  -webkit-mask-image: linear-gradient(white, white), linear-gradient(white, white), linear-gradient(white, white), url('/icons/preloader-arch.svg');
+  mask-size:
+    calc(50% - (var(--arch-w) / 2) + 2px) 100%,
+    calc(var(--arch-w) + 4px) calc(var(--arch-y) + 2px),
+    calc(50% - (var(--arch-w) / 2) + 2px) 100%,
+    var(--arch-w) var(--arch-h);
+  -webkit-mask-size:
+    calc(50% - (var(--arch-w) / 2) + 2px) 100%,
+    calc(var(--arch-w) + 4px) calc(var(--arch-y) + 2px),
+    calc(50% - (var(--arch-w) / 2) + 2px) 100%,
+    var(--arch-w) var(--arch-h);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position:
+    left top,
+    center top,
+    right top,
+    center var(--arch-y);
+  -webkit-mask-position:
+    left top,
+    center top,
+    right top,
+    center var(--arch-y);
+  mask-composite: add;
+  -webkit-mask-composite: source-over;
+}
+
+.ctn {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: var(--u-32);
+}
+
+.t {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sLogo {
+  width: var(--u-48);
+  height: var(--u-48);
+}
+
+.logoSymbol {
+  width: 100%;
+  height: 100%;
+}
+
+.markSvg {
+  width: 100%;
+  height: 100%;
+  color: var(--c-cream);
+}
+
+.c {
+  position: relative;
+  width: 100%;
+}
+
+.titleL {
+  grid-column: 1 / span 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleR {
+  grid-column: 10 / span 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  grid-column: 4 / span 6;
+  text-align: center;
+  position: relative;
+}
+
+.logoA {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translateX(-50%);
+  width: 100%;
+  pointer-events: none;
+}
+
+.preloaderA {
+  color: var(--c-cream);
+  white-space: nowrap;
+}
+
+.b {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sTitle {
+  grid-column: 4 / span 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.progress {
+  width: var(--u-272);
+  height: 1px;
+  background: rgba(243, 243, 236, 0.2);
+  overflow: hidden;
+  position: relative;
+  margin-inline: auto;
+}
+
+.progressFill {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 100%;
+  background: var(--c-cream);
+  transform: translateY(-100%);
+}
+
+.partInitial {
+  opacity: 0;
+  transform: translateY(var(--u-32));
+}
+
+.partLineInitial {
+  clip-path: inset(0% 0% 100% 0%);
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bgA {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+
+.bgImg {
+  width: 75vw;
+  max-width: 1200px;
+  height: auto;
+  object-fit: contain;
+}
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  color: rgba(243, 243, 236, 0.12);
+}
+
+.frameLtb {
+  position: absolute;
+  left: var(--offset);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.frameRtb {
+  position: absolute;
+  right: var(--offset);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.frameTlr {
+  position: absolute;
+  top: var(--u-96);
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.frameBlr {
+  position: absolute;
+  bottom: var(--u-96);
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.frameLt {
+  position: absolute;
+  left: var(--offset);
+  top: var(--u-96);
+  width: var(--u-48);
+  height: var(--u-48);
+}
+
+.frameRt {
+  position: absolute;
+  right: var(--offset);
+  top: var(--u-96);
+  width: var(--u-48);
+  height: var(--u-48);
+}
+
+.frameRb {
+  position: absolute;
+  right: var(--offset);
+  bottom: var(--u-96);
+  width: var(--u-48);
+  height: var(--u-48);
+}
+
+@media (max-width: 991px) {
+  .titleL, .titleR {
+    display: none;
+  }
+  .logo {
+    grid-column: 1 / span 4;
+  }
+  .sTitle {
+    grid-column: 1 / span 4;
+  }
+  .progress {
+    width: 60vw;
+  }
+}

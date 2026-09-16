@@ -1,0 +1,28 @@
+{
+ "ref": {
+  "heroBenefits": 3600,
+  "benefitsQuote": 4320,
+  "quoteConcept": 5220,
+  "conceptPlan": 6300,
+  "planApart": 3600,
+  "apartAmen": 12074,
+  "amenInteriors": 13829,
+  "interiorsArch": null,
+  "archFacts": 5220,
+  "factsCta": 21538,
+  "ctaFooter": 22356
+ },
+ "loc": {
+  "heroBenefits": 3600,
+  "benefitsQuote": 4320,
+  "quoteConcept": 5185,
+  "conceptPlan": 6265,
+  "planApart": 10765,
+  "apartAmen": 12025,
+  "amenInteriors": 13759,
+  "interiorsArch": null,
+  "archFacts": 5185,
+  "factsCta": 21531,
+  "ctaFooter": 22350
+ }
+}

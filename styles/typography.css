@@ -1,0 +1,91 @@
+/* =============================================================================
+   Typography — mirrors the reference's h1–h6 / a1–a2 / c1 / p1–p2 / l1–l2 ladder
+   ========================================================================== */
+
+@font-face {
+  font-family: "Maison Neue Extended";
+  src: url("/fonts/maisonneueext-book.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Maison Neue Extended";
+  src: url("/fonts/maisonneueext-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * The display face is `ambroise-francois-std`, loaded from the reference's own
+ * Adobe kit, so the metrics here are the real ones — no synthetic horizontal
+ * scaling and no layout-box compensation. `case` and lining numerals match the
+ * reference's own declaration, and matter because every display string on the
+ * page is uppercase.
+ */
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  text-transform: uppercase;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "case" on;
+  margin: 0;
+}
+
+.h1 { font-size: var(--h1-size); line-height: var(--h1-lh); letter-spacing: var(--h1-ls); }
+.h2 { font-size: var(--h2-size); line-height: var(--h2-lh); letter-spacing: var(--h2-ls); }
+.h3 { font-size: var(--h3-size); line-height: var(--h3-lh); letter-spacing: var(--h3-ls); }
+.h4 { font-size: var(--h4-size); line-height: var(--h4-lh); letter-spacing: var(--h4-ls); }
+.h5 { font-size: var(--h5-size); line-height: var(--h5-lh); letter-spacing: var(--h5-ls); }
+.h6 { font-size: var(--h6-size); line-height: var(--h6-lh); letter-spacing: var(--h6-ls); }
+
+/* accent script — never uppercased */
+.a1, .a2 {
+  font-family: var(--font-accent);
+  font-weight: 400;
+  text-transform: none;
+  margin: 0;
+}
+.a1 { font-size: var(--a1-size); line-height: var(--a1-lh); }
+.a2 { font-size: var(--a2-size); line-height: var(--a2-lh); }
+
+/* wide-tracked display caption */
+.c1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--c1-size);
+  line-height: var(--c1-lh);
+  letter-spacing: var(--c1-ls);
+  text-transform: uppercase;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "case" on;
+  margin: 0;
+}
+
+.p1, .p2 {
+  font-family: var(--font-body);
+  font-weight: 400;
+  margin: 0;
+}
+.p1 { font-size: var(--p1-size); line-height: var(--p1-lh); letter-spacing: var(--p1-ls); }
+.p2 { font-size: var(--p2-size); line-height: var(--p2-lh); letter-spacing: var(--p2-ls); }
+
+/* labels — bold, tracked, uppercase */
+.l1, .l2 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+}
+.l1 { font-size: var(--l1-size); line-height: var(--l1-lh); letter-spacing: var(--l1-ls); }
+.l2 { font-size: var(--l2-size); line-height: var(--l2-lh); letter-spacing: var(--l2-ls); }
+
+.l1.reg, .l2.reg { font-weight: 400; }
+
+.a-left   { text-align: left; }
+.a-center { text-align: center; }
+.a-right  { text-align: right; }
+.no-wrap  { white-space: nowrap; }
+.muted    { color: var(--ink-muted); }

@@ -1,0 +1,106 @@
+/* the smaller slide image left the section short of the reference's 900 */
+.section { padding-block: calc(var(--u-64) + var(--u-72)) calc(var(--u-96) + var(--u-72)); overflow: clip; }
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: var(--u-48);
+}
+
+/* ----------------------------------------------------------------- title */
+
+.title {
+  /* the reference lets these titles bleed past the gutters; the wrapper keeps
+     its own width so the bleed never widens the grid track */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  white-space: nowrap;
+}
+
+.chars { display: inline-block; }
+/* nowrap so a hyphen inside a word — "Real-life" — cannot become a break
+   opportunity between two of its character boxes at narrow widths */
+.word { display: inline-block; white-space: nowrap; }
+
+/* Each glyph carries its own delay, so the line dissolves and resolves left to
+   right. It never moves — the reference's display headings simply fade. */
+.char {
+  display: inline-block;
+  white-space: pre;
+  animation-delay: var(--char-delay, 0ms);
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-out);
+}
+
+.char[data-phase="idle"] { opacity: 0; }
+.char[data-phase="in"] { animation-name: charIn; animation-duration: var(--in-char); }
+.char[data-phase="out"] { animation-name: charOut; animation-duration: var(--out-char); }
+
+@keyframes charIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes charOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ---------------------------------------------------------------- render */
+
+.figure { width: 100%; display: flex; justify-content: center; }
+
+/* Enlarged from the reference's 374x187 (26%) to about 1.5x. The wipe and zoom
+   are both in percent of this frame, so they scale with it unchanged. */
+.frame {
+  position: relative;
+  display: block;
+  width: 40%;
+  max-width: 100%;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+}
+
+/* One layer per slide, stacked. The incoming layer wipes over the outgoing one
+   behind a slanted edge; the outgoing layer is never touched. */
+.layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  will-change: clip-path;
+}
+
+.img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ------------------------------------------------------------------ copy */
+
+.copy {
+  display: grid;
+  justify-items: center;
+  gap: var(--u-32);
+  transition:
+    opacity var(--dur-s) var(--ease-out),
+    transform var(--dur-s) var(--ease-out);
+}
+
+.copy[data-phase="idle"],
+.copy[data-phase="out"] { opacity: 0; transform: translateY(var(--u-8)); }
+
+.copy[data-phase="in"] {
+  opacity: 1;
+  transform: none;
+  /* trails the title swap, so the copy arrives under a heading already forming */
+  transition-delay: 120ms;
+}
+
+.body { max-width: var(--col-5); color: var(--ink); }
+
+.kicker { color: var(--ink); }
+.kickerLine { display: block; }
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 991px) {
+  .frame { width: 100%; }
+  .title { white-space: normal; margin-inline: 0; width: 100%; max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .char { animation: none !important; opacity: 1 !important; }
+  .copy[data-phase="idle"] { opacity: 1; transform: none; }
+}

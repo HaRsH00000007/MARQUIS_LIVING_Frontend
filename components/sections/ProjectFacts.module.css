@@ -1,0 +1,112 @@
+/*
+ * `--drift` is written by the component: -1 as the section enters, +1 as it
+ * leaves. Declared here so the row has a resting value before hydration and
+ * under reduced motion, where the component never sets it.
+ */
+.section {
+  position: relative;
+  padding-block: var(--u-96) var(--u-120);
+  --drift: 0;
+}
+
+/* 806 of 1354, as the apartment intro sets it: three lines at h4. */
+.leadWrap { width: 59.5%; margin-inline: auto; }
+
+/* ----------------------------------------------------------------- cards */
+
+/*
+ * `--max-travel` is the furthest any card moves, and the track reserves
+ * exactly that much as padding on both sides. The columns are measured after
+ * the padding, so a card at full travel lands on the container's edge and
+ * never past it — which is what was carrying the copy out of the box on the
+ * way up.
+ */
+.track {
+  --max-travel: 3.5;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--u-48);
+  width: 100%;
+  margin: var(--u-120) 0 0;
+  padding: 0 calc(var(--max-travel) * 1vw);
+  list-style: none;
+}
+
+/*
+ * Each card carries its own `--travel`, so the row opens and closes rather
+ * than sliding as one block. The transform is the only thing that moves; the
+ * grid places the cards and never reflows, so the drift costs no layout.
+ */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* the hairline is what holds the row together now the cards have no rules */
+  border-top: 1px solid var(--line);
+  padding-top: var(--u-24);
+  transform: translate3d(calc(var(--drift) * var(--travel, 0) * 1vw), 0, 0);
+  will-change: transform;
+}
+
+.index { color: var(--ink-muted); }
+
+.label {
+  margin: var(--u-12) 0 var(--u-20);
+  text-transform: none;
+}
+
+/*
+ * Not `--ink-muted`: that is 60% cream, which on this near-black burgundy left
+ * the paragraphs barely legible. Set at 80% and a step up from `p1`'s 13,
+ * with more leading, so the copy reads at a glance without competing with the
+ * display label above it.
+ */
+.body {
+  margin: 0;
+  max-width: 40ch;
+  color: var(--cream-80);
+  font-size: calc(14.5 * var(--u));
+  line-height: 1.6;
+}
+
+.close {
+  margin: var(--u-120) auto 0;
+  color: var(--ink-muted);
+}
+
+.mark {
+  width: var(--u-48);
+  height: var(--u-48);
+  margin-inline: auto;
+}
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 991px) {
+  .section { padding-block: var(--u-64) var(--u-80); }
+
+  .leadWrap { width: 100%; }
+
+  /* Stacked, and still: three cards side by side are unreadable at this width,
+     and a row that does not travel sideways has nothing to drift. */
+  .track {
+    grid-template-columns: 1fr;
+    gap: var(--u-56);
+    margin-top: var(--u-64);
+    /* nothing travels down here, so the reserve is only wasted width */
+    padding: 0;
+  }
+
+  .card { transform: none; will-change: auto; }
+
+  /* one card to a row, so the measure no longer needs capping */
+  .body { max-width: none; }
+
+  .close { margin-top: var(--u-64); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transform: none; will-change: auto; }
+}

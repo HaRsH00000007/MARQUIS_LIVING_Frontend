@@ -1,0 +1,54 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  padding: var(--offset);
+  background: rgba(23, 35, 59, 0.55);
+  backdrop-filter: blur(6px);
+  animation: fade var(--dur-m) var(--ease-out);
+}
+
+.dialog {
+  position: relative;
+  width: min(100%, 34rem);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--u-48);
+  background: var(--bg);
+  color: var(--ink);
+  animation: rise var(--dur-m) var(--ease-out);
+}
+
+.close {
+  position: absolute;
+  top: var(--u-24);
+  right: var(--u-24);
+  width: var(--u-24);
+  height: var(--u-24);
+}
+
+.form { display: flex; flex-direction: column; gap: var(--u-16); }
+
+.field { display: flex; flex-direction: column; gap: var(--u-8); }
+
+.field input {
+  width: 100%;
+  padding: var(--u-12) 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: border-color var(--dur-s) var(--ease-out);
+}
+.field input:focus { outline: none; border-bottom-color: var(--ink); }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { opacity: 0; transform: translateY(2rem); } }
+
+@media (max-width: 991px) {
+  .dialog { width: 100%; padding: var(--u-32); }
+}

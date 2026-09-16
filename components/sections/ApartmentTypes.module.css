@@ -1,0 +1,137 @@
+/*
+ * The reference gives this section exactly one screen and composes the card
+ * across the full 1354 gutter width, not inside a narrower stage. Measured at
+ * 1440x900, section-local:
+ *
+ *   spec labels   x 317          y 349
+ *   render        x 522  w 396   y 157  h 528   (3:4)
+ *   body + CTA    x 1001 w 255   y 349
+ *   name (h2)     x 180  w 1080  y 692
+ *   pagination    x 180  w 1080  y 814
+ *
+ * Everything below is those numbers as a fraction of the 1354-wide container
+ * and the 900-tall section, so the composition holds at any width.
+ */
+.section { height: var(--vh100); }
+
+/*
+ * The card is composed against the section's own screen, so the percentages
+ * below need a containing block of exactly the gutter width and screen height.
+ * The gutter is a margin rather than the usual `.container` padding: an
+ * absolutely positioned child resolves `left: %` against the padding box, so
+ * `.container`'s inline padding would measure every offset against the full
+ * 1440 and pull the whole composition 26px left.
+ */
+.inner {
+  position: relative;
+  height: 100%;
+  margin-inline: var(--offset);
+}
+
+.stage { position: absolute; inset: 0; }
+
+.card {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-l) var(--ease-out), visibility var(--dur-l);
+}
+
+.on { opacity: 1; visibility: visible; }
+
+.spec {
+  position: absolute;
+  left: 20.24%;
+  top: 38.78%;
+  width: 19.13%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--u-32);
+}
+
+.specCol { display: flex; flex-direction: column; gap: var(--u-8); }
+
+.media {
+  position: absolute;
+  left: 35.38%;
+  top: 17.44%;
+  width: 29.25%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+/* the clip and its poster share this: the source is 16:9, the frame is 3:4 */
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* GSAP tweens scale on arrival — give it a layer to work on */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.aside {
+  position: absolute;
+  left: 70.75%;
+  top: 38.78%;
+  width: 18.83%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.body { color: var(--ink-muted); }
+
+/*
+ * The layout's name. `h2` on the reference — 122.4px at 1440, measured — not
+ * `h3`; at h3 it reads as a caption rather than the plate the card sits under.
+ * 1080 of 1354, centred.
+ */
+.name {
+  position: absolute;
+  left: 10.12%;
+  top: 76.89%;
+  width: 79.76%;
+  margin: 0;
+}
+
+/* 1080 of 1354, centred, at the reference's own 814 of 900 */
+.pag {
+  position: absolute;
+  left: 10.12%;
+  top: 90.44%;
+  width: 79.76%;
+}
+
+@media (max-width: 991px) {
+  .section { height: auto; padding-block: var(--u-64); }
+  .inner { height: auto; margin-inline: var(--offset); }
+  .stage { position: static; }
+
+  .card {
+    position: relative;
+    inset: auto;
+    /* stacked cards would each claim a row, so only the active one is in flow */
+    height: 0;
+    overflow: hidden;
+  }
+  .on { height: auto; overflow: visible; }
+
+  .spec,
+  .media,
+  .aside,
+  .name {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
+  }
+
+  .media { aspect-ratio: 3 / 2; margin-block: var(--u-16); }
+  .spec { flex-direction: row; gap: var(--u-48); }
+  .aside { padding-top: var(--u-24); }
+  .name { margin-top: var(--u-24); }
+  .pag { position: static; width: 100%; margin-top: var(--u-32); }
+}

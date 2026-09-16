@@ -1,0 +1,62 @@
+.rail {
+  position: fixed;
+  left: var(--offset);
+  /* a fixed-width column, so the footer's "To top" control can share it */
+  width: var(--u-136);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--u-64);
+  color: var(--ink);
+  pointer-events: none;
+  transition: color var(--dur-m) var(--ease-out);
+}
+
+.track {
+  position: relative;
+  width: 1px;
+  height: var(--u-160);
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.thumb {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: top 0.12s linear;
+}
+
+.hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--u-16);
+  transition: opacity var(--dur-m) var(--ease-out);
+}
+
+/* At the very bottom the footer shows its own "To top" control in this
+   column, so the scroll hint steps aside rather than stacking with it. */
+.hintOut { opacity: 0; }
+
+.hint > span:first-child {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  width: var(--u-48);
+  height: var(--u-48);
+}
+.arrow > svg {
+  width: var(--u-48);
+  transform: rotate(90deg);
+}
+
+@media (max-width: 991px) { .rail { display: none; } }

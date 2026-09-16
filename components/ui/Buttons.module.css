@@ -1,0 +1,92 @@
+/* ---------------------------------------------------------------- pill ---- */
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--u-16) var(--u-32);
+  border: 1px solid currentColor;
+  border-radius: 100vw;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pillBg {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 100%;
+  background: var(--ink);
+  z-index: -1;
+}
+
+.pillLabel {
+  position: relative;
+  display: block;
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------- circle ---- */
+
+.circle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  /* the disc is only 8.5rem across, so the padding is kept tight — the longest
+     label ("...APARTMENTS") has to sit inside it on one line */
+  padding: var(--u-8);
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.circleBg {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 100%;
+  background: var(--ink);
+  border-radius: 100%;
+  z-index: -1;
+}
+
+/* Two classes, so this wins over the global `.l2` it is set alongside. */
+.circle .circleLabel {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* `.l2`'s 0.32em is too wide for the disc and pushed the longest word past
+     the border, which left `text-align: center` nothing to centre */
+  letter-spacing: 0.16em;
+  /* letter-spacing is added after the last glyph too, so a centred line sits
+     half a step left of true centre; the same indent up front cancels it */
+  text-indent: 0.16em;
+}
+
+/* ----------------------------------------------------------- nav item ---- */
+
+.navItem {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.navItemStack {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.navItemLine {
+  display: block;
+}
+
+.navItemLine2 {
+  position: absolute;
+  inset: 0;
+}

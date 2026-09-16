@@ -1,0 +1,14 @@
+.section { position: relative; padding-block: var(--u-96); }
+
+/* 806 of 1354, as the reference sets it: three lines at h4. */
+.leadWrap { width: 59.5%; margin-inline: auto; }
+
+.mark {
+  width: var(--u-48);
+  height: var(--u-48);
+  margin-inline: auto;
+}
+
+
+@media (max-width: 991px) {
+  .lead { max-width: 100%; }}
