@@ -1,0 +1,82 @@
+/* ---------------------------------------------------------------- pill ---- */
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--u-16) var(--u-32);
+  border: 1px solid currentColor;
+  border-radius: 100vw;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pillBg {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 100%;
+  background: var(--ink);
+  z-index: -1;
+}
+
+.pillLabel {
+  position: relative;
+  display: block;
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------- circle ---- */
+
+.circle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  padding: var(--u-16);
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.circleBg {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 100%;
+  background: var(--ink);
+  border-radius: 100%;
+  z-index: -1;
+}
+
+.circleLabel {
+  position: relative;
+  max-width: 100%;
+}
+
+/* ----------------------------------------------------------- nav item ---- */
+
+.navItem {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.navItemStack {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.navItemLine {
+  display: block;
+}
+
+.navItemLine2 {
+  position: absolute;
+  inset: 0;
+}

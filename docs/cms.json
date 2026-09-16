@@ -1,0 +1,317 @@
+{
+ "benefits": [
+  {
+   "text": "REAL-LIFE LOCATION | Nestled between pristine beaches, world-class golf courses and exclusive wellness clubs, EraResidence offers a rare balance of seclusion and seamless access to the finest Mediterraneanlifestyle. | DESIGNED AS A COMMUNITY,NOT A COMPLEX",
+   "imgs": [
+    "6a150affaf1d8cc969d57dd0_img_cam_02-p-1600.webp"
+   ],
+   "cls": "benefits-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Built to stayBuilt to stayDrawing on the spirit of Marbella's golden age, the design blends modern architecture with natural materials, lush landscaping and thoughtfully crafted spaces.Designed as a community, not a complex",
+   "imgs": [
+    "6a150bbc2a39862be04f2cd5_era-residence-terrace-p-1600.webp"
+   ],
+   "cls": "benefits-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Boutique conceptBoutique conceptA boutique gated community of 25 residences on Costa del Sol, designed around privacy, wellbeing and timeless Mediterranean living.Designed as a community, not a complex",
+   "imgs": [
+    "6a150cc2f810e37eec2ea963_era-residence-garden.webp"
+   ],
+   "cls": "benefits-cms_list_item w-dyn-item"
+  }
+ ],
+ "apartTypes": [
+  {
+   "text": "BEDROOMS | 3 | AREA UP TO | 178 — 202 M² | Private basement, direct outdoor access anda dedicated lower level. | EXPLORE GROUND + BASEMENT | EXPLORE GROUND + BASEMENT | GROUND FLOOR + BASEMENT",
+   "imgs": [
+    "6a1514d7c27920c70252da1f_era-residence-ground-floor-basement-p-1600.webp"
+   ],
+   "cls": "apart-type-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Bedrooms2Area up to97 — 104 m²Step directly onto your terrace and into the communal gardens, blending indoor comfort with outdoor living.Explore Ground floorExplore Ground floorGround Floor",
+   "imgs": [
+    "6a1575f46655e8c4e795ec64_era-residence-landscaping-p-1600.webp"
+   ],
+   "cls": "apart-type-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Bedrooms2-3Area up to124 — 243 m²Two floors crowned with panoramic views and a private rooftop solarium — the ultimate expression of luxury living.Explore PenthousesExplore PenthousesPenthouse duplex",
+   "imgs": [
+    "6a15153b797c328a9f2f5964_era-residence-terrace.webp"
+   ],
+   "cls": "apart-type-cms_list_item w-dyn-item"
+  }
+ ],
+ "amenities": [
+  {
+   "text": "GATED COMMUNITY | INSTEAD OF CORRIDORS, WALKING PATHSCONNECT THE APARTMENTS — MAKING ERA RESIDENCEFEEL CLOSER TO A GROUP OF PRIVATE HOMES THAN ASTANDARD",
+   "imgs": [
+    "6a1512e5b24991c76981118b_era-residence-gated-community-p-1600.webp"
+   ],
+   "cls": "amen-cms_list_item w-dyn-item is-active"
+  },
+  {
+   "text": "Swimming PoolSaltwater swimming pool, Children’s pool, Sauna, jacuzzi and wellness shower",
+   "imgs": [
+    "6a151264dc1dcca76fda17d9_era-residence-pool-p-1600.webp"
+   ],
+   "cls": "amen-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Parking areaEach parking space includes pre-installation for optional EV charging.",
+   "imgs": [
+    "6a1573fc640c344ee0705819_era-residence-parking.webp"
+   ],
+   "cls": "amen-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Spa & gymDesigned exclusively for residents and their guests, the amenities at ERA encourage a slower and more balanced Mediterranean lifestyle",
+   "imgs": [
+    "6a15132fe66907986a254201_era-residence-spa-%26-gym-p-1600.webp"
+   ],
+   "cls": "amen-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "LandscapingThe landscaping concept was designed to soften the architecture and strengthen the connection between the residences and the Mediterranean environment.",
+   "imgs": [
+    "6a151382fb101ce2ca9db288_era-residence-landscaping.webp"
+   ],
+   "cls": "amen-cms_list_item w-dyn-item"
+  }
+ ],
+ "amenTabs": [
+  {
+   "text": "GATED COMMUNITY",
+   "imgs": [],
+   "cls": "amen-tabs-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "SWIMMING POOL",
+   "imgs": [],
+   "cls": "amen-tabs-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "PARKING AREA",
+   "imgs": [],
+   "cls": "amen-tabs-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "SPA & GYM",
+   "imgs": [],
+   "cls": "amen-tabs-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "LANDSCAPING",
+   "imgs": [],
+   "cls": "amen-tabs-cms_list_item w-dyn-item"
+  }
+ ],
+ "gallery": [
+  {
+   "text": "",
+   "imgs": [
+    "6a1507fddb26e71ff717c30c_img_cam_03-p-1600.webp"
+   ],
+   "cls": "gallery-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "",
+   "imgs": [
+    "6a15080748155bc8e151f5ff_img_cam_07-p-1600.webp"
+   ],
+   "cls": "gallery-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "",
+   "imgs": [
+    "6a150812aefa2e544369d4a6_img_cam_09-p-1600.webp"
+   ],
+   "cls": "gallery-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "",
+   "imgs": [
+    "6a1575180f248400b7124a46_era-residence-kitchen-p-1600.webp"
+   ],
+   "cls": "gallery-cms_list_item w-dyn-item"
+  }
+ ],
+ "other": [
+  {
+   "text": "DEVELOPER | Swiss Technology S.L.",
+   "imgs": [],
+   "cls": "other-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "SALES & MARKETING | Unreal Estate Group",
+   "imgs": [
+    "6a1577b00ac578734e61941e_Unreal%20logo.svg"
+   ],
+   "cls": "other-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "LICENSE OBTAINED | The project holds all required permits and an active construction license. All documentation is publicly available. Construction is already underway — visit the site in person or follow progress via our live online stream.",
+   "imgs": [],
+   "cls": "other-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "2026 | Currently under construction. The first phase of construction is underway, with ongoing development of the apartments and communal areas. Potential buyers can anticipate a modern living space upon completion of the build.",
+   "imgs": [],
+   "cls": "other-cms_list_item w-dyn-item"
+  }
+ ],
+ "pins": [
+  {
+   "text": "",
+   "imgs": [],
+   "cls": "pins-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "",
+   "imgs": [],
+   "cls": "pins-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "",
+   "imgs": [],
+   "cls": "pins-cms_list_item w-dyn-item"
+  }
+ ],
+ "contact": [
+  {
+   "text": "+34 (655) 408-648",
+   "imgs": [],
+   "cls": "contact-cms_list_item w-dyn-item"
+  }
+ ],
+ "locCms": [
+  {
+   "text": "SALES OFFICE | AVENIDA LITORAL, 29680 ESTEPONA, MÁLAGA, SPAIN | AVENIDA LITORAL, 29680 ESTEPONA, MÁLAGA, SPAIN",
+   "imgs": [],
+   "cls": "loc-cms_list_item w-dyn-item"
+  }
+ ],
+ "legal": [
+  {
+   "text": "PRIVACY POLICY | PRIVACY POLICY | ,",
+   "imgs": [],
+   "cls": "legal-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "TERMS OF USE | TERMS OF USE",
+   "imgs": [],
+   "cls": "legal-cms_list_item w-dyn-item"
+  },
+  {
+   "text": "Privacy policy",
+   "imgs": [],
+   "cls": "legal-cms_list_item inline w-dyn-item"
+  }
+ ],
+ "navHTML": [],
+ "svgs": [
+  {
+   "w": "0 0 40 40",
+   "parent": "logo w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 40 40\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M6.55544 9.1241C4.81712 7.38578 4.69025 4.69428 4.69025 4.69428C4.69025 4.69428 7.38176 4.82115 9.12007 6.55947C10.8584 8.29779 10.9853 10.9893 10.9853 10.9893C10.9853 10.9893 8.29376 10.8624 6.55544 9.1241Z\" fill=\"currentColor\"></path>\n<path d=\"M20 0.00151769L16.1569 8.1194C15.5932 9.31006 15.5931 10.6907 16.1568 11.8814L18.4988 16.8291C17.7735 17.1796 17.1891 17.7755 16.8534 18.5091L11.8814 16.1558C10.6907 15.5923 9.31007 15.5923 8.11946 16.156L0 20V19.177C0 18.3493 0.423339 17.5792 1.12211 17.1356L7.64451 12.9953C9.08249 12.0825 10.9183 12.0824 12.3564 12.9951L14.1067 14.1059L12.9961 12.3565C12.0833 10.9184 12.0833 9.08239 12.9962 7.64431L17.1364 1.12212C17.5799 0.423353 18.3501 1.51793e-05 19.1777 1.51793e-05L20 0.00151769Z\" fill=\"currentColor\"></path>\n<path d=\"M33.4446 30.8759C35.1829 32.6142 35.3097 35.3057 35.3097 35.3057C35.3097 35.3057 32.6182 35.1788 30.8799 33.4405C29.1416 31.7022 29.0147 29.0107 29.0147 29.0107C29.0147 29.0107 31.7062 29.1375 33.4446 30.8759Z\" fill=\"currentColor\"></path>\n<path d=\"M20 39.9984L23.8431 31.8806C24.4068 30.6899 24.4069 29.3092 23.8432 28.1185L21.5012 23.1708C22.2265 22.8204 22.8109 22.2244 23.1466 21.4909L28.1186 23.8441C29.3093 24.4077 30.6899 24.4076 31.8805 23.8439L40 19.9999V20.8229C40 21.6506 39.5767 22.4208 38.8779 22.8643L32.3555 27.0047C30.9175 27.9175 29.0817 27.9176 27.6436 27.0049L25.8933 25.894L27.0039 27.6435C27.9167 29.0816 27.9167 30.9176 27.0038 32.3556L22.8636 38.8778C22.4201 39.5766 21.6499 39.9999 20.8223 39.9999L20 39.9984Z\" fill=\"currentColor\"></path>\n<path d=\"M30.8759 6.55544C32.6142 4.81712 35.3057 4.69026 35.3057 4.69026C35.3057 4.69026 35.1789 7.38176 33.4405 9.12008C31.7022 10.8584 29.0107 10.9853 29.0107 10.9853C29.0107 10.9853 29.1376 8.29376 30.8759 6.55544Z\" fill=\"currentColor\"></path>\n<path d=\"M39.9985 20L31.8806 16.1569C30.69 15.5932 29.3093 15.5931 28.1186 16.1568L23.1709 18.4988C22.8204 17.7735 22.2245 17.1891 21.4909 16.8534L23.8442 11.8814C24.4078 10.6907 24.4077 9.31007 23.844 8.11946L20 0L20.823 3.59746e-08C21.6507 7.2153e-08 22.4208 0.423339 22.8644 1.12211L27.0047 7.64451C27.9175 9.08249 27.9176 10.9183 27.0049 12.3564L25.8941 14.1067L27.6435 12.9961C29.0816 12.0833 30.9176 12.0833 32.3557 12.9962L38.8779 17.1364C39.5767 17.5799 40 18.3501 40 19.1777L39.9985 20Z\" fill=\"currentColor\"></path>\n<path d=\"M9.12417 33.4445C7.38585 35.1828 4.69435 35.3097 4.69435 35.3097C4.6943"
+  },
+  {
+   "w": null,
+   "parent": "frame_l-tb w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"50%\" y1=\"0%\" x2=\"50%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_lt w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"100%\" x2=\"100%\" y2=\"0%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_t-lr w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_rt w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_r-tb w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"50%\" y1=\"0%\" x2=\"50%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_rb w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"100%\" x2=\"100%\" y2=\"0%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_b-lr w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_lb w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_l-tb w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"50%\" y1=\"0%\" x2=\"50%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_lt w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"100%\" x2=\"100%\" y2=\"0%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_t-lr w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_rt w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_r-tb w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"50%\" y1=\"0%\" x2=\"50%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_rb w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"100%\" x2=\"100%\" y2=\"0%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_b-lr w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": null,
+   "parent": "frame_lb w-variant-db77920b-274b-9558-1ced-34e87f5b7d94 w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <line x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\" stroke-width=\"1\" stroke=\"currentColor\" vector-effect=\"non-scaling-stroke\"></line>\n</svg>"
+  },
+  {
+   "w": "0 0 40 40",
+   "parent": "logo w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 40 40\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M6.55544 9.1241C4.81712 7.38578 4.69025 4.69428 4.69025 4.69428C4.69025 4.69428 7.38176 4.82115 9.12007 6.55947C10.8584 8.29779 10.9853 10.9893 10.9853 10.9893C10.9853 10.9893 8.29376 10.8624 6.55544 9.1241Z\" fill=\"currentColor\"></path>\n<path d=\"M20 0.00151769L16.1569 8.1194C15.5932 9.31006 15.5931 10.6907 16.1568 11.8814L18.4988 16.8291C17.7735 17.1796 17.1891 17.7755 16.8534 18.5091L11.8814 16.1558C10.6907 15.5923 9.31007 15.5923 8.11946 16.156L0 20V19.177C0 18.3493 0.423339 17.5792 1.12211 17.1356L7.64451 12.9953C9.08249 12.0825 10.9183 12.0824 12.3564 12.9951L14.1067 14.1059L12.9961 12.3565C12.0833 10.9184 12.0833 9.08239 12.9962 7.64431L17.1364 1.12212C17.5799 0.423353 18.3501 1.51793e-05 19.1777 1.51793e-05L20 0.00151769Z\" fill=\"currentColor\"></path>\n<path d=\"M33.4446 30.8759C35.1829 32.6142 35.3097 35.3057 35.3097 35.3057C35.3097 35.3057 32.6182 35.1788 30.8799 33.4405C29.1416 31.7022 29.0147 29.0107 29.0147 29.0107C29.0147 29.0107 31.7062 29.1375 33.4446 30.8759Z\" fill=\"currentColor\"></path>\n<path d=\"M20 39.9984L23.8431 31.8806C24.4068 30.6899 24.4069 29.3092 23.8432 28.1185L21.5012 23.1708C22.2265 22.8204 22.8109 22.2244 23.1466 21.4909L28.1186 23.8441C29.3093 24.4077 30.6899 24.4076 31.8805 23.8439L40 19.9999V20.8229C40 21.6506 39.5767 22.4208 38.8779 22.8643L32.3555 27.0047C30.9175 27.9175 29.0817 27.9176 27.6436 27.0049L25.8933 25.894L27.0039 27.6435C27.9167 29.0816 27.9167 30.9176 27.0038 32.3556L22.8636 38.8778C22.4201 39.5766 21.6499 39.9999 20.8223 39.9999L20 39.9984Z\" fill=\"currentColor\"></path>\n<path d=\"M30.8759 6.55544C32.6142 4.81712 35.3057 4.69026 35.3057 4.69026C35.3057 4.69026 35.1789 7.38176 33.4405 9.12008C31.7022 10.8584 29.0107 10.9853 29.0107 10.9853C29.0107 10.9853 29.1376 8.29376 30.8759 6.55544Z\" fill=\"currentColor\"></path>\n<path d=\"M39.9985 20L31.8806 16.1569C30.69 15.5932 29.3093 15.5931 28.1186 16.1568L23.1709 18.4988C22.8204 17.7735 22.2245 17.1891 21.4909 16.8534L23.8442 11.8814C24.4078 10.6907 24.4077 9.31007 23.844 8.11946L20 0L20.823 3.59746e-08C21.6507 7.2153e-08 22.4208 0.423339 22.8644 1.12211L27.0047 7.64451C27.9175 9.08249 27.9176 10.9183 27.0049 12.3564L25.8941 14.1067L27.6435 12.9961C29.0816 12.0833 30.9176 12.0833 32.3557 12.9962L38.8779 17.1364C39.5767 17.5799 40 18.3501 40 19.1777L39.9985 20Z\" fill=\"currentColor\"></path>\n<path d=\"M9.12417 33.4445C7.38585 35.1828 4.69435 35.3097 4.69435 35.3097C4.6943"
+  },
+  {
+   "w": "0 0 120 120",
+   "parent": "header-logo_bg b-desk w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 120 120\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M47.4199 16.9826L46.1848 10.8049L50.8534 9.87151L51.0898 11.0541L47.7715 11.7175L48.0309 13.0148L51.0315 12.415L51.2556 13.5358L48.2549 14.1357L48.5337 15.5301L51.8432 14.8684L52.0796 16.051L47.4199 16.9826Z\" fill=\"currentColor\"></path>\n<path d=\"M59.2364 13.0521L59.2367 13.0701L60.8154 15.3744L59.2496 15.4012L57.7528 13.1495L56.637 13.1686L56.676 15.4453L55.2992 15.4689L55.1914 9.16977L58.5119 9.11294C59.2079 9.10703 59.7569 9.27766 60.1589 9.62483C60.567 9.9779 60.7793 10.4633 60.7959 11.0811C60.7986 11.5912 60.6649 12.0165 60.3947 12.3572C60.1245 12.6979 59.7384 12.9295 59.2364 13.0521ZM56.6162 11.9538L58.4249 11.9228C58.7429 11.9174 58.9877 11.8442 59.1593 11.7032C59.3368 11.5562 59.4233 11.3507 59.4188 11.0867C59.4143 10.8227 59.3269 10.6262 59.1567 10.4971C58.9865 10.374 58.7275 10.3154 58.3795 10.3214L56.5888 10.352L56.6162 11.9538Z\" fill=\"currentColor\"></path>\n<path d=\"M68.6706 16.25L68.439 15.2192L65.332 14.6483L64.7492 15.5295L63.2886 15.2612L67.2154 9.57718L68.4812 9.80976L70.14 16.52L68.6706 16.25ZM66.0545 13.5549L68.1613 13.942L67.5705 11.2804L67.5528 11.2771L66.0545 13.5549Z\" fill=\"currentColor\"></path>\n<path d=\"M95.5466 29.3081L95.533 29.3198L94.7732 32.0077L93.7503 30.822L94.5221 28.2307L93.7931 27.3857L92.069 28.873L91.1695 27.8304L95.9398 23.7152L98.1091 26.2298C98.5591 26.7607 98.7795 27.2917 98.7701 27.8228C98.7601 28.3623 98.5231 28.8362 98.0591 29.2444C97.669 29.573 97.2566 29.7425 96.8219 29.753C96.3872 29.7635 95.9621 29.6152 95.5466 29.3081ZM94.7131 26.592L95.8947 27.9618C96.1024 28.2025 96.3154 28.3437 96.5335 28.3853C96.7601 28.4276 96.9734 28.3625 97.1733 28.19C97.3732 28.0176 97.4682 27.8246 97.4584 27.6112C97.4441 27.4017 97.3233 27.1652 97.0959 26.9017L95.9261 25.5456L94.7131 26.592Z\" fill=\"currentColor\"></path>\n<path d=\"M96.7983 34.4477L102.247 31.2845L104.637 35.4019L103.594 36.0074L101.895 33.0809L100.751 33.7452L102.287 36.3915L101.299 36.9654L99.7624 34.3191L98.5326 35.0331L100.227 37.9518L99.1842 38.5573L96.7983 34.4477Z\" fill=\"currentColor\"></path>\n<path d=\"M101.515 43.8954C101.234 43.0911 101.184 42.3796 101.364 41.7608C101.548 41.1344 101.952 40.6427 102.576 40.2857L103.285 41.4661C102.892 41.7023 102.641 41.9895 102.532 42.3278C102.422 42.6604 102.448 43.0555 102.612 43.5131C102.747 43.8917 102.91 44.1614 103.102 44.3224C103.289 44.4911 103.491 44.5371 103.705 44.4603C103.898 44.4106 104.023 44.2447 104.082 "
+  },
+  {
+   "w": "0 0 80 80",
+   "parent": "header-logo_bg b-mob w-embed",
+   "html": "<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 80 80\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M30.9343 8.10939L29.9398 2.5984L34.1045 1.84685L34.2949 2.90181L31.3347 3.43599L31.5436 4.5933L34.2203 4.11027L34.4008 5.11012L31.724 5.59315L31.9485 6.83706L34.9008 6.3043L35.0912 7.35926L30.9343 8.10939Z\" fill=\"currentColor\"></path>\n<path d=\"M41.4653 4.97996L41.4646 4.99595L42.7436 7.12405L41.3529 7.06507L40.1438 4.98797L39.1527 4.94594L39.0669 6.96812L37.844 6.91626L38.0813 1.32129L41.0307 1.44637C41.6485 1.47791 42.1267 1.65833 42.465 1.98763C42.8085 2.32248 42.9712 2.76444 42.9533 3.31351C42.9287 3.76621 42.7876 4.13656 42.5298 4.42456C42.272 4.71257 41.9172 4.8977 41.4653 4.97996ZM39.1985 3.86691L40.805 3.93504C41.0874 3.94702 41.3085 3.89501 41.4682 3.779C41.6335 3.6579 41.7211 3.48012 41.731 3.24566C41.741 3.01121 41.6738 2.8322 41.5296 2.70864C41.3852 2.59042 41.1584 2.52475 40.8494 2.51164L39.2588 2.44419L39.1985 3.86691Z\" fill=\"currentColor\"></path>\n<path d=\"M49.5232 8.45767L49.4056 7.52596L46.7048 6.75775L46.1144 7.48812L44.8448 7.127L48.8007 2.43005L49.901 2.74302L50.8006 8.82098L49.5232 8.45767ZM47.4366 5.8514L49.268 6.37229L48.9706 3.96719L48.9553 3.96281L47.4366 5.8514Z\" fill=\"currentColor\"></path>\n<path d=\"M64.0983 14.551L64.0873 14.5626L63.6522 17.007L62.6429 16.0484L63.0971 13.6883L62.3779 13.0051L60.984 14.4727L60.0965 13.6297L63.9531 9.56936L66.0935 11.6023C66.5384 12.0323 66.7801 12.4825 66.8186 12.9531C66.8573 13.4312 66.6895 13.8712 66.315 14.2732C65.999 14.5982 65.6491 14.7845 65.2656 14.8321C64.882 14.8797 64.4929 14.786 64.0983 14.551ZM63.1216 12.2221L64.2876 13.3295C64.4925 13.5241 64.6933 13.6302 64.8899 13.6478C65.0941 13.6652 65.277 13.5888 65.4386 13.4187C65.6002 13.2485 65.6672 13.0695 65.6398 12.8816C65.6086 12.6975 65.4809 12.499 65.2566 12.2859L64.1023 11.1896L63.1216 12.2221Z\" fill=\"currentColor\"></path>\n<path d=\"M65.5855 18.9163L70.2355 15.7958L72.5937 19.3099L71.7035 19.9072L70.0274 17.4095L69.0509 18.0648L70.5666 20.3234L69.7229 20.8895L68.2073 18.631L67.1577 19.3353L68.8294 21.8264L67.9392 22.4237L65.5855 18.9163Z\" fill=\"currentColor\"></path>\n<path d=\"M70.1865 26.9667C69.9144 26.2599 69.8499 25.6291 69.9928 25.0744C70.1388 24.5127 70.4842 24.0646 71.0289 23.7302L71.6913 24.7592C71.3483 24.98 71.1333 25.2421 71.0463 25.5457C70.9573 25.8442 70.9919 26.1945 71.1499 26.5966C71.2806 26.9292 71.4332 27.1643 71.6077 27.302C71.7792 27.4467 71.9592 27.4819 72.1478 27.4078C72.3175 27.3583 72.4244 27.2074 72.4685 26.955"
+  }
+ ]
+}

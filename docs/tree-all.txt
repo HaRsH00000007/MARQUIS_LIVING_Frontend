@@ -1,0 +1,690 @@
+
+
+########## SECTION 0: .section.clip.theme_on-color ##########
+<section.section.clip.theme_on-color>
+  <div.container>
+    <div.hero-scroll-area>
+      <div.hero-w>
+        <div.hero-s>
+          <div.u-48>
+          <div.u-272.b-mob>
+          <div.grid>
+            <div.hero-s_logo>
+              <h1.h1.a-center>
+                <span.split-word>
+                <br>
+                <span.split-word>
+              <div.hero-s_logo_a>
+                <h2.a2>
+          <div.u-48>
+          <div.grid>
+            <h3.hero-s_title.h5>
+              <span.a-left>
+                <div.span> " "
+              <div.hero-s_tabs>
+                <a.nav-item.w-inline-block.is-active>
+                <div.hero-s_tabs_divider.is-day> [bg:linear-gradient(90deg, rgba(255, 255, 255, 0]
+                <a.nav-item.w-inline-block>
+              <span.a-right>
+                <div.span> " "
+        <div.hero-w_bg>
+          <div.hero-w_bg_master>
+            <div.hero-w_bg_master_img>
+              <div.pins-cms.b-desk.w-dyn-list>
+                <div.pins-cms_list.w-dyn-items>
+              <div.hero-w_bg_master_img_day>
+                <div.img-w.h-auto>
+              <div.hero-w_bg_master_img_night>
+                <div.img-w.h-auto>
+              <div.img-over-grad.from-top._100vh> [bg:linear-gradient(rgba(0, 0, 0, 0.3]
+              <div.img-over-grad.from-bot.bot._6x> [bg:linear-gradient(rgba(0, 0, 0, 0]
+              <div.img-over-grad.from-bot.bot._6x> [bg:linear-gradient(rgba(0, 0, 0, 0]
+            <div.hero-s_b>
+              <div.hero-s_btn>
+                <div.e-auto>
+              <div.u-32>
+              <div.grid>
+                <div.hero-s_desc>
+              <div.u-48>
+      <div.hero_themes>
+        <div.hero_themes_color>
+        <div.hero_themes_light>
+
+
+########## SECTION 1: .section.arch.clip.theme_on-brand ##########
+<section.section.arch.clip.theme_on-brand>
+  <div.container>
+    <div.benefits-intro-w>
+      <div.benefits-intro-s>
+        <div.u-48.b-mob>
+        <div.u-272.b-mob>
+        <div.s_logo>
+          <div.info-s_logo_l>
+            <div.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line>
+          <div.logo_symbol.ico-48>
+            <div.logo.w-embed>
+              <svg.[object.SVGAnimatedString]> " "
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+                <path.[object.SVGAnimatedString]>
+          <div.info-s_logo_r>
+            <div.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line>
+        <div.u-48>
+        <div.divider>
+          <div.line-v>
+        <div.u-48>
+        <div.grid>
+          <div.s_title>
+            <p.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+        <div.u-96>
+        <div.benefits-intro-s_title>
+          <div.benefits-intro-s_title_svg.b-desk.w-embed>
+            <svg.[object.SVGAnimatedString]> " "
+              <defs.[object.SVGAnimatedString]> " "
+                <path.[object.SVGAnimatedString]>
+              <text.[object.SVGAnimatedString]> " "
+                <textpath.[object.SVGAnimatedString]> "Three reasons to choose Era"
+          <div.benefits-intro-s_title_svg.b-mob.w-embed>
+            <svg.[object.SVGAnimatedString]> " "
+              <defs.[object.SVGAnimatedString]> " "
+                <path.[object.SVGAnimatedString]>
+              <text.[object.SVGAnimatedString]> " "
+                <textpath.[object.SVGAnimatedString]> "Three reasons to choose Era"
+
+
+########## SECTION 2: .section.z-2.theme_on-brand ##########
+<section.section.z-2.theme_on-brand>
+  <div.container>
+    <div.benefits-w>
+      <div.benefits-s>
+        <div.grid.fill>
+          <div.benefits-s_cms>
+            <div.benefits-s_cms_pag>
+              <div.u-48>
+              <div.u-16>
+              <div.benefit-slide_img>
+              <div.u-16>
+              <div.pag>
+                <div.pag_prev>
+                <div.pag_progress>
+                <div.pag_next>
+            <div.benefits-cms.w-dyn-list>
+              <div.benefits-cms_list.w-dyn-items>
+                <div.benefits-cms_list_item.w-dyn-item>
+                <div.benefits-cms_list_item.w-dyn-item>
+                <div.benefits-cms_list_item.w-dyn-item>
+
+
+########## SECTION 3: .section.z-2.theme_on-brand ##########
+<section.section.z-2.theme_on-brand>
+  <div.container>
+    <div.quote-w>
+      <div.quote-s.b-desk.theme_on-color>
+        <div.grid>
+          <div.quote-s_c.w-clearfix>
+            <div.grid._4-columns>
+              <div.quote-s_ico>
+                <div.ico-48>
+                <div.u-32>
+            <div.red-line>
+            <h4.h5>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line>
+            <div.u-64>
+            <div.grid._4-columns>
+              <div.quote-s_author>
+                <div.l1>
+                <div.l1.reg>
+        <div.u-48>
+      <div.quote-w_bg>
+        <div.img-w.h-auto.quote-w_bg_img>
+          <div.img-over-grad.from-bot.bot._4x.b-desk> [bg:linear-gradient(rgba(0, 0, 0, 0]
+          <div.img-over-grad.from-bot.bot._4x.b-desk> [bg:linear-gradient(rgba(0, 0, 0, 0]
+          <img.img.h-auto.quote-w_bg_img> [img:6a0f8c07861fe831459ff0d9_img_cam_05_alpha.webp]
+      <div.w_themes>
+        <div.w_themes_row.fill>
+          <div.quote-w_themes_color-1>
+          <div.quote-w_themes_light-1>
+        <div.w_themes_row>
+          <div.quote-w_themes_color-2>
+
+
+########## SECTION 4: .section.clip ##########
+<section.section.clip>
+  <div.container.loc>
+    <div.loc-scroll-area>
+      <div.loc-scroll-area_screen>
+        <div.loc-scroll-area_track>
+          <div.loc-info-w>
+            <div.loc-info-s>
+              <div.loc-info-s_t>
+                <div.u-48>
+                <div.u-160.b-mob>
+              <div.loc-info-s_c>
+                <div.grid>
+                <div.u-32.b-desk>
+                <div.u-160.b-mob>
+                <div.grid>
+                <div.u-96.b-mob>
+              <div.loc-info-s_b>
+                <div.grid>
+                <div.u-48>
+            <div.flower.loc-info>
+              <video.video> [video:bougainvillea-flowers_01.webm]
+                <source>
+                <source>
+          <div.loc-intro-w>
+            <div.loc-intro-s>
+              <div.u-48.b-desk>
+              <div.u-160.b-mob>
+              <div.grid._13-columns.fill>
+                <div.loc-intro-s_cap>
+                <div.loc-intro-s_title>
+                <div.loc-intro-s_img>
+                <div.loc-intro-s_desc>
+                <div.loc-intro-s_btn>
+              <div.u-48>
+            <div.flower.loc-intro>
+              <video.video> [video:bougainvillea-flowers_02.webm]
+                <source>
+                <source>
+          <div.loc-path-w>
+            <div.loc-path-s>
+              <div.loc-path-s_t>
+                <div.u-48.b-desk>
+                <div.u-160.b-mob>
+              <div.loc-path-s_c>
+                <div.grid>
+              <div.loc-path-s_b>
+                <div.u-48.b-mob>
+                <div.grid>
+                <div.u-48>
+            <div.loc-path-w_flower>
+              <div.flower.loc-path>
+                <video.video> [video:bougainvillea-flowers_03.webm]
+      <div.slow-scroll-trigger>
+
+
+########## SECTION 5: .section.clip.theme_on-color ##########
+<section.section.clip.theme_on-color>
+  <div.container>
+    <div.loc-w>
+      <div.loc-w_over-grad> [bg:linear-gradient(rgb(243, 243, 236]
+      <div.loc-w_over-grad> [bg:linear-gradient(rgb(243, 243, 236]
+      <div.loc-w_clouds>
+        <div.marquee>
+          <div.marquee_track>
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-33> [img:6a0fa3c60405a99c8530535e_img_clouds_33.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-33> [img:6a0fa3c60405a99c8530535e_img_clouds_33.avif]
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-33> [img:6a0fa3c60405a99c8530535e_img_clouds_33.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-33> [img:6a0fa3c60405a99c8530535e_img_clouds_33.avif]
+      <div.loc-w_clouds>
+        <div.marquee>
+          <div.marquee_track>
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-47> [img:6a0fa3c6685d7bb04792137a_img_clouds_47.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-47> [img:6a0fa3c6685d7bb04792137a_img_clouds_47.avif]
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-47> [img:6a0fa3c6685d7bb04792137a_img_clouds_47.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-47> [img:6a0fa3c6685d7bb04792137a_img_clouds_47.avif]
+      <div.loc-w_clouds>
+        <div.marquee>
+          <div.marquee_track>
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-02> [img:6a0fa3c6c9c3c584d9d78d85_img_clouds_02.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-02> [img:6a0fa3c6c9c3c584d9d78d85_img_clouds_02.avif]
+            <div.marquee_list>
+              <div.marquee_list_item>
+                <img.clouds.is-02> [img:6a0fa3c6c9c3c584d9d78d85_img_clouds_02.avif]
+              <div.marquee_list_item>
+                <img.clouds.is-02> [img:6a0fa3c6c9c3c584d9d78d85_img_clouds_02.avif]
+      <div.loc-s>
+        <div.grid>
+          <div.loc-s_desc>
+            <div.b-desk>
+              <div.loc-s_desc_line>
+                <div.line-v>
+              <h3.l1>
+                <span.split-line-mask>
+                <span.split-line-mask>
+              <div.u-32>
+              <h4.p1>
+                <span.split-line-mask>
+              <div.u-32>
+              <h5.p1>
+                <span.split-line-mask>
+            <div.b-mob>
+              <div.l1-list>
+                <div.ico-16>
+                <div.l1> "Drag to see more"
+                <div.ico-16>
+        <div.u-48>
+        <div.loc-w_decor.theme_on-brand>
+          <div.w-embed>
+            <style> ".loc-w_decor { clip-path: polygon(var(--_special-units---offset-l) 0, calc(100% - var(--_special-units---offset-r)) 0%, 100% 101%, 0 101%); }"
+      <div.loc-w_bg>
+        <div.loc-w_bg_img>
+          <div.pins-cms.w-dyn-list>
+            <div.cms_empty-none.w-dyn-empty>
+          <div.img-w.h-auto>
+            <img.img.h-auto> [img:6a15185e6803ae588479d12b_era-residence-master-plan.webp]
+            <div.img-over-grad.from-bot.bot._100vh> [bg:linear-gradient(rgba(0, 0, 0, 0]
+
+
+########## SECTION 6: .section.theme_on-brand ##########
+<section.section.theme_on-brand>
+  <div.container>
+    <div.apart-type-w>
+      <div.apart-type-s>
+        <div.u-48.b-desk>
+        <div.u-96.b-mob>
+        <div.grid.fill>
+          <div.apart-type-s_cms>
+            <div.apart-type-cms.w-dyn-list>
+              <div.apart-type-cms_list.w-dyn-items>
+                <div.apart-type-cms_list_item.w-dyn-item>
+                <div.apart-type-cms_list_item.w-dyn-item>
+                <div.apart-type-cms_list_item.w-dyn-item>
+            <div.u-16>
+            <div.pag>
+              <div.pag_prev>
+                <div.ico-16>
+                <div.pag_prev_label>
+              <div.pag_progress>
+                <div.pag_progress_fill>
+              <div.pag_next>
+                <div.pag_prev_label>
+                <div.ico-16>
+        <div.u-48>
+
+
+########## SECTION 7: .section.clip.theme_on-brand ##########
+<section.section.clip.theme_on-brand>
+  <div.container>
+    <div.apart-info-w>
+      <div.apart-info-s>
+        <div.u-48>
+        <div.divider>
+          <div.line-v>
+        <div.u-48>
+        <div.grid>
+          <div.s_title>
+            <p.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+        <div.u-160>
+        <div.grid>
+          <div.info-s_lead>
+            <h3.h4.a-center>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+        <div.u-160>
+        <div.grid>
+          <div.info-s_desc>
+            <p.p1.a-center>
+            <div.u-32>
+            <div.s_logo>
+              <div.logo_symbol.ico-48>
+                <div.logo.w-embed>
+        <div.u-48>
+      <div.flower.apart-info>
+        <video.video> [video:bougainvillea-flowers_04.webm]
+          <source>
+          <source>
+
+
+########## SECTION 8: .section.clip.theme_on-color ##########
+<section.section.clip.theme_on-color>
+  <div.container>
+    <div.amen-w>
+      <div.amen-s>
+        <div.amen-s_cms>
+          <div.amen-cms.w-dyn-list>
+            <div.amen-cms_list.w-dyn-items>
+              <div.amen-cms_list_item.w-dyn-item.is-active>
+                <div.amen-slide>
+              <div.amen-cms_list_item.w-dyn-item>
+                <div.amen-slide>
+              <div.amen-cms_list_item.w-dyn-item>
+                <div.amen-slide>
+              <div.amen-cms_list_item.w-dyn-item>
+                <div.amen-slide>
+              <div.amen-cms_list_item.w-dyn-item>
+                <div.amen-slide>
+          <div.amm-s_cms_tabs-w>
+            <div.grid>
+              <div.amm-s_cms_tabs>
+                <div.amen-tabs-cms.w-dyn-list>
+                <div.amm-s_cms_tabs_line>
+          <div.amm-s_cms_btn-w.b-desk>
+            <div.grid>
+              <div.amm-s_cms_btn>
+                <div.btn-circle>
+
+
+########## SECTION 9: .section.arch.clip ##########
+<section.section.arch.clip>
+  <div.container>
+    <div.interior-w>
+      <div.interior-s>
+        <div.u-272>
+        <div.grid>
+          <div.interior-s_title>
+            <h2.h1.a-center>
+              <span.split-word>
+                <span.split-char> "T"
+                <span.split-char> "h"
+                <span.split-char> "e"
+              <br>
+              <span.split-word>
+                <span.split-char> "s"
+                <span.split-char> "p"
+                <span.split-char> "a"
+                <span.split-char> "c"
+                <span.split-char> "e"
+              <br>
+              <span.split-word>
+                <span.split-char> "t"
+                <span.split-char> "o"
+            <div.interior-s_title_a>
+              <h3.a1.a-center>
+                <span>
+                <span>
+        <div.interior-s_imgs>
+          <div.interior-s_l>
+            <div.u-272>
+            <div.grid._5-columns>
+              <div.interior-s_l_img-w>
+                <div.interior-s_l_img>
+                <div.flower.interior>
+              <div.interior-s_l_desc>
+                <div.u-16>
+                <h4.l1>
+                <div.u-160.b-mob>
+          <div.interior-s_r>
+            <div.grid._5-columns>
+              <div.interior-s_r_img>
+                <div.img-w>
+              <div.interior-s_r_lead.w-clearfix>
+                <div.u-16>
+                <div.red-line>
+                <h4.h5>
+              <div.interior-s_r_desc>
+                <div.u-64>
+                <p.p1>
+                <div.u-96>
+              <div.interior-s_r_btn>
+                <div.btn-circle>
+        <div.u-272>
+        <div.grid>
+          <div.interior-s_gallery-cms>
+            <div.gallery-cms.w-dyn-list>
+              <div.gallery-cms_list.w-dyn-items>
+                <div.gallery-cms_list_item.w-dyn-item>
+                <div.gallery-cms_list_item.w-dyn-item>
+                <div.gallery-cms_list_item.w-dyn-item>
+                <div.gallery-cms_list_item.w-dyn-item>
+            <div.u-16>
+            <div.interior-s_gallery-cms_pag>
+              <div.pag>
+                <div.pag_prev>
+                <div.pag_progress>
+                <div.pag_next>
+        <div.u-96>
+      <div.interior_themes>
+        <div.interior_themes_light-1>
+        <div.themes_row>
+          <div.interior_themes_dark-2>
+          <div.interior_themes_light-2>
+        <div.interior_themes_light-3>
+
+
+########## SECTION 10: .section.clip ##########
+<section.section.clip>
+  <div.container>
+    <div.arch-scroll-area>
+      <div.arch-intro-s.b-desk>
+        <div.w_bg>
+          <div.arch-intro-s_bg_l>
+          <div.arch-intro-s_bg_r>
+            <div.w-embed>
+          <div.flower.arch-intro-l>
+            <video.video> [video:bougainvillea-flowers_05.webm]
+              <source>
+              <source>
+          <div.flower.arch-intro-r>
+            <video.video> [video:bougainvillea-flowers_07.webm]
+              <source>
+              <source>
+      <div.arch-w.theme_on-color>
+        <div.arch-s>
+          <div.arch-s_t>
+            <div.u-48>
+            <h2.h1.a-center>
+              <span.split-word>
+                <span.split-char> "A"
+                <span.split-char> "r"
+                <span.split-char> "c"
+                <span.split-char> "h"
+                <span.split-char> "i"
+                <span.split-char> "t"
+                <span.split-char> "e"
+                <span.split-char> "c"
+                <span.split-char> "t"
+                <span.split-char> "u"
+                <span.split-char> "r"
+                <span.split-char> "e"
+            <div.u-32>
+            <div.grid>
+              <div.arch-s_desc>
+                <p.l1.a-center>
+          <div.arch-s_b>
+            <div.grid>
+              <div.arch-s_quote.w-clearfix>
+                <div.red-line>
+                <h3.h5> "The architecture of ERA Residences balances clean contemporary lines with Mediterranean warmth and texture"
+                <div.u-64>
+                <div.grid._4-columns>
+                <div.u-160.b-desk>
+              <div.arch-s_btn.b-desk>
+                <div.btn-circle>
+            <div.u-96>
+        <div.w_bg>
+          <div.img-w>
+            <img.img> [img:6a0f8994091fd12c24e79c8a_img_cam_02.webp]
+            <div.img-over-grad.bot._100vh> [bg:linear-gradient(rgba(0, 0, 0, 0]
+            <div.img-over-grad.bot._100vh> [bg:linear-gradient(rgba(0, 0, 0, 0]
+      <div._100vh.b-desk>
+      <div._100vh.b-desk>
+      <div.arch_themes>
+        <div.arch_themes_light.b-desk>
+        <div.arch_themes_color>
+
+
+########## SECTION 11: .section.clip ##########
+<section.section.clip>
+  <div.container>
+    <div.other-w>
+      <div.other-s>
+        <div.u-48>
+        <div.grid>
+          <div.s_title>
+            <p.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+        <div.u-48>
+        <div.divider>
+          <div.line-v>
+        <div.u-64>
+        <div.grid>
+          <div.other-s_cms>
+            <div.other-cms.w-dyn-list>
+              <div.other-cms_list.w-dyn-items>
+                <div.other-cms_list_item.w-dyn-item>
+                <div.other-cms_list_item.w-dyn-item>
+                <div.other-cms_list_item.w-dyn-item>
+                <div.other-cms_list_item.w-dyn-item>
+        <div.u-160>
+      <div.flower.other>
+        <video.video> [video:bougainvillea-flowers_07.webm]
+          <source>
+          <source>
+
+
+########## SECTION 12: .section.theme_on-color ##########
+<section.section.theme_on-color>
+  <div.container>
+    <div.cta-w>
+      <div.cta-s>
+        <div.u-48>
+        <div.grid>
+          <div.cta-s_desc>
+            <p.l1.a-center>
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+              <span.split-line-mask>
+                <span.split-line> " "
+        <div.u-272>
+        <div.grid>
+          <div.cta-s_title>
+            <h2.h1.a-center> " "
+              <span.split-word>
+                <span.split-char> "P"
+                <span.split-char> "e"
+                <span.split-char> "r"
+                <span.split-char> "f"
+                <span.split-char> "e"
+                <span.split-char> "c"
+                <span.split-char> "t"
+              <br>
+              <span.split-word>
+                <span.split-char> "s"
+                <span.split-char> "e"
+                <span.split-char> "a"
+              <span.split-word>
+                <span.split-char> "v"
+                <span.split-char> "i"
+                <span.split-char> "e"
+                <span.split-char> "w"
+                <span.split-char> "s"
+            <div.u-32>
+            <h3.c1.a-center> " "
+              <span.split-word>
+                <span.split-char> "F"
+                <span.split-char> "r"
+                <span.split-char> "o"
+                <span.split-char> "m"
+              <span.split-word>
+                <span.split-char> "r"
+                <span.split-char> "o"
+                <span.split-char> "o"
+                <span.split-char> "f"
+                <span.split-char> "t"
+                <span.split-char> "o"
+                <span.split-char> "p"
+              <span.split-word>
+                <span.split-char> "t"
+                <span.split-char> "e"
+                <span.split-char> "r"
+                <span.split-char> "r"
+                <span.split-char> "a"
+                <span.split-char> "c"
+                <span.split-char> "e"
+                <span.split-char> "s"
+            <div.u-160>
+            <div.cta-s_title_btn>
+              <div.btn-circle>
+                <div.btn-circle_label>
+                <div.btn-circle_bg.w-embed>
+                <a.btn-circle_link.w-inline-block>
+      <div.w_bg>
+        <div.img-w>
+          <img.img-p> [img:6a0f88f3b81e88aabf6874e7_img_cta_1920-p-1600.png]
+          <div.img-over-grad.from-top._4x> [bg:linear-gradient(rgba(0, 0, 0, 0.3]
+          <div.img-over-grad> [bg:linear-gradient(rgba(0, 0, 0, 0]
+          <div.img-over-grad> [bg:linear-gradient(rgba(0, 0, 0, 0]
+
+
+########## SECTION 13: .section.theme_on-dark ##########
+<section.section.theme_on-dark>
+  <div.container>
+    <div.footer-w>
+      <a.footer-s_s-top.w-inline-block.w--current>
+        <div.l2> "To top"
+        <div.s-down_arrow.w-embed>
+          <svg.[object.SVGAnimatedString]> " "
+            <path.[object.SVGAnimatedString]>
+      <div.footer-s>
+        <div.footer-s_t>
+        <div.footer-s_c>
+          <div.grid>
+            <div.footer-s_contact>
+              <div.s_logo>
+                <div.logo_symbol.ico-64>
+              <div.u-32>
+              <div.contact-cms.w-dyn-list>
+                <div.contact-cms_list.w-dyn-items>
+              <div.u-48>
+            <div.footer-s_address>
+              <div.loc-cms.w-dyn-list>
+                <div.loc-cms_list.w-dyn-items>
+        <div.footer-s_b>
+          <div.grid>
+            <div.footer-s_info>
+              <div.l1>
+                <span.split-line-mask>
+              <div.l1.reg.no-wrap>
+                <span.split-line-mask>
+              <div.u-12>
+              <div.legal-cms.w-dyn-list>
+                <span.split-line-mask>
+            <div.footer-s_credits>
+              <div.credits>
+                <a.credits_link.w-inline-block>
+                <div.credits_logo-w>
+                <div.u-12>
+                <div.l1.reg.a-right>
+                <div>
+          <div.u-48>
+      <div.footer-w_bg>

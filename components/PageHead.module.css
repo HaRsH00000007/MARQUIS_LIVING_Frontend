@@ -1,0 +1,2 @@
+.head { padding-block: calc(var(--u-160) + var(--u-96)) var(--u-160); }
+.lead { max-width: var(--col-6); margin-inline: auto; color: var(--ink-muted); }

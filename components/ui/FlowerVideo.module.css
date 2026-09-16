@@ -1,0 +1,11 @@
+.flower {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.media {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}

@@ -1,0 +1,63 @@
+/*
+ * The stage. Perspective is the Framer original's 1200px against its 1440
+ * frame, expressed in vw so the depth of the swing scales with the panel
+ * instead of flattening out on wide screens and exaggerating on narrow ones.
+ */
+.gallery {
+  position: absolute;
+  inset: 0;
+  perspective: 83.333vw;
+  pointer-events: none;
+}
+
+/* A face is one flat plane of cards, turned as a unit about its centre. */
+.face {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Edge-on until the loop brings it round — and where it stays without JS or
+   under reduced motion, leaving only the first face on show. */
+.faceBack { transform: rotateY(90deg); }
+
+/*
+ * Widths are capped against the viewport height as well as its width, so on a
+ * short, wide screen the cards stop growing before they reach into the copy.
+ * 2.1 is the height-to-width ratio the positions were laid out against.
+ */
+.card {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  width: calc(var(--w) * min(1vw, 2.1vh));
+  backface-visibility: hidden;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/*
+ * Below 992px the panel stacks and its copy fills it edge to edge, so there is
+ * no margin left to scatter cards into. The gallery drops into the flow above
+ * the heading instead, in a box of its own, and the cards take their phone
+ * positions within it.
+ */
+@media (max-width: 991px) {
+  .gallery {
+    position: relative;
+    inset: auto;
+    height: 92vw;
+    margin-bottom: var(--u-32);
+  }
+
+  .card {
+    left: calc(var(--mx) * 1%);
+    top: calc(var(--my) * 1%);
+    width: calc(var(--mw) * 1%);
+  }
+}

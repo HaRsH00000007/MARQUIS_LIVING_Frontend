@@ -1,0 +1,67 @@
+.section {
+  position: relative;
+  padding-block: var(--u-96) var(--u-120);
+}
+
+.lead {
+  max-width: 46ch;
+  margin: 0 auto;
+  color: var(--ink-muted);
+}
+
+/*
+ * Two by two rather than the reference's single centred column: with every
+ * paragraph now on the page instead of behind a click, one column ran long and
+ * still left the width of the screen empty on either side.
+ */
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--u-96) var(--u-96);
+  width: 84%;
+  margin: var(--u-96) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  /* the hairline is what holds the field together now the rows have no rules */
+  border-top: 1px solid var(--line);
+  padding-top: var(--u-24);
+}
+
+.index { color: var(--ink-muted); }
+
+.label {
+  margin: var(--u-12) 0 var(--u-20);
+  text-transform: none;
+}
+
+.body {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.close {
+  margin: var(--u-96) auto 0;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 991px) {
+  .section { padding-block: var(--u-64) var(--u-80); }
+
+  .list {
+    grid-template-columns: 1fr;
+    gap: var(--u-56);
+    width: 100%;
+    margin-top: var(--u-64);
+  }
+
+  .lead,
+  .body { max-width: none; }
+
+  .close { margin-top: var(--u-64); }
+}

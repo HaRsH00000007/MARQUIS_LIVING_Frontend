@@ -1,0 +1,422 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import { book } from "@/lib/content";
+import { gsap } from "@/lib/gsap";
+import { useLenis } from "@/components/SmoothScroll";
+import styles from "./Book.module.css";
+
+const clamp = (n: number) => Math.max(0, Math.min(1, n));
+/** Smoothstep of `n` between `a` and `b`. */
+const smooth = (n: number, a: number, b: number) => {
+  const t = clamp((n - a) / (b - a));
+  return t * t * (3 - 2 * t);
+};
+
+/*
+ * One cycle per spread, as shares of that cycle's scroll: the photograph opens
+ * out to full screen, closes back onto its page, then the right page turns.
+ * The designer's own timings.
+ */
+const ZOOM_IN: [number, number] = [0.12, 0.42];
+const ZOOM_OUT: [number, number] = [0.58, 0.8];
+const TURN: [number, number] = [0.86, 0.98];
+/**
+ * Only the first spread zooms. The later spreads have no photograph to lift, so
+ * their page turn takes a broader share of the cycle instead of waiting out the
+ * stretch the zoom used to fill.
+ */
+const ZOOM_SPREAD = 0;
+const TURN_PLAIN: [number, number] = [0.35, 0.85];
+/** How far the right page swings over the spine. */
+const TURN_DEG = 164;
+/** Seconds per page when the book closes back to its first spread. */
+const REWIND_PER_PAGE = 0.45;
+/**
+ * Where in the first cycle the closed book comes to rest: past the top veil
+ * clearing and before the first zoom begins.
+ */
+const REWIND_REST = 0.1;
+
+/** The counter's line of instruction for each stage of a cycle. */
+const stageLabel = (zoomIn: number, zoomOut: number, zooms: boolean) =>
+  !zooms
+    ? "Scroll / Turn the page"
+    : zoomOut > 0.08
+    ? "Returning to page"
+    : zoomIn > 0.98
+      ? "Full screen"
+      : zoomIn > 0.08
+        ? "Zoom into image"
+        : "Scroll / Zoom into image";
+
+/**
+ * The editorial book, rebuilt from the designer's WordPress piece. The section
+ * pins for nine screens while an open book rests in the room. On the first
+ * spread, scrolling lifts the right-page photograph off the page to fill the
+ * screen, settles it back, and turns the page; the later spreads simply turn.
+ *
+ * Everything is written straight onto the elements from a rAF-throttled scroll
+ * handler, so scrolling never re-renders React. Under reduced motion nothing
+ * runs and the first spread simply rests in the room.
+ */
+export function Book() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const lenisRef = useLenis();
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const sticky = stickyRef.current;
+    if (!section || !sticky) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const q = <T extends HTMLElement>(sel: string) => [...sticky.querySelectorAll<T>(sel)];
+    const spreads = q<HTMLElement>("[data-spread]");
+    const frames = q<HTMLElement>("[data-frame]");
+    const copies = q<HTMLElement>("[data-frame-copy]");
+    const scrims = q<HTMLElement>("[data-frame-scrim]");
+    const heading = sticky.querySelector<HTMLElement>("[data-heading]");
+    const progress = sticky.querySelector<HTMLElement>("[data-progress]");
+    const count = sticky.querySelector<HTMLElement>("[data-count]");
+    const stage = sticky.querySelector<HTMLElement>("[data-stage]");
+    const veilTop = sticky.querySelector<HTMLElement>("[data-veil-top]");
+    const veilBottom = sticky.querySelector<HTMLElement>("[data-veil-bottom]");
+    const last = spreads.length - 1;
+
+    let frame = 0;
+    let shownFrame = -1;
+    let lastY = window.scrollY;
+
+    /*
+     * The close. Scrolling back up from the last spread does not scrub back
+     * through every zoom and turn: the pages turn back to the first spread in
+     * one go. `s` runs from the last spread to 0 and stands in for the scroll
+     * while it plays. The scroll itself is moved to the first spread's resting
+     * point up front — the book is pinned at both ends, so nothing on screen
+     * moves — and held still until the pages have settled, so the next scroll
+     * up leaves the section rather than replaying it.
+     */
+    let rewind: { s: number; veil: number } | null = null;
+    let rewindTween: gsap.core.Tween | null = null;
+    /** The Lenis instance held still for the close, so cleanup restarts that one. */
+    let heldLenis: { start: () => void } | null = null;
+
+    const startRewind = (rect: DOMRect, vh: number, veil: number) => {
+      const lenis = lenisRef?.current;
+      heldLenis = lenis ?? null;
+      const sectionTop = rect.top + window.scrollY;
+      const span = section.offsetHeight - vh;
+      const rest = sectionTop + span * (REWIND_REST / spreads.length);
+      const pinEnd = sectionTop + span;
+      rewind = { s: last, veil };
+
+      // park the scroll at the first spread's resting point and hold it there
+      const park = () => {
+        if (!rewind) return;
+        if (lenis) {
+          lenis.scrollTo(rest, { immediate: true, force: true });
+          lenis.stop();
+        } else {
+          window.scrollTo({ top: rest, behavior: "instant" as ScrollBehavior });
+        }
+      };
+
+      if (lenis && window.scrollY > pinEnd + 1) {
+        /*
+         * Past the pin the book has begun to scroll away with the page, so a
+         * jump from here would show. Glide it back to the end of the pin first
+         * (input locked) and park from there, where the jump is invisible; the
+         * pages start turning back straight away regardless.
+         */
+        lenis.scrollTo(pinEnd, { duration: 0.35, force: true, lock: true, onComplete: park });
+      } else {
+        park();
+      }
+      rewindTween = gsap.to(rewind, {
+        s: 0,
+        duration: REWIND_PER_PAGE * last + 0.35,
+        ease: "InOut",
+        onUpdate: () => {
+          if (!frame) frame = requestAnimationFrame(update);
+        },
+        onComplete: () => {
+          rewind = null;
+          rewindTween = null;
+          lenis?.start();
+          lastY = window.scrollY;
+          update();
+        },
+      });
+    };
+
+    /*
+     * Where each lifted copy block comes to rest. `offsetLeft` and friends read
+     * the untransformed box, so they stay true while the block is mid-flight,
+     * and they only change with the viewport.
+     */
+    let resting: { x: number; y: number; w: number }[] | null = null;
+    const measureCopies = () => {
+      resting = copies.map((c) => ({ x: c.offsetLeft, y: c.offsetTop, w: c.offsetWidth }));
+    };
+
+    const update = () => {
+      frame = 0;
+      const vh = window.innerHeight;
+      const rect = section.getBoundingClientRect();
+      // off screen entirely: nothing to draw
+      if (rect.bottom < -vh || rect.top > vh * 2) return;
+
+      const p = clamp(-rect.top / Math.max(1, section.offsetHeight - vh));
+      let cycle = Math.min(last, Math.floor(p * spreads.length));
+      const local = clamp(p * spreads.length - cycle);
+      const zooms = cycle === ZOOM_SPREAD;
+      let zoomIn = zooms ? smooth(local, ...ZOOM_IN) : 0;
+      let zoomOut = zooms ? smooth(local, ...ZOOM_OUT) : 0;
+      let zoom = zoomIn * (1 - zoomOut);
+      let turn = cycle < last ? smooth(local, ...(zooms ? TURN : TURN_PLAIN)) : 0;
+
+      const y = window.scrollY;
+      const goingUp = y < lastY - 1;
+      lastY = y;
+
+      /*
+       * On the last spread with the book at rest and scrolling up: close it.
+       * That includes the stretch just after the pin, where the last spread is
+       * still on screen as the section scrolls away — the usual place to be
+       * "on the last page".
+       */
+      const onScreen = rect.top <= 0 && rect.bottom > 0;
+      if (!rewind && goingUp && onScreen && last > 0 && cycle === last && zoom <= 0.001) {
+        startRewind(rect, vh, smooth(p, 0.96, 1));
+      }
+
+      if (rewind) {
+        const s = rewind.s;
+        cycle = Math.min(last, Math.floor(s));
+        turn = cycle < last ? s - cycle : 0;
+        zoomIn = zoomOut = zoom = 0;
+      }
+
+      // the active spread on top, the next one fading in under the turning page
+      spreads.forEach((spread, i) => {
+        spread.style.zIndex = i === cycle ? "3" : i === cycle + 1 ? "2" : "1";
+        spread.style.opacity = i === cycle ? "1" : i === cycle + 1 ? turn.toFixed(4) : "0";
+        const imagePage = spread.querySelector<HTMLElement>("[data-image-page]");
+        const copyPage = spread.querySelector<HTMLElement>("[data-copy-page]");
+        const t = i === cycle ? turn : 0;
+        if (imagePage) {
+          imagePage.style.transform = t
+            ? `perspective(1700px) rotateY(${(-TURN_DEG * t).toFixed(2)}deg) translateZ(${(t * 2).toFixed(2)}px)`
+            : "";
+        }
+        if (copyPage) copyPage.style.opacity = (1 - t * 0.32).toFixed(4);
+      });
+
+      // the photograph: laid over its printed position, grown to the screen
+      if (shownFrame !== -1 && (zoom <= 0.001 || shownFrame !== cycle)) {
+        frames[shownFrame].style.opacity = "0";
+        copies[shownFrame].style.opacity = "0";
+        shownFrame = -1;
+      }
+      if (zoom > 0.001) {
+        const printed = spreads[cycle].querySelector<HTMLElement>("[data-photo]");
+        const live = frames[cycle];
+        if (printed && live) {
+          const r = printed.getBoundingClientRect();
+          const s = sticky.getBoundingClientRect();
+          const x = r.left - s.left;
+          const y = r.top - s.top;
+          live.style.left = `${x * (1 - zoom)}px`;
+          live.style.top = `${y * (1 - zoom)}px`;
+          live.style.width = `${r.width + (s.width - r.width) * zoom}px`;
+          live.style.height = `${r.height + (s.height - r.height) * zoom}px`;
+          live.style.opacity = "1";
+          shownFrame = cycle;
+
+          /*
+           * The left page's words travel with it: the block starts the width of
+           * that page, sitting over it, and grows into its own place on the
+           * photograph. It only reads once the picture is broad enough to carry
+           * it, so it fades in behind the last of the zoom.
+           */
+          const read = smooth(zoom, 0.34, 0.82);
+          const copy = copies[cycle];
+          const page = spreads[cycle].querySelector<HTMLElement>("[data-copy-page]");
+          if (!resting) measureCopies();
+          const rest = resting?.[cycle];
+          if (copy && page && rest && rest.w) {
+            const c = page.getBoundingClientRect();
+            const from = c.width / rest.w;
+            const grow = from + (1 - from) * zoom;
+            const tx = (c.left - s.left - rest.x) * (1 - zoom);
+            const ty = (c.top - s.top - rest.y) * (1 - zoom);
+            copy.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${grow.toFixed(4)})`;
+            copy.style.opacity = read.toFixed(4);
+          }
+          // the scrim rides inside the frame, so it darkens the photograph for
+          // the words and leaves the room and the book alone
+          if (scrims[cycle]) scrims[cycle].style.opacity = (read * 0.92).toFixed(4);
+        }
+      }
+
+      /*
+       * The room is left alone. It used to fade out across the zoom, but the
+       * photograph covers the screen by the end of that anyway, so all the fade
+       * did was wash the room to flat cream behind a book that was still in
+       * full view.
+       */
+      if (heading) heading.style.opacity = (1 - smooth(zoom, 0.12, 0.62)).toFixed(4);
+      if (progress) progress.style.opacity = (1 - smooth(zoom, 0.6, 0.95)).toFixed(4);
+
+      const countText = `${String(cycle + 1).padStart(2, "0")} / ${String(spreads.length).padStart(2, "0")}`;
+      if (count && count.textContent !== countText) count.textContent = countText;
+      const stageText = stageLabel(zoomIn, zoomOut, cycle === ZOOM_SPREAD);
+      if (stage && stage.textContent !== stageText) stage.textContent = stageText;
+
+      // cream edges: the top one stays solid while the room scrolls in (a
+      // partly faded veil still shows a line against the cream above) and
+      // clears over the first moments of the pin; the bottom one arrives over
+      // the last of it
+      if (veilTop) veilTop.style.opacity = rect.top > 0 ? "1" : (1 - smooth(p, 0, 0.025)).toFixed(4);
+      if (veilBottom) {
+        // while closing, the bottom edge fades out with the pages rather than
+        // dropping away with the scroll jump
+        const veil = rewind ? rewind.veil * (rewind.s / last) : smooth(p, 0.96, 1);
+        veilBottom.style.opacity = veil.toFixed(4);
+      }
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    };
+
+    const onResize = () => {
+      resting = null;
+      update();
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (frame) cancelAnimationFrame(frame);
+      if (rewindTween) {
+        rewindTween.kill();
+        heldLenis?.start();
+      }
+    };
+  }, [lenisRef]);
+
+  const total = String(book.spreads.length).padStart(2, "0");
+
+  return (
+    <section
+      ref={sectionRef}
+      data-theme="dark"
+      data-canvas="cream"
+      className={`section ${styles.section}`}
+      aria-labelledby="book-title"
+    >
+      <div ref={stickyRef} className={styles.sticky}>
+        <div className={styles.bg} data-bg aria-hidden>
+          <Image src={book.background} alt="" fill sizes="100vw" className={styles.bgImg} />
+          <span className={styles.shade} />
+        </div>
+
+        <div className={styles.heading} data-heading>
+          <p className={styles.label}>{book.label}</p>
+          <h2 id="book-title" className={styles.title}>
+            {book.title[0]}
+            <br />
+            {book.title[1]}
+          </h2>
+        </div>
+
+        <div className={styles.book}>
+          <span className={styles.spine} aria-hidden />
+          {book.spreads.map((spread, i) => (
+            <article
+              key={spread.kicker}
+              className={styles.spread}
+              data-spread={i}
+              aria-hidden={i > 0 || undefined}
+            >
+              <div className={`${styles.page} ${styles.copyPage}`} data-copy-page>
+                <div>
+                  <span className={styles.pageLabel}>{spread.kicker}</span>
+                  <h3 className={styles.pageTitle}>
+                    {spread.title[0]}
+                    <br />
+                    {spread.title[1]}
+                  </h3>
+                </div>
+                <p className={styles.pageBody}>{spread.body}</p>
+                <span className={styles.pageLabel}>{spread.foot}</span>
+              </div>
+              <figure className={`${styles.page} ${styles.imagePage}`} data-image-page>
+                <div className={styles.photo} data-photo>
+                  <Image
+                    src={spread.image}
+                    alt={spread.alt}
+                    fill
+                    sizes="(max-width: 991px) 45vw, 30vw"
+                    className={styles.photoImg}
+                  />
+                </div>
+                <figcaption className={styles.caption}>{spread.caption}</figcaption>
+              </figure>
+            </article>
+          ))}
+        </div>
+
+        <div className={styles.portal} aria-hidden>
+          {book.spreads.map((spread, i) => (
+            <div key={spread.image + i} className={styles.frame} data-frame={i}>
+              {/* the frame fills the screen, so it takes the photograph at full
+                  quality rather than the default 75 */}
+              <Image
+                src={spread.image}
+                alt=""
+                fill
+                sizes="100vw"
+                quality={90}
+                className={styles.photoImg}
+              />
+              <span className={styles.frameScrim} data-frame-scrim />
+            </div>
+          ))}
+
+          {book.spreads.map((spread, i) => (
+            <div key={spread.kicker + i} className={styles.portalCopy} data-frame-copy={i}>
+              <span className={styles.portalKicker}>{spread.kicker}</span>
+              <h3 className={styles.portalTitle}>
+                {spread.title[0]}
+                <br />
+                {spread.title[1]}
+              </h3>
+              <p className={styles.portalBody}>{spread.body}</p>
+              <span className={styles.portalKicker}>{spread.foot}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.progress} data-progress>
+          <output className={styles.count} data-count aria-live="polite">
+            01 / {total}
+          </output>
+          <span className={styles.label} data-stage>
+            Scroll / Zoom into image
+          </span>
+        </div>
+
+        <span className={styles.veilTop} data-veil-top aria-hidden />
+        <span className={styles.veilBottom} data-veil-bottom aria-hidden />
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,26 @@
+import { chromium } from 'playwright-core';
+const b=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+const p=await (await b.newContext({viewport:{width:1440,height:900}})).newPage();
+await p.goto('https://www.era-residence.com/',{waitUntil:'networkidle',timeout:180000});
+await p.waitForTimeout(6500);
+const h=await p.evaluate(()=>document.body.scrollHeight);
+for(let y=0;y<h;y+=420){await p.evaluate(v=>scrollTo(0,v),y);await p.waitForTimeout(45);}
+await p.evaluate(()=>scrollTo(0,8300)); await p.waitForTimeout(1500);
+console.log(await p.evaluate(()=>{
+ const norm=s=>(s||'').replace(/\s+/g,' ').trim();
+ let sec=null;
+ for(const el of document.querySelectorAll('h1,h2,h3,h4,div,span')){
+  if(norm(el.textContent).replace(/\s/g,'').toUpperCase().startsWith('NEWGOLDENMILE')){sec=el.closest('section');if(sec)break;}}
+ const lines=[];
+ const walk=(el,d)=>{
+  if(d>5) return;
+  const r=el.getBoundingClientRect(); const cs=getComputedStyle(el);
+  lines.push('  '.repeat(d)+el.tagName.toLowerCase()+'.'+(el.className||'').toString().slice(0,50)
+   +' ['+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height)+'] '
+   +cs.position+' '+cs.display+' ov:'+cs.overflow+' tr:'+cs.transform.slice(0,40));
+  for(const k of el.children) walk(k,d+1);
+ };
+ walk(sec,0);
+ return lines.join('\n');
+}));
+await b.close();

@@ -1,0 +1,128 @@
+/*
+ * The reference sets this quote as white type directly on the pool render —
+ * right-aligned, under an oversized opening quote mark. An earlier pass put it
+ * in a solid plum card, which reintroduced exactly the hard rectangle this
+ * section exists to avoid. The image is the panel.
+ */
+
+.section {
+  position: relative;
+  /* the bottom edge meets the cream below on a clean line, with no gradient;
+     the top edge is handled by `.section::before` further down, which has to
+     sit above the render rather than behind it */
+  display: flex;
+  align-items: flex-end;
+  /* 1.2 screens, as the reference gives it */
+  min-height: 120vh;
+  padding-block: var(--u-96);
+  overflow: clip;
+}
+
+.inner { position: relative; z-index: 2; }
+
+/*
+ * The render's top edge, dissolved into the ground above it.
+ *
+ * This replaces the shared `.bleed-top` veil, which could never work here: it
+ * paints at z-index 1, the same as `.bg`, and loses to it on DOM order — so
+ * the fade was drawn *behind* the render and never showed at all. Hence the
+ * ruled line where the image met the section above. At z-index 2 it sits over
+ * the image, below `.inner`, which still paints above it on DOM order.
+ *
+ * Height and easing match the master-plan veil: 8vh of linear ramp was set for
+ * a pale sky overhead, and cannot carry the jump to a near-black burgundy.
+ */
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 34vh;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--c-sky) 0%,
+    rgba(38, 0, 4, 0.957) 12.5%,
+    rgba(38, 0, 4, 0.844) 25%,
+    rgba(38, 0, 4, 0.684) 37.5%,
+    rgba(38, 0, 4, 0.5) 50%,
+    rgba(38, 0, 4, 0.316) 62.5%,
+    rgba(38, 0, 4, 0.156) 75%,
+    rgba(38, 0, 4, 0.043) 87.5%,
+    rgba(38, 0, 4, 0) 100%
+  );
+}
+
+.quote {
+  /* measured on the reference: 533 wide, right edge at 1260 of 1440 — an inset
+     block, not one flush to the gutter */
+  max-width: 39.4%;
+  margin: 0 10.1% 0 auto;
+  color: var(--ink);
+  text-align: left;
+}
+
+.glyph {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--h3-size);
+  line-height: 0.6;
+  color: var(--ink);
+}
+
+.text { margin: 0; }
+
+.author { display: flex; flex-direction: column; gap: var(--u-4); }
+.author > span:last-child { color: var(--ink-muted); }
+
+/* --------------------------------------------------------------- image ---- */
+
+/*
+ * Natural aspect, bottom-aligned, no crop and no drift: the reference renders
+ * this image at 1440x1080 — exactly its 4:3 — and does not parallax it. The
+ * previous ±15% overflow both re-cropped the picture and added a movement the
+ * reference does not have.
+ */
+.bg {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/*
+ * Zoomed 3% from the top edge. The render's last 2% below the carpet is a
+ * strip of dark marble floor that would sit as a band along the section's
+ * foot. Scaling from the top pushes that strip past the clipped bottom edge
+ * so the carpet itself meets the ground below; the top
+ * edge stays put, the extra width is clipped evenly, and a transform leaves
+ * the section's layout and height untouched.
+ */
+.img {
+  width: 100%;
+  height: auto;
+  transform: scale(1.03);
+  transform-origin: 50% 0;
+}
+
+/*
+ * The reference stacks two bottom gradients 389 of 1080 tall over this render —
+ * 36% — which is what gives the white quote type its footing. Expressed here as
+ * one gradient of the equivalent density.
+ */
+.shade {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 36%;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.62));
+}
+
+
+@media (max-width: 991px) {
+  /* the reference gives this 0.46 of a screen at 390 — the render is short here */
+  .section { min-height: auto; padding-block: var(--u-48); }
+  .quote { max-width: 100%; margin-left: 0; }
+  .section::before { height: 20vh; }
+}

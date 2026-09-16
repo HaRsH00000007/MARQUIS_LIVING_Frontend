@@ -1,0 +1,129 @@
+.section {
+  position: relative;
+  /* 1.4 screens, matching the reference's 1260 at 1440x900 */
+  min-height: 140vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: clip;
+}
+
+/* --------------------------------------------------------------- plate ---- */
+
+/* The render is the section's ground, not a picture placed on one. */
+.plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.planViewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.plan {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+/* --------------------------------------------------------------- veils ---- */
+
+/*
+ * The render's own sky would otherwise start on a hard line against the cream
+ * the concept panels leave behind. Dissolving its top edge into that cream
+ * lets the two read as one continuous atmosphere.
+ */
+.veilTop,
+.veilEnd {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.veilTop {
+  top: 0;
+  height: 20vh;
+  background: linear-gradient(var(--c-cream), rgba(243, 243, 236, 0));
+}
+
+/*
+ * And out the other side, into the ground the apartment cards sit on.
+ *
+ * This needs far more room than the 16vh it originally had. That number was
+ * set when the ground below was a pale sky — a small step in luminance from
+ * the render. The ground is now a near-black burgundy, so the same distance
+ * has to carry a far larger jump, and it read as a hard edge instead of a fade.
+ *
+ * The stops are a smoothstep ramp (t^2*(3-2t)) rather than the two-stop linear
+ * one. A linear alpha ramp does almost nothing visible over its first half and
+ * then does all its work in the last third, which is what makes the join look
+ * abrupt; easing it in and out puts the change where the eye expects it.
+ */
+.veilEnd {
+  bottom: 0;
+  height: 34vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(38, 0, 4, 0) 0%,
+    rgba(38, 0, 4, 0.043) 12.5%,
+    rgba(38, 0, 4, 0.156) 25%,
+    rgba(38, 0, 4, 0.316) 37.5%,
+    rgba(38, 0, 4, 0.5) 50%,
+    rgba(38, 0, 4, 0.684) 62.5%,
+    rgba(38, 0, 4, 0.844) 75%,
+    rgba(38, 0, 4, 0.957) 87.5%,
+    var(--c-sky) 100%
+  );
+}
+
+/* ---------------------------------------------------------------- copy ---- */
+
+.head {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--u-32);
+  padding-bottom: var(--u-96);
+}
+
+.headText {
+  max-width: var(--col-4);
+  margin-left: auto;
+  text-align: left;
+}
+
+.hint { color: var(--ink-muted); }
+
+/* ---------------------------------------------------------- responsive ---- */
+
+@media (max-width: 991px) {
+  .section {
+    min-height: auto;
+    display: block;
+    padding-top: var(--u-48);
+  }
+
+  /* back into flow, so the plan can be panned rather than cropped */
+  .plate { position: static; }
+  .planViewport { overflow-x: auto; scrollbar-width: none; cursor: grab; }
+  .planViewport::-webkit-scrollbar { display: none; }
+  .planViewport:active { cursor: grabbing; }
+  .plan { width: 180vw; max-width: none; height: auto; object-fit: fill; }
+
+  .veilTop { height: 18vh; }
+  /* the section is in flow here, so it needs far less run-up */
+  .veilEnd { height: 20vh; }
+
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: var(--u-32) var(--u-64);
+  }
+  .headText { margin-left: 0; max-width: 100%; }
+}

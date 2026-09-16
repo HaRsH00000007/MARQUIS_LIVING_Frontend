@@ -1,0 +1,22 @@
+node_modules
+.next
+out
+tools/node_modules
+reference-download
+docs/comparison-full
+*.tsbuildinfo
+next-env.d.ts
+
+# QA capture artifacts (~64MB of browser screenshots from the build process).
+# These were working material: side-by-side captures against the reference
+# site, scroll-sequence filmstrips and geometry sweeps. The written analysis
+# in docs/*.md is kept; the raw captures are not redistributed.
+docs/comparison
+docs/seq
+docs/anchor
+docs/trans
+docs/vcmp
+docs/sweep
+docs/sweep-m
+docs/concept
+docs/local

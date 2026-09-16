@@ -1,0 +1,275 @@
+/* 3379 on the reference at 1440x900 — the scroll area, 3.75 screens. */
+.section {
+  position: relative;
+  height: 375vh;
+}
+
+/* -------------------------------------------- shutters (.arch-intro-s) ----- */
+
+/*
+ * Two solid cream panels, one over each half of the screen, each with a
+ * rectangular hole cut in it by `clip-path`. They sit above the render and are
+ * what the reveal actually is: the render never moves into view, the cream
+ * moves out of the way.
+ *
+ * `margin-bottom: -100vh` is the reference's own trick — the layer is sticky
+ * and viewport-tall, but contributes no height, so the panel below it starts at
+ * the top of the scroll area rather than one screen down.
+ */
+.shutters {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: var(--vh100);
+  margin-bottom: calc(var(--vh100) * -1);
+  pointer-events: none;
+  transform: scale(var(--shutter-scale, 1));
+  will-change: transform;
+}
+
+.shutterL,
+.shutterR {
+  position: absolute;
+  background-color: var(--c-cream);
+}
+
+/* the 1px overlap closes the seam down the centre line, as the reference does */
+.shutterL { inset: -1% calc(50% - 1px) 0 0; }
+.shutterR { inset: -1% 0 0 50%; }
+
+/* ---------------------------------------------------- notes on the cream --- */
+
+/*
+ * Where the bougainvillea hung. Its own sticky layer above the shutters, so the
+ * copy holds its size while the cream panels scale out from under it — the
+ * flowers rode that scale, type cannot.
+ */
+.notes {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  height: var(--vh100);
+  margin-bottom: calc(var(--vh100) * -1);
+  pointer-events: none;
+
+  /*
+   * The cream each note has to live within. The left shutter covers 0–50vw and
+   * its hole opens at 44.444% of that panel, so the cream runs out at 22.222vw;
+   * the right shutter's hole ends at 55.556% of 50–100vw, so its cream starts
+   * at 77.778vw. Both notes are held inside those edges rather than given a
+   * width of their own, which is what let them spill over the render before.
+   */
+  --band-end: 22.222vw;
+  --band-start: 77.778vw;
+  /* breathing room between the type and the cut edge of the shutter */
+  --band-gap: var(--u-24);
+}
+
+.noteLeft,
+.noteRight {
+  position: absolute;
+  /* the panels behind are cream, whatever the section's own theme says */
+  color: var(--c-navy);
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.noteLeft {
+  left: var(--offset);
+  right: calc(100% - var(--band-end) + var(--band-gap));
+  bottom: 13%;
+}
+
+.noteRight {
+  left: calc(var(--band-start) + var(--band-gap));
+  right: var(--offset);
+  top: 22%;
+}
+
+.noteKicker {
+  display: block;
+  color: var(--navy-60);
+}
+
+/*
+ * Sized off the band rather than the page's display scale, so it grows with the
+ * cream instead of over it: at ~3vw the longest word still clears the shutter's
+ * cut edge.
+ *
+ * The kit carries ambroise-francois-std at 400 only. `font-weight: 700` gets
+ * the browser's synthetic bold, which is a fixed smear — 600 renders exactly
+ * the same, so there is no lighter step to ask for. The weight stays at 400 and
+ * a hairline stroke does the thickening instead, which is adjustable: raise
+ * --note-weight towards 0.03em for heavier, drop it to 0 for the plain face.
+ */
+.noteTitle {
+  --note-weight: 0.011em;
+
+  margin: var(--u-16) 0 var(--u-24);
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(26px, 3vw, 58px);
+  line-height: 1.02;
+  /* opened up from the display scale's -0.016em: the point is to fill the band */
+  letter-spacing: 0.004em;
+  text-transform: none;
+  -webkit-text-stroke: var(--note-weight) currentColor;
+}
+
+.noteLine {
+  margin: 0 0 var(--u-12);
+  color: var(--navy-60);
+}
+
+.noteLine:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------ render + type (.arch-w) -- */
+
+/*
+ * 1354 x 1579 on the reference — `aspect-ratio: 144/168`, so 175.4vh at a
+ * 900-tall screen. Sticky at the top of the scroll area: it holds through the
+ * reveal and releases when the area runs out beneath it, which lands at
+ * sectionTop + 1796 (the reference's own release is sectionTop + 1800).
+ *
+ * The reference scales it 0.75 -> 1 about its top edge as the shutters clear,
+ * so the render settles into place rather than simply appearing.
+ */
+.stage {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 175.4vh;
+  /* the theme class on this element remaps --ink and --bg; nothing else applies
+     them, because the section itself deliberately carries no theme (it bleeds) */
+  color: var(--ink);
+  background-color: var(--bg);
+  overflow: hidden;
+  transform: scale(var(--stage-scale, 1));
+  transform-origin: center top;
+  will-change: transform;
+}
+
+.stageBg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* the reference's yPercent 25 parallax — the panel's own plum shows above it */
+.img {
+  object-fit: cover;
+  transform: translateY(var(--img-shift, 0%));
+}
+
+/*
+ * The reference never washes this render — it stays bright Mediterranean
+ * daylight with white type over it, darkened only where the title and the
+ * credits actually sit.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(20, 10, 24, 0.42), rgba(20, 10, 24, 0) 26%),
+    linear-gradient(rgba(20, 10, 24, 0) 62%, rgba(20, 10, 24, 0.55));
+}
+
+/*
+ * 376 tall at the top, 425 tall at the foot, 778 of air between — which is
+ * exactly what `space-between` gives across the panel's 1579.
+ */
+.inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding-block: var(--u-48) 0;
+}
+
+.top { flex: 0 0 auto; }
+
+/* 425 of 1579 — the band runs to the panel's own bottom edge, which is what
+   keeps the credits below the fold until the render is fully open. */
+.bottom {
+  flex: 0 0 auto;
+  height: 26.92%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--u-48);
+}
+
+/*
+ * Measured at 349px on the reference — roughly twice h1, and 1015 painted at
+ * the 0.75 the panel starts on. At h1 it read as a caption over the render
+ * rather than the wall of type the section is built around.
+ */
+.title {
+  width: 100%;
+  margin: 0;
+  overflow: clip;
+  white-space: nowrap;
+  font-size: calc(388 * var(--u));
+  line-height: 0.9;
+}
+
+.introCopy { max-width: var(--col-6); margin-inline: auto; }
+
+/* 533 of 1354, inset 137 from the panel's left edge */
+.quote { width: 39.4%; margin-left: 10.1%; }
+
+/* ---------------------------------------------------------- responsive ---- */
+
+/*
+ * The reference gates this whole sequence behind `min-width: 992px`: the
+ * shutter layer carries `b-desk`, and the timeline is inside a
+ * `gsap.matchMedia` for the same breakpoint. Below it the shutters are not
+ * drawn at all and the panel is an ordinary block.
+ */
+@media (max-width: 991px) {
+  .section { height: auto; }
+
+  .shutters { display: none; }
+
+  /*
+   * No reveal on mobile, so the notes come out of their layer and read as a
+   * plain stacked block. The scroll-driven inline transform and fade are
+   * overridden here — there is nothing left for them to track.
+   */
+  .notes {
+    position: relative;
+    display: grid;
+    gap: var(--u-48);
+    height: auto;
+    margin-bottom: 0;
+    padding: var(--u-64) var(--offset);
+    background-color: var(--c-cream);
+  }
+
+  .noteLeft,
+  .noteRight {
+    position: static;
+    inset: auto;
+    width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .noteTitle { font-size: calc(40 * var(--u)); }
+
+  .stage {
+    position: relative;
+    height: auto;
+    min-height: 120vh;
+    transform: none;
+  }
+  .img { transform: none; }
+
+  .inner { padding-block: var(--u-64); gap: var(--u-96); }
+  .bottom { height: auto; }
+  .title { white-space: normal; font-size: calc(150 * var(--u)); }
+  .bottom { flex-direction: column; align-items: flex-start; }
+  .quote { width: 100%; margin-left: 0; }
+}

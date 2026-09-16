@@ -1,0 +1,9 @@
+.canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  /* the hero's own plum, so the very first paint matches before the first
+     scroll handler has run */
+  background-color: var(--c-plum);
+  pointer-events: none;
+}
