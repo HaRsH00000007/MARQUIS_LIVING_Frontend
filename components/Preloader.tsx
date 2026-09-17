@@ -7,8 +7,8 @@ import styles from "./Preloader.module.css";
 /**
  * Marquis Living Opening Animation & Preloader.
  * Replicates the authentic intro splash sequence from the reference:
- *  - 1st visit: 4s full intro splash with the quatrefoil mark, Costa del Sol /
- *    Marquis Living / Estepona typography, animated progress fill track,
+ *  - 1st visit: 4s full intro splash with the quatrefoil mark, Interior /
+ *    Marquis Living / Dubai typography, animated progress fill track,
  *    architectural decor frame lines, watermark background,
  *    and expanding arch mask reveal.
  *  - Repeat visits: sleek short arch reveal without blocking repeat visitors.
@@ -182,7 +182,7 @@ export function Preloader() {
           <div className="container">
             <div className="grid">
               <div className={styles.titleL}>
-                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>Costa</div>
+                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>Interior</div>
               </div>
               <div className={styles.logo}>
                 <div data-part="h" className={`h3 a-center ${styles.partInitial}`}>
@@ -190,12 +190,12 @@ export function Preloader() {
                 </div>
                 <div className={styles.logoA}>
                   <div data-part="a" className={`a2 ${styles.preloaderA} a-center ${styles.partInitial}`}>
-                    Estepona
+                    Dubai
                   </div>
                 </div>
               </div>
               <div className={styles.titleR}>
-                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>del Sol</div>
+                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>Design</div>
               </div>
             </div>
           </div>

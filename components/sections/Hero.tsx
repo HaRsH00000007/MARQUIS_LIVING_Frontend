@@ -116,23 +116,29 @@ export function Hero() {
           </SplitReveal>
         </p>
 
-        {/* The statement is set twice, once in each bottom corner, as the
-            reference composition does. */}
+        {/* A statement in each bottom corner, as the reference composition
+            does — but each corner carries its own, so the two read as separate
+            claims. A corner with no `small` prints no label line at all. */}
         <div className={styles.straps}>
-          {(["left", "right"] as const).map((side) => (
-            <div key={side} className={`${styles.strapCol} ${styles[side]}`}>
-              <p className={`l2 reg ${styles.strapSmall}`}>
-                <SplitReveal mode="line" delay={1.6} immediate>
-                  {hero.strap.small}
-                </SplitReveal>
-              </p>
-              <p className={`h5 ${styles.strapLarge}`}>
-                <SplitReveal mode="word" delay={1.7} immediate>
-                  {hero.strap.large}
-                </SplitReveal>
-              </p>
-            </div>
-          ))}
+          {(["left", "right"] as const).map((side) => {
+            const strap = hero.strap[side];
+            return (
+              <div key={side} className={`${styles.strapCol} ${styles[side]}`}>
+                {strap.small ? (
+                  <p className={`l2 reg ${styles.strapSmall}`}>
+                    <SplitReveal mode="line" delay={1.6} immediate>
+                      {strap.small}
+                    </SplitReveal>
+                  </p>
+                ) : null}
+                <p className={`h5 ${styles.strapLarge}`}>
+                  <SplitReveal mode="word" delay={1.7} immediate>
+                    {strap.large}
+                  </SplitReveal>
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
       </div>

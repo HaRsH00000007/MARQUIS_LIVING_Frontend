@@ -63,10 +63,10 @@ function IntroPanel({ intro, scale, opacity, repeat = false }: IntroPanelProps) 
 }
 
 /**
- * Concept / New Golden Mile. On desktop the section pins and its three panels
+ * Concept / Built on Ambition. On desktop the section pins and its three panels
  * flip over one another in 3D as the page scrolls (`useFlipPin`); below 992px
  * they stack vertically. The first and last panels are the same concept intro,
- * with the burgundy New Golden Mile card between them.
+ * with the burgundy Built on Ambition card between them.
  * Animates intro scale 0.75 -> 1.0 on entrance and horizontal line shifts.
  *
  * The panels are deliberately *not* the same width. Measured off the
@@ -173,7 +173,7 @@ export function Concept() {
             <FadeIn className={styles.placeImg}>
               <Image
                 src={place.image}
-                alt="Three interiors at ERA Residence: a living room, a hallway and a bedroom"
+                alt="Three Marquis Living interiors: a living room, a hallway and a bedroom"
                 width={1181}
                 height={1331}
                 sizes="(max-width: 991px) 90vw, 34vw"

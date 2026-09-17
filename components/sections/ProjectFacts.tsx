@@ -21,7 +21,7 @@ import styles from "./ProjectFacts.module.css";
  * keeps a drifting card inside the container instead of running out past its
  * right edge.
  */
-const TRAVEL = [1.5, 2.5, 3.5];
+const TRAVEL = [1.2, 2.0, 2.8, 3.5];
 
 /**
  * The measures the place is composed to.

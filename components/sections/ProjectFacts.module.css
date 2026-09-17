@@ -25,8 +25,8 @@
   --max-travel: 3.5;
 
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--u-48);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--u-32);
   width: 100%;
   margin: var(--u-120) 0 0;
   padding: 0 calc(var(--max-travel) * 1vw);
@@ -91,8 +91,10 @@
 
   /* Stacked, and still: three cards side by side are unreadable at this width,
      and a row that does not travel sideways has nothing to drift. */
+  /* Two up rather than one: these cards are a figure and a short line, so a
+     single column would run the section absurdly long on a phone. */
   .track {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--u-56);
     margin-top: var(--u-64);
     /* nothing travels down here, so the reserve is only wasted width */

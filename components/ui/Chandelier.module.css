@@ -1,0 +1,118 @@
+/*
+ * Pendant chandeliers for the arched sections.
+ *
+ * The host section positions the pair with `--chandelier-top` / `--chandelier-inset`,
+ * so the cords always start just under the dome's curve at that x position.
+ */
+
+.chandelier {
+  position: absolute;
+  /*
+   * `--chandelier-top` places the fixture itself. Both plates carry 396px of
+   * plain cord above it (1.75x the 226px plate width) so the ropes can run all
+   * the way into the ceiling, so the element starts that much higher and the
+   * host's dome mask trims the cords at the curve.
+   */
+  top: calc(var(--chandelier-top, 12vw) - var(--cord-ext) * var(--chandelier-w, 8.5vw));
+  width: var(--chandelier-w, 8.5vw);
+  --cord-ext: 1.75;
+  z-index: 1;
+  line-height: 0;
+  /* the cords hang from the ceiling — the light reads from the top down */
+  transform-origin: 50% 0;
+  isolation: isolate;
+}
+
+.left { left: var(--chandelier-inset, 8%); }
+
+/* mirrored so the pair reads as a matched set either side of the crown */
+.right { right: var(--chandelier-inset, 8%); transform: scaleX(-1); }
+
+.plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* pinned rather than left to `height: auto`: an optimiser variant with a
+     stale intrinsic size would otherwise skew one plate against the other */
+  height: auto;
+  aspect-ratio: 226 / 1061;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* the unlit plate — the base of the stack, faded out as the lit one arrives */
+.dim { opacity: 1; }
+
+/*
+ * The lit plate sits exactly over the unlit one and fades in on hover.
+ *
+ * It is not a second photograph: it is the unlit plate's own pixels regraded
+ * through a luminance curve measured off the lit reference, so the two share
+ * one silhouette to the pixel and the fixture cannot shift, resize or change
+ * shape as it lights. Only colour crosses the fade.
+ */
+.lit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+/*
+ * The warm bloom around the glass. Centred on the lower cluster, where the two
+ * large globes sit, and scaled by the timeline as the lamp catches.
+ */
+.glow {
+  position: absolute;
+  left: 50%;
+  /* the lower cluster: 366px down a 665px fixture, 396px further down a
+     1061px box once the cord is added */
+  top: 71.8%;
+  width: 260%;
+  aspect-ratio: 1;
+  translate: -50% -40%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 214, 148, 0.5) 0%,
+    rgba(255, 199, 126, 0.28) 26%,
+    rgba(255, 186, 106, 0.11) 48%,
+    rgba(255, 178, 96, 0.03) 72%,
+    rgba(255, 178, 96, 0) 100%
+  );
+  mix-blend-mode: screen;
+  filter: blur(6px);
+}
+
+/* the wider, softer wash the fixture throws onto the dome around it */
+.spill {
+  position: absolute;
+  left: 50%;
+  top: 62.4%;
+  width: 520%;
+  aspect-ratio: 1;
+  translate: -50% -30%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  /* a long, even falloff all the way to the edge — a hard stop short of it
+     leaves a visible ring on the flat cream */
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 190, 110, 0.2) 0%,
+    rgba(255, 184, 104, 0.12) 25%,
+    rgba(255, 180, 100, 0.055) 45%,
+    rgba(255, 178, 96, 0.018) 68%,
+    rgba(255, 178, 96, 0) 100%
+  );
+  filter: blur(24px);
+}
+
+@media (max-width: 991px) {
+  .chandelier {
+    width: var(--chandelier-w-m, 18vw);
+    top: calc(var(--chandelier-top, 12vw) - var(--cord-ext) * var(--chandelier-w-m, 18vw));
+  }
+}

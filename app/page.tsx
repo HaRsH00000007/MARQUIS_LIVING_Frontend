@@ -23,20 +23,19 @@ const jsonLd = {
   description: site.description,
   inLanguage: "en",
   mainEntity: {
-    "@type": "ApartmentComplex",
+    "@type": "InteriorDesignService",
     name: site.name,
     description:
-      "A boutique gated community of 25 residences on Costa del Sol, designed around privacy, wellbeing and timeless Mediterranean living.",
+      "A bespoke interior design studio in Dubai, delivering consultancy, turnkey solutions and furniture across residential, commercial and hospitality projects.",
+    /* TODO: no street address for the Dubai studio in the content deck — fill
+       `streetAddress` / `postalCode` in once supplied. */
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Avenida Litoral",
-      postalCode: "29680",
-      addressLocality: "Estepona",
-      addressRegion: "Málaga",
-      addressCountry: "ES",
+      addressLocality: "Dubai",
+      addressCountry: "AE",
     },
     telephone: site.phone,
-    numberOfAccommodationUnits: 25,
+    areaServed: "Dubai, United Arab Emirates",
   },
 };
 

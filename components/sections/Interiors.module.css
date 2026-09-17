@@ -19,10 +19,21 @@
   --dome-gap: 6vw;
   /* the dome's own curve, the same as the shared `.arch` */
   --dome-rise: 26vw;
+  /*
+   * The hanging pair. `--chandelier-top` is where the fixture itself hangs;
+   * the cords above it run past the crown line and `.ceiling` trims them to the
+   * dome's curve, so each rope meets the ceiling flush whatever the curve is
+   * doing at its x.
+   */
+  --chandelier-inset: 9%;
+  --chandelier-top: 11vw;
+  --chandelier-w: 8.5vw;
   margin-top: calc(var(--dome-overlap) * -1);
   /* The reference lets the title sit high inside the dome rather than clearing
-     it — measured, its whole section is 2979 with only ~575 of padding. */
-  padding-top: calc(20vw + var(--u-24));
+     it — measured, its whole section is 2979 with only ~575 of padding. Raised
+     from 20vw so the title sits up under the crown, its cap line above the
+     chandeliers' top globes rather than dropping below the pair. */
+  padding-top: calc(8vw + var(--u-24));
   /* painted by the two layers below instead, so the dome can be narrower than
      the section */
   background: transparent;
@@ -61,11 +72,64 @@
   bottom: 0;
 }
 
-.title { position: relative; width: 100%; margin: 0; overflow: clip; }
+/* ---------------------------------------------------------- chandeliers ---- */
+
+/*
+ * The ceiling the pair hangs from: the same box and the same curve as the dome
+ * itself (`.section::before`), clipping its children. The cords are positioned
+ * above the crown line so this clip is what ends them — they meet the curve
+ * flush at whatever x they sit at, with no gap and no cord over the render
+ * outside the dome.
+ */
+.ceiling {
+  position: absolute;
+  inset: 0 calc(var(--dome-gap) * (1 - var(--dome-open, 0)));
+  border-top-left-radius: 50% var(--dome-rise);
+  border-top-right-radius: 50% var(--dome-rise);
+  overflow: hidden;
+  /* only the fixtures themselves take the pointer, not this full-bleed box */
+  pointer-events: none;
+  /*
+   * Above `.title`, which is a full-width block that reaches across both
+   * fixtures: at an equal z-index the later heading won the hit test and ate
+   * the hover that lights them. Only the two fixture boxes are raised with it
+   * — the rest of this layer is transparent to the pointer — and they sit in
+   * the margins, clear of the type.
+   */
+  z-index: 3;
+}
+
+.ceiling > * { pointer-events: auto; }
+
+/*
+ * `overflow: clip` masks the display lines' rise, but its box ends on the
+ * script's baseline, which cut the descenders off `Marquis Living`. The box is
+ * dropped half an em further down and the same amount pulled back off the
+ * bottom margin, so the ink clears the clip edge while the following spacer and
+ * the feature grid stay exactly where they were. (`overflow-clip-margin` would
+ * say this in one line, but Safari does not honour it.)
+ *
+ * `z-index` lifts the title over `.featureLeft`, which opens its own stacking
+ * context below and otherwise painted its card over the tail of the script.
+ */
+.title {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0 0 -0.5em;
+  padding-bottom: 0.5em;
+  overflow: clip;
+}
 
 .accent {
   display: block;
-  margin-top: calc(var(--u-96) * -1);
+  /*
+   * No negative pull. The script's capitals ride high in their line box, so the
+   * -96px tuck this carried drove `Marquis Living` straight through the middle
+   * of `BEHIND`. At 0 the two still read as one lockup — the script's ascenders
+   * sit just under the display line's baseline — without the collision.
+   */
+  margin-top: 0;
   text-transform: none;
 }
 
@@ -155,8 +219,12 @@
   .section {
     --dome-overlap: 18vw;
     --dome-rise: 45vw;
+    /* the rounder mobile crown drops far lower at the sides */
+    --chandelier-top: 24vw;
+    --chandelier-w-m: 16vw;
     padding-top: calc(45vw + var(--u-64));
   }
-  .accent { margin-top: calc(var(--u-64) * -1); }
+  /* same collision, same fix, at the mobile type size */
+  .accent { margin-top: 0; }
   .feature { grid-template-columns: 1fr; gap: var(--u-64); }
 }

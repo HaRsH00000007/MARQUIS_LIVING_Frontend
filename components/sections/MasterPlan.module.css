@@ -32,22 +32,16 @@
 /* --------------------------------------------------------------- veils ---- */
 
 /*
- * The render's own sky would otherwise start on a hard line against the cream
- * the concept panels leave behind. Dissolving its top edge into that cream
- * lets the two read as one continuous atmosphere.
+ * No veil across the top. A cream gradient used to dissolve the render's top
+ * edge into the cream the concept panels leave behind, but it washed out the
+ * first fifth of the render and read as a smear rather than a join. The two
+ * grounds meet on a clean horizontal line instead.
  */
-.veilTop,
 .veilEnd {
   position: absolute;
   inset-inline: 0;
   z-index: 3;
   pointer-events: none;
-}
-
-.veilTop {
-  top: 0;
-  height: 20vh;
-  background: linear-gradient(var(--c-cream), rgba(243, 243, 236, 0));
 }
 
 /*
@@ -116,7 +110,6 @@
   .planViewport:active { cursor: grabbing; }
   .plan { width: 180vw; max-width: none; height: auto; object-fit: fill; }
 
-  .veilTop { height: 18vh; }
   /* the section is in flow here, so it needs far less run-up */
   .veilEnd { height: 20vh; }
 

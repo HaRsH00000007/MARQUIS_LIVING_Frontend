@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPage
       title="Privacy policy"
-      lead="How ERA Residence collects, uses and protects the information you share with us."
+      lead="How Marquis Living collects, uses and protects the information you share with us."
       sections={[
         {
           heading: "Information we collect",
@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
         },
         {
           heading: "How we use it",
-          body: "Your details are used solely to respond to your enquiry and to share information about availability at ERA Residence. We do not sell or rent personal data to third parties.",
+          body: "Your details are used solely to respond to your enquiry and to share information about working with Marquis Living. We do not sell or rent personal data to third parties.",
         },
         {
           heading: "Cookies",

@@ -36,7 +36,7 @@ export function MasterPlan() {
         <div className={styles.planViewport} ref={panRef}>
           <Image
             src={masterPlan.image}
-            alt="ERA Residence master plan"
+            alt="A Marquis Living project in Dubai"
             width={2400}
             height={1350}
             sizes="(max-width: 991px) 180vw, 100vw"
@@ -45,7 +45,6 @@ export function MasterPlan() {
         </div>
       </div>
 
-      <span className={styles.veilTop} aria-hidden />
       <span className={styles.veilEnd} aria-hidden />
 
       <div className={`container ${styles.head}`}>

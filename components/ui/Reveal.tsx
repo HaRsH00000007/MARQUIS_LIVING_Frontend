@@ -129,7 +129,7 @@ interface AccentProps {
 }
 
 /**
- * The script "write-on" used for `Estepona`, `Live in` and `yours`.
+ * The script "write-on" used for `Dubai`, `Marquis Living` and `yours`.
  *
  * Measured from a screen recording of the reference: the word starts at a wide
  * tracking and collapses to zero over ~0.7s while the characters fade in
