@@ -220,6 +220,34 @@
 /* 533 of 1354, inset 137 from the panel's left edge */
 .quote { width: 39.4%; margin-left: 10.1%; }
 
+/*
+ * Desktop: the quote column's children join the row's own grid
+ * (`display: contents`), so the CTA can share rows with the credit and sit
+ * level with "By Shruti Sodhi & Kunal Jaggi" / "Co-Founders…". Rows 1-6 are
+ * the quote's red line, spacer, quote, spacer, and the two credit lines.
+ */
+@media (min-width: 992px) {
+  .bottom {
+    display: grid;
+    grid-template-columns: 10.1% 39.4% 1fr auto;
+    grid-auto-rows: min-content;
+    align-content: start;
+    column-gap: 0;
+  }
+  .quote { display: contents; }
+  .quote > * { grid-column: 2; }
+  /* zero-height, so the taller pill can't stretch the credit rows apart; it
+     overflows equally above and below the rows' centre line */
+  .cta {
+    grid-column: 4;
+    grid-row: 5 / 7;
+    align-self: center;
+    height: 0;
+    display: flex;
+    align-items: center;
+  }
+}
+
 /* ---------------------------------------------------------- responsive ---- */
 
 /*

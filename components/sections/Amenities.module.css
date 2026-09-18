@@ -119,11 +119,18 @@
 
 /* 259 of 1354, right edge inset 137 (one grid column) from the gutter — not
    flush to it, which is where this column had been sitting. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 19.13%;
+  margin-right: 10.12%;
+}
+
 .tabs {
   display: flex;
   flex-direction: column;
-  width: 19.13%;
-  margin-right: 10.12%;
+  width: 100%;
   pointer-events: auto;
 }
 
@@ -144,13 +151,12 @@
   .tabOn:hover { opacity: 1; }
 }
 
-/* the reference parks this on the right edge, roughly at the render's midline */
+/* directly beneath the last tab ("Post-handover support"), on the tabs' left
+   edge; the pill is wider than the column and simply runs past its right */
 .cta {
-  position: absolute;
-  right: var(--offset);
-  top: 50%;
-  translate: 0 -50%;
+  margin-top: var(--u-32);
   pointer-events: auto;
+  white-space: nowrap;
 }
 
 @media (max-width: 991px) {
@@ -170,9 +176,17 @@
   .foot {
     position: static;
     display: block;
-    padding: 0;
+    /* keeps the container's side gutter — at 0 the tab list ran flush
+       against the left edge of the screen */
+    padding: 0 var(--offset);
     margin-top: var(--u-48);
   }
-  .tabs { width: 100%; margin-right: 0; }
-  .tab { min-height: 44px; }
+  .rail { width: 100%; margin-right: 0; }
+  .tab { min-height: 44px; opacity: 0.55; }
+  .tabOn { opacity: 1; }
+
+  /* Clears the tab list out from under the next section's dome, which climbs
+     18vw over this one, and from the colour dissolve above that dome — the
+     last tab was washing out into cream. */
+  .sticky { padding-bottom: calc(18vw + 12vh + var(--u-48)); }
 }

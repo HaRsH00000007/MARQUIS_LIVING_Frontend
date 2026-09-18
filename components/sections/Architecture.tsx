@@ -227,7 +227,7 @@ export function Architecture() {
               <p className="l1">{architecture.creditRole}</p>
               <p className="l1 reg muted">{architecture.creditName}</p>
             </div>
-            <div className="b-desk">
+            <div className={`b-desk ${styles.cta}`}>
               <ButtonCircle label={architecture.cta.label} href={architecture.cta.href} />
             </div>
           </div>

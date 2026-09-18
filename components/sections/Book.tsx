@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { book } from "@/lib/content";
 import { gsap } from "@/lib/gsap";
@@ -212,6 +213,14 @@ export function Book() {
             : "";
         }
         if (copyPage) copyPage.style.opacity = (1 - t * 0.32).toFixed(4);
+        // spreads ignore the pointer; only the spread on top, at rest on its
+        // page (not zoomed, not turning), lets its "See our work" link be clicked
+        const cta = spread.querySelector<HTMLElement>("[data-page-cta]");
+        if (cta) {
+          const live = i === cycle && zoom < 0.02 && turn < 0.02;
+          cta.style.pointerEvents = live ? "auto" : "none";
+          cta.tabIndex = live ? 0 : -1;
+        }
       });
 
       // the photograph: laid over its printed position, grown to the screen
@@ -355,7 +364,20 @@ export function Book() {
                     {spread.title[1]}
                   </h3>
                 </div>
-                <p className={styles.pageBody}>{spread.body}</p>
+                {/* body and CTA share one slot, so the page keeps its three-part
+                    spacing (heading / body / foot line) */}
+                <div className={styles.pageMid}>
+                  <p className={styles.pageBody}>{spread.body}</p>
+                  <Link
+                    href={book.cta.href}
+                    className={styles.pageCta}
+                    data-page-cta
+                    // the scroll script hands focus and clicks to the spread on top
+                    tabIndex={i > 0 ? -1 : undefined}
+                  >
+                    {book.cta.label}
+                  </Link>
+                </div>
                 <span className={styles.pageLabel}>{spread.foot}</span>
               </div>
               <figure className={`${styles.page} ${styles.imagePage}`} data-image-page>

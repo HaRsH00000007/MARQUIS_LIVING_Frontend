@@ -187,9 +187,20 @@
   /* the two offices stack rather than squeeze into half a phone screen */
   .offices { grid-template-columns: 1fr; gap: var(--u-32); width: 100%; }
 
-  /* the reference keeps the legal/credits row side by side at the full gutter
-     width on mobile, and drops the "To top" control entirely */
-  .bottom { width: 100%; }
+  /* Side by side, the company name and the legal links were squeezed into
+     half a phone's width and broke mid-phrase ("TERMS OF / USE"). Stacked and
+     centred, like the contact block above, each reads on its own lines. The
+     "To top" control is dropped entirely, as on the reference. */
+  .bottom {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--u-32);
+    text-align: center;
+  }
+  .info { align-items: center; }
+  .creditsLink { align-items: center; }
+  .creditsLink > span { text-align: center; }
 
   .toTop { display: none; }
 }

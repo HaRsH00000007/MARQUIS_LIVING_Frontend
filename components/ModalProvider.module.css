@@ -8,8 +8,9 @@
   padding: var(--offset);
   background: rgba(23, 35, 59, 0.55);
   backdrop-filter: blur(6px);
-  animation: fade var(--dur-m) var(--ease-out);
+  animation: fade 0.6s var(--ease-out) both;
 }
+.backdrop.closing { animation: fadeOut 0.65s var(--ease-in-out) both; }
 
 .dialog {
   position: relative;
@@ -19,8 +20,18 @@
   padding: var(--u-48);
   background: var(--bg);
   color: var(--ink);
-  animation: rise var(--dur-m) var(--ease-out);
+  /*
+   * Opens from the middle of the top edge, as on the reference: a thin sliver
+   * at the top centre that widens out to both sides while it unrolls down to
+   * full height, the panel dropping into place as it does.
+   */
+  animation: unroll 0.9s var(--ease-in-out) both;
 }
+.dialog.closing { animation: rollUp 0.65s var(--ease-in-out) both; }
+
+/* the words follow the panel in, once it has mostly opened */
+.content { animation: contentIn 0.5s var(--ease-out) 0.5s both; }
+.dialog.closing .content { animation: contentOut 0.25s var(--ease-in) both; }
 
 .close {
   position: absolute;
@@ -47,7 +58,36 @@
 .field input:focus { outline: none; border-bottom-color: var(--ink); }
 
 @keyframes fade { from { opacity: 0; } }
-@keyframes rise { from { opacity: 0; transform: translateY(2rem); } }
+@keyframes fadeOut { to { opacity: 0; } }
+
+@keyframes unroll {
+  from {
+    clip-path: inset(0 50% 100% 50%);
+    transform: translateY(-4rem);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+@keyframes rollUp {
+  from {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+  to {
+    clip-path: inset(0 50% 100% 50%);
+    transform: translateY(-4rem);
+  }
+}
+@keyframes contentIn { from { opacity: 0; transform: translateY(-0.75rem); } }
+@keyframes contentOut { to { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .dialog,
+  .content { animation: fade 0.2s linear both; }
+}
 
 @media (max-width: 991px) {
   .dialog { width: 100%; padding: var(--u-32); }

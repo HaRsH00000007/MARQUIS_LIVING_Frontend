@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { EraBadge } from "./ui/EraMark";
 import { NavItem } from "./ui/Buttons";
 import { MenuIcon, CloseIcon } from "./ui/Icons";
 import { nav, site } from "@/lib/content";
 import { useModal } from "./ModalProvider";
+import { useLenis, useScrollTo } from "./SmoothScroll";
 import { useSectionTheme } from "@/hooks/useSectionTheme";
 import styles from "./Header.module.css";
 
@@ -17,19 +19,84 @@ import styles from "./Header.module.css";
  */
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dark = useSectionTheme();
   const { open: openModal } = useModal();
+  const lenisRef = useLenis();
+  const scrollTo = useScrollTo();
+  const router = useRouter();
 
+  /*
+   * "Contact" goes to the contact details in the footer. On the home page it
+   * glides down to them; from any other page it opens the home page at
+   * `#contact`, where the footer picks the hash up and settles there.
+   */
+  const goToContact = () => {
+    setOpen(false);
+    if (document.getElementById("contact")) {
+      scrollTo(document.documentElement.scrollHeight - window.innerHeight);
+    } else {
+      router.push("/#contact");
+    }
+  };
+
+  /*
+   * With the sheet open the page underneath must not move. `overflow: hidden`
+   * alone does not stop Lenis, which drives the scroll itself, so it is paused
+   * too.
+   */
   useEffect(() => {
+    const lenis = lenisRef?.current;
     document.body.style.overflow = open ? "hidden" : "";
+    if (open) lenis?.stop();
+    else lenis?.start();
     return () => {
       document.body.style.overflow = "";
+      lenis?.start();
     };
-  }, [open]);
+  }, [open, lenisRef]);
+
+  // the sheet only exists below 992px; rotating past it must not leave it open
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 992px)");
+    const onChange = () => mql.matches && setOpen(false);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  /*
+   * Once the page has left the hero's top edge the phone header gets a solid
+   * bar (see `.scrolled` in the stylesheet), so copy scrolling underneath can
+   * never run through the logo or the menu button.
+   */
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 24);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <>
-      <header className={`${styles.header} ${dark ? "theme_on-image" : "theme_on-light"}`}>
+      <header
+        className={[
+          styles.header,
+          dark ? "theme_on-image" : "theme_on-light",
+          scrolled && !open ? styles.scrolled : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <Link href="/" className={styles.badge} aria-label={`${site.name} — home`}>
           <EraBadge />
         </Link>
@@ -60,7 +127,7 @@ export function Header() {
 
           <span className={styles.secondary}>
             <NavItem label="Book a call" onClick={() => openModal("book")} ariaLabel="Book a call" />
-            <NavItem label="Contact" href="/contact" ariaLabel="Contact" />
+            <NavItem label="Contact" onClick={goToContact} ariaLabel="Contact" />
           </span>
 
           <button
@@ -101,9 +168,9 @@ export function Header() {
             </button>
           </li>
           <li>
-            <Link href="/contact" className="h3" onClick={() => setOpen(false)}>
+            <button type="button" className="h3" onClick={goToContact}>
               Contact
-            </Link>
+            </button>
           </li>
         </ul>
         <div className={styles.sheetFoot}>

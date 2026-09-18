@@ -83,7 +83,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background-size: 180px 180px;
 }
 
-@media (prefers-reduced-motion: reduce) {
+/*
+ * Off on phones as well: a full-screen fixed layer with a blend mode has to be
+ * re-composited against everything beneath it on every scrolled frame, which a
+ * phone GPU pays for in dropped frames. At 3.5% opacity it is not missed.
+ */
+@media (prefers-reduced-motion: reduce), (max-width: 991px) {
   .grain { display: none; }
 }
 

@@ -9,6 +9,14 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, CustomEase);
 
   /*
+   * A phone's address bar shows and hides as the page scrolls, and each time
+   * it does the viewport height changes. By default that fires a full
+   * ScrollTrigger refresh — every pin re-measured mid-swipe — which reads as a
+   * jolt. Width changes (rotation) still refresh.
+   */
+  ScrollTrigger.config({ ignoreMobileResize: true });
+
+  /*
    * The reference's own named eases, transcribed from its animation bundle
    * (see docs/webflow-recovery.md §3). Registering them under the same names
    * means a tween here can quote the reference's configuration verbatim

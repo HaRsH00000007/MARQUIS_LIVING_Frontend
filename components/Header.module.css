@@ -1,7 +1,9 @@
 .header {
   position: fixed;
   inset: 0 0 auto;
-  z-index: 50;
+  /* above the cookie card (80) so the open menu sheet (88) and its Close
+     control are never covered; below the booking dialog (90) */
+  z-index: 89;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -52,9 +54,29 @@
 .menuIco { display: block; width: var(--u-24); height: var(--u-24); }
 
 @media (max-width: 991px) {
-  .header { padding: var(--u-16) var(--offset); align-items: center; }
+  .header {
+    padding: calc(var(--u-12) + env(safe-area-inset-top, 0px)) var(--offset) var(--u-12);
+    align-items: center;
+    transition:
+      color var(--dur-m) var(--ease-out),
+      background-color var(--dur-s) var(--ease-out),
+      box-shadow var(--dur-s) var(--ease-out);
+  }
   .primary, .secondary { display: none; }
   .menuBtn { display: inline-flex; }
+
+  /*
+   * Past the top of the page the phone header sits on a solid plum bar with
+   * cream ink. Without it every section's copy scrolled straight through the
+   * logo and the menu button, and on the cream sections the white "Menu"
+   * label all but disappeared.
+   */
+  .header.scrolled {
+    --ink: var(--c-cream);
+    color: var(--c-cream);
+    background-color: rgba(38, 0, 4, 0.96);
+    box-shadow: 0 1px 0 var(--cream-10);
+  }
 }
 
 /* ------------------------------------------------------- mobile sheet ---- */
@@ -62,11 +84,17 @@
 .sheet {
   position: fixed;
   inset: 0;
-  z-index: 45;
+  z-index: 88;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--u-96) + var(--u-48)) var(--offset) var(--u-48);
+  gap: var(--u-48);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    calc(var(--u-96) + var(--u-48) + env(safe-area-inset-top, 0px))
+    var(--offset)
+    calc(var(--u-48) + env(safe-area-inset-bottom, 0px));
   background: var(--bg);
   color: var(--ink);
   opacity: 0;
@@ -76,7 +104,15 @@
 
 .sheetOpen { opacity: 1; transform: none; }
 
-.sheetList { display: flex; flex-direction: column; gap: var(--u-16); }
-.sheetList a, .sheetList button { display: block; text-align: left; }
+.sheetList { display: flex; flex-direction: column; }
+.sheetList li { border-bottom: 1px solid var(--line); }
+.sheetList li:first-child { border-top: 1px solid var(--line); }
+.sheetList a,
+.sheetList button {
+  display: block;
+  width: 100%;
+  padding-block: var(--u-16) var(--u-12);
+  text-align: left;
+}
 
 .sheetFoot { display: flex; flex-direction: column; gap: var(--u-8); }

@@ -12,7 +12,7 @@
   /* ---- raw palette ---- */
   --c-navy: #17233b;
   --c-cream: #f3f3ec;
-  --c-plum: #340c24;
+  --c-plum: #260004; /* matched to --c-sky, the dome's maroon; was #340c24 */
   --c-sky: #260004;
   --c-blush: #f8bbcb;
   --c-white: #ffffff;
@@ -196,7 +196,9 @@
     --h6-size: calc(28 * var(--u));
     --a1-size: calc(96 * var(--u));
     --a2-size: calc(72 * var(--u));
-    --c1-size: calc(19 * var(--u));  --c1-lh: 126.316%;
+    /* well under the desktop tracking: at 0.8em a phone line held only a
+       word or two, and "HAVE A QUESTION FOR US?" broke into scattered letters */
+    --c1-size: calc(19 * var(--u));  --c1-lh: 126.316%;  --c1-ls: 0.3em;
   }
 }
 

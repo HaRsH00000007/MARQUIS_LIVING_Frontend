@@ -16,7 +16,9 @@ export function useSectionTheme(probeRatio = 0.35) {
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
+    let frame = 0;
     const probe = () => {
+      frame = 0;
       const sections = document.querySelectorAll<HTMLElement>("[data-theme]");
       const y = window.innerHeight * probeRatio;
       let theme: string | undefined;
@@ -27,12 +29,19 @@ export function useSectionTheme(probeRatio = 0.35) {
       setDark(theme !== "light");
     };
 
+    // At most once per frame: the probe measures every themed section, and
+    // scroll events can arrive several times a frame on touch devices.
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(probe);
+    };
+
     probe();
-    window.addEventListener("scroll", probe, { passive: true });
-    window.addEventListener("resize", probe);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     return () => {
-      window.removeEventListener("scroll", probe);
-      window.removeEventListener("resize", probe);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frame) cancelAnimationFrame(frame);
     };
   }, [probeRatio]);
 

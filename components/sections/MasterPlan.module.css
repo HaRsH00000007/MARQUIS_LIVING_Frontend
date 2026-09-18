@@ -87,9 +87,38 @@
 }
 
 .headText {
-  max-width: var(--col-4);
+  /* wider than --col-4 so the enlarged title still sets on two lines */
+  max-width: max(var(--col-4), 40vw);
   margin-left: auto;
   text-align: left;
+  /* the copy sits over the bright side of the render; a soft shadow lifts it */
+  text-shadow: 0 1px 14px rgba(38, 0, 4, 0.55), 0 1px 3px rgba(38, 0, 4, 0.45);
+}
+
+/* the shared label / body sizes read too small over the render */
+/* set in the display face (Ambroise François), like the section names; it is
+   tall and condensed, so it runs larger than the body-font label it replaces */
+.headText :global(.l1) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 2.5vw, 48px);
+  /* 1.1, not tighter: each line is an overflow-hidden mask and the comma's
+     tail needs room inside it */
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+/* each line is already its own block mask, so the <br> between them only
+   added an empty line of gap */
+.headText h2 br { display: none; }
+
+.headText :global(.p1) {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 1.5vw, 28px);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
 .hint { color: var(--ink-muted); }
@@ -104,7 +133,24 @@
   }
 
   /* back into flow, so the plan can be panned rather than cropped */
-  .plate { position: static; }
+  .plate { position: relative; }
+
+  /*
+   * In flow, the copy sits below the render rather than over it — on the
+   * page's cream ground, where its cream ink disappeared. The copy gets the
+   * burgundy it is set for, and the render's lower edge dissolves into that
+   * same colour, so the two still meet without a hard line.
+   */
+  .plate::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 35%;
+    pointer-events: none;
+    background: linear-gradient(rgba(38, 0, 4, 0), var(--c-sky));
+  }
+  .veilEnd { display: none; }
+  .head { background: var(--c-sky); }
   .planViewport { overflow-x: auto; scrollbar-width: none; cursor: grab; }
   .planViewport::-webkit-scrollbar { display: none; }
   .planViewport:active { cursor: grabbing; }

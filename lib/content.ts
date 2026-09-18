@@ -65,7 +65,7 @@ export const benefitsIntro = {
   logoLeft: "Marquis",
   logoRight: "Living",
   strap: "Every studio says they're different.\nHere's what that actually looks like, in practice.",
-  curvedTitle: "The Marquis Difference",
+  curvedTitle: "Designed Around Your Life",
 } as const;
 
 export const benefits = [
@@ -128,7 +128,7 @@ export const concept = {
       caption: "Precision over everything",
       body: "This is a city that expects more, and the spaces within it carry that same energy. We design with a full understanding of what it takes to stand out here.",
       image: "/images/concept-place-interiors.webp",
-      cta: { label: "See our work", href: "/apartments" },
+      cta: { label: "See our work", href: "/gallery/residential" },
     },
   },
 } as const;
@@ -150,35 +150,80 @@ export const masterPlan = {
    when they end. */
 export const apartmentTypes = [
   {
-    id: "ground-basement",
-    name: "Ground floor + basement",
-    bedrooms: "3",
-    area: "178 — 202 m²",
-    body: "Private basement, direct outdoor access and a dedicated lower level.",
-    cta: "Explore ground + basement",
-    href: "/apartments",
+    id: "residential",
+    name: "Residential",
+    projectType: "Full homes, apartments, renovations",
+    area: "80 — 600 m²",
+    body: "Every room shaped around how you actually live, from the first sketch to the last cushion.",
+    cta: "Explore residential",
+    href: "/gallery/residential",
     video: "apartment-ground-basement",
   },
   {
-    id: "ground-floor",
-    name: "Ground floor",
-    bedrooms: "2",
-    area: "97 — 104 m²",
-    body: "Step directly onto your terrace and into the communal gardens, blending indoor comfort with outdoor living.",
-    cta: "Explore ground floor",
-    href: "/apartments",
+    id: "commercial",
+    name: "Commercial",
+    projectType: "Offices, showrooms, retail",
+    area: "150 — 2,000 m²",
+    body: "Spaces built to perform beautifully every day, not just in the opening week.",
+    cta: "Explore commercial",
+    href: "/gallery/commercial",
     video: "apartment-ground-floor",
   },
   {
-    id: "penthouse-duplex",
-    name: "Penthouse duplex",
-    bedrooms: "2-3",
-    area: "124 — 243 m²",
-    body: "Two floors crowned with panoramic views and a private rooftop solarium — the ultimate expression of luxury living.",
-    cta: "Explore penthouses",
-    href: "/apartments",
+    id: "hospitality",
+    name: "Hospitality",
+    projectType: "Restaurants, hotels, lounges",
+    area: "200 — 3,000 m²",
+    body: "Designed to feel effortless and inviting, day after day.",
+    cta: "Explore hospitality",
+    href: "/gallery/hospitality",
     video: "apartment-penthouse-duplex",
   },
+] as const;
+
+/* ------------------------------------------------------------- gallery ---- */
+
+/* The three "Explore" buttons each open the parallax gallery for their sector.
+   Until each sector has its own photography, all three draw on the same set of
+   the site's own interiors; only the heading and lead change. */
+export const galleryCategories = {
+  residential: {
+    title: "Residential",
+    lead: "Full homes, apartments and renovations, shaped around how you actually live.",
+  },
+  commercial: {
+    title: "Commercial",
+    lead: "Offices, showrooms and retail, built to perform beautifully every day.",
+  },
+  hospitality: {
+    title: "Hospitality",
+    lead: "Restaurants, hotels and lounges that feel effortless and inviting.",
+  },
+} as const;
+
+export type GalleryCategory = keyof typeof galleryCategories;
+
+/* `w` / `h` are the files' own pixel sizes, so each card keeps its photo's
+   proportions on the strip. */
+export const galleryItems = [
+  { src: "/images/hero-02.jpg", w: 2304, h: 1536, title: "Marble Hour", caption: "A living room composed around stone and brass" },
+  { src: "/images/book-entrance.webp", w: 2400, h: 2999, title: "Grand Arrival", caption: "A chandelier-lit entrance framed in marble" },
+  { src: "/images/flip-01.webp", w: 960, h: 1200, title: "Soft Geometry", caption: "Curved forms softening a formal plan" },
+  { src: "/images/quote-render.webp", w: 1920, h: 1440, title: "Evening Light", caption: "Warm lamplight layered over quiet neutrals" },
+  { src: "/images/book-bar.webp", w: 2400, h: 3373, title: "The Cellar Bar", caption: "Amber glass, dark timber and a cascade of light" },
+  { src: "/images/flip-03.webp", w: 1200, h: 800, title: "Open Plan", caption: "One continuous room for living and gathering" },
+  { src: "/images/architecture-render-19.webp", w: 1122, h: 1402, title: "Structure & Warmth", caption: "Architecture and interior speaking one language" },
+  { src: "/images/flip-02.webp", w: 960, h: 1200, title: "Layered Neutrals", caption: "Texture doing the work that colour usually does" },
+  { src: "/images/benefit-gathering-room.webp", w: 1325, h: 679, title: "The Gathering Room", caption: "A long table set for the whole family" },
+  { src: "/images/book-living.webp", w: 2400, h: 2999, title: "Quiet Grandeur", caption: "Scale held in check by softness" },
+  { src: "/images/flip-06.webp", w: 1200, h: 960, title: "Dining in Stone", caption: "A marble table as the room's anchor" },
+  { src: "/images/concept-place-interiors.webp", w: 1181, h: 1331, title: "A Considered Place", caption: "Every piece chosen for how it will be used" },
+  { src: "/images/flip-04.webp", w: 960, h: 1200, title: "Brass & Velvet", caption: "Rich materials, restrained palette" },
+  { src: "/images/cta-render-21.webp", w: 1024, h: 1536, title: "The Long View", caption: "Rooms arranged around the light they receive" },
+  { src: "/images/benefit-boutique-concept.webp", w: 1869, h: 2243, title: "Boutique Concept", caption: "Hotel-grade detail for everyday living" },
+  { src: "/images/flip-05.webp", w: 1065, h: 1200, title: "Tailored Corners", caption: "Joinery made to measure, edge to edge" },
+  { src: "/images/render.jpg", w: 1402, h: 1122, title: "From First Sketch", caption: "The design as it was promised, delivered" },
+  { src: "/images/book-room-v2.webp", w: 1024, h: 1536, title: "Private Retreat", caption: "A bedroom that asks nothing of you" },
 ] as const;
 
 export const apartmentIntro = {
@@ -301,6 +346,8 @@ export const book = {
   label: "The Marquis Journal / Selected spaces",
   title: ["The art of living,", "done properly."],
   background: "/images/book-room-v2.webp",
+  /* the small button on each left-hand page */
+  cta: { label: "See our work", href: "/gallery/residential" },
   spreads: [
     {
       kicker: "Marquis Living / 01",

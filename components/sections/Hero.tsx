@@ -119,7 +119,15 @@ export function Hero() {
         {/* A statement in each bottom corner, as the reference composition
             does — but each corner carries its own, so the two read as separate
             claims. A corner with no `small` prints no label line at all. */}
+        {/* The CTA sits in the middle of this row, level with the large
+            strapline ("For the true connoisseurs of fine living"), so the two
+            travel together as the copy layer rises. */}
         <div className={styles.straps}>
+          <div className={styles.strapCta}>
+            <FadeIn delay={1.65} immediate>
+              <ButtonCircle label={hero.cta.label} href={hero.cta.href} />
+            </FadeIn>
+          </div>
           {(["left", "right"] as const).map((side) => {
             const strap = hero.strap[side];
             return (
@@ -143,13 +151,6 @@ export function Hero() {
       </div>
       </div>
 
-      {/* The CTA row lives outside the fading copy layer, as it does on the
-          reference, so it stays legible over the render while the hero scrolls. */}
-      <div className={styles.foot}>
-        <FadeIn delay={1.65} immediate>
-          <ButtonCircle label={hero.cta.label} href={hero.cta.href} />
-        </FadeIn>
-      </div>
       </div>
     </section>
   );

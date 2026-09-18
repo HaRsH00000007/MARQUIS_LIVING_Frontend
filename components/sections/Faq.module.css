@@ -114,4 +114,11 @@
   }
   .figure { aspect-ratio: 1.25; }
   .answer { max-width: none; }
+
+  /* Ranged right, a phone-width column left each question as a ragged block
+     pushed against the mark; set left, it reads as a normal list. */
+  .trigger,
+  .panelInner { text-align: left; }
+  .trigger { gap: var(--u-16); padding-block: var(--u-16); }
+  .answer { margin: 0; }
 }

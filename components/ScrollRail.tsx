@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLong } from "./ui/Icons";
 import { useSectionTheme } from "@/hooks/useSectionTheme";
+import { useIsDesktop } from "@/hooks/useMediaQuery";
 import styles from "./ScrollRail.module.css";
 
 /**
@@ -11,6 +12,13 @@ import styles from "./ScrollRail.module.css";
  * "Scroll ↓" hint below it.
  */
 export function ScrollRail() {
+  // The rail is hidden below 992px. Not mounting it there also drops its
+  // per-frame scroll work and re-render, which phones were paying for unseen.
+  const isDesktop = useIsDesktop();
+  return isDesktop ? <Rail /> : null;
+}
+
+function Rail() {
   const [progress, setProgress] = useState(0);
   const frame = useRef(0);
   const dark = useSectionTheme();

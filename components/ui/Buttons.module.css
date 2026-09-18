@@ -69,6 +69,15 @@
   text-indent: 0.16em;
 }
 
+/*
+ * 8.5rem is 8.5% of the viewport — 33px on a 390 phone, which cut every label
+ * down to its first two letters ("CO", "KN MO"). Phones get a fixed disc big
+ * enough for the longest label, "CONSULTATION", on one line.
+ */
+@media (max-width: 991px) {
+  .circle { width: 144px; padding: 12px; }
+}
+
 /* ----------------------------------------------------------- nav item ---- */
 
 .navItem {

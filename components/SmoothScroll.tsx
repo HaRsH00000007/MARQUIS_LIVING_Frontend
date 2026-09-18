@@ -59,8 +59,15 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       lerp: 0.085,
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.6,
-      syncTouch: true,
+      /*
+       * Touch is left to the browser. `syncTouch` re-implemented finger
+       * scrolling in JavaScript — every frame of a swipe went through the main
+       * thread, competing with the pinned sections' own scroll work — and was
+       * the main reason the site stuttered on phones. Native touch scrolling
+       * runs on the compositor and keeps its own momentum; ScrollTrigger reads
+       * it just the same.
+       */
+      syncTouch: false,
     });
 
     instance.on("scroll", ScrollTrigger.update);

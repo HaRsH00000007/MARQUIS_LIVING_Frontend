@@ -185,15 +185,13 @@
 /* fills its 396-wide column and sets on one line, as the reference does */
 .placeCaption { display: block; }
 
+/* The CTA is a pill now, not the reference's 187px disc: it keeps the disc's
+   right edge (87.36% + 10.6%) and sizes to its label. */
 .placeBtn {
   position: absolute;
-  left: 87.36%;
+  right: 2.04%;
   top: 39.56%;
-  width: 10.6%;
-  aspect-ratio: 1;
 }
-/* the circle's intrinsic size is smaller than the reference's 187 here */
-.placeBtn > * { width: 100%; height: 100%; }
 
 /* ----------------------------------------------------------- page flip ---- */
 
@@ -268,7 +266,9 @@
     position: static;
     width: 100%;
   }
-  .placeBtn { aspect-ratio: auto; }
+  /* the pill sizes to its label and centres, rather than stretching across
+     the whole column */
+  .placeBtn { width: auto; align-self: center; }
   /* Each word is its own span, so nowrap only stops mid-word breaks
      ("GOLDE / N"); any overhang is clipped by the panel. */
   .placeWord1,

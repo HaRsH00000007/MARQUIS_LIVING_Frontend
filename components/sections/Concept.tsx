@@ -91,7 +91,10 @@ export function Concept() {
 
   useEffect(() => {
     const el = sectionRef.current;
-    if (!el) return;
+    // Phones stack the panels, so there is no track for the scale, fade and
+    // drift below to follow — and re-rendering the section on every scrolled
+    // frame was pure cost there. The mobile values are fixed further down.
+    if (!el || !isDesktop) return;
     let frame = 0;
 
     /*
@@ -118,11 +121,16 @@ export function Concept() {
       window.removeEventListener("resize", update);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [isDesktop]);
 
   const { intro, place } = concept.panels;
-  const introScale = 0.75 + Math.min(1, progress * 2) * 0.25;
-  const introOpacity = Math.min(1, progress * 2.5);
+  /*
+   * On phones the intro is read in the normal flow of the page, so it sits at
+   * full size and opacity: scaled from 0.75 and faded in off the section's
+   * progress, it was still pale and shrunken by the time it reached the eye.
+   */
+  const introScale = isDesktop ? 0.75 + Math.min(1, progress * 2) * 0.25 : 1;
+  const introOpacity = isDesktop ? Math.min(1, progress * 2.5) : 1;
 
   /*
    * The reference counter-drifts the three title lines across the whole track,
@@ -130,12 +138,22 @@ export function Concept() {
    * (docs/webflow-recovery.md §3). Reproduced literally: each line is a plain
    * lerp between its own pair over the section's scroll progress.
    */
-  const drift = (from: number, to: number) => from + (to - from) * progress;
+  // no drift on phones: at 20% of a phone-width word it pushed "Built" and
+  // "Ambition" off the edge of the screen
+  const drift = (from: number, to: number) => (isDesktop ? from + (to - from) * progress : 0);
   const lineShift1 = drift(-5, 5);
   const lineShift2 = drift(25, -25);
   const lineShift3 = drift(-15, 25);
 
   return (
+    /*
+     * React-owned wrapper for the pin. ScrollTrigger wraps the pinned section
+     * in a `.pin-spacer`, and its cleanup (an effect) only runs after React has
+     * removed the DOM — so without this, leaving the page asked <main> to
+     * remove a section that now lived inside the spacer, and navigation threw
+     * `removeChild: not a child of this node`. React removes this div instead.
+     */
+    <div>
     <section ref={sectionRef} data-theme="light" data-canvas="cream" className={`section bleed clip ${styles.section}`}>
       <div className={styles.screen}>
         <div ref={trackRef} className={styles.track}>
@@ -200,9 +218,14 @@ export function Concept() {
           {/* The concept intro again, closing the flip on the panel it opened
               with. By the time it arrives the section's progress has carried
               the copy to full scale and opacity. */}
-          <IntroPanel intro={intro} scale={introScale} opacity={introOpacity} repeat />
+          {/* Desktop only: it closes the flip. In the phones' vertical stack it
+              was the same block of copy and photographs a second time. */}
+          {isDesktop && (
+            <IntroPanel intro={intro} scale={introScale} opacity={introOpacity} repeat />
+          )}
         </div>
       </div>
     </section>
+    </div>
   );
 }

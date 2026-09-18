@@ -224,7 +224,18 @@
     --chandelier-w-m: 16vw;
     padding-top: calc(45vw + var(--u-64));
   }
-  /* same collision, same fix, at the mobile type size */
-  .accent { margin-top: 0; }
+  /* same collision, same fix, at the mobile type size. The script also steps
+     down from a1: at 90px "Marquis Living" was wider than the phone and
+     broke as "Marquis Liv / ing" under the clip. */
+  .title .accent { margin-top: 0; font-size: min(var(--a2-size), 13vw); white-space: nowrap; }
   .feature { grid-template-columns: 1fr; gap: var(--u-64); }
+
+  /* rem is 1% of the viewport, so the desktop sizes set these at 7px and 4px
+     on a phone — unreadable */
+  .founderName { font-size: 20px; }
+  .founderRole { font-size: 13px; }
+
+  /* the plate only has to sit under the portrait, caption and lead; its
+     desktop floor of 756px left an empty plum block below them */
+  .featureLeft::before { min-height: 0; }
 }

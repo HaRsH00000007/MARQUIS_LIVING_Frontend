@@ -7,6 +7,7 @@ import { useSlider } from "@/hooks/useSlider";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Pagination } from "../ui/Pagination";
 import { ButtonPill } from "../ui/Buttons";
+import { useLenis } from "@/components/SmoothScroll";
 import styles from "./ApartmentTypes.module.css";
 
 /**
@@ -33,6 +34,28 @@ export function ApartmentTypes() {
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const [near, setNear] = useState(false);
   const still = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const lenisRef = useLenis();
+
+  /*
+   * Arriving at `/#apartments` (the gallery's Back link): settle on these
+   * slides. The pinned sections above only reach their final height once
+   * ScrollTrigger has refreshed, so the jump is made after layout has settled
+   * and checked once more a little later.
+   */
+  useEffect(() => {
+    if (window.location.hash !== "#apartments") return;
+    const jump = () => {
+      const el = document.getElementById("apartments");
+      if (!el) return;
+      const top = Math.round(el.getBoundingClientRect().top + window.scrollY);
+      if (Math.abs(window.scrollY - top) < 40) return;
+      const lenis = lenisRef?.current;
+      if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+      else window.scrollTo({ top, behavior: "instant" as ScrollBehavior });
+    };
+    const timers = [450, 1200].map((ms) => window.setTimeout(jump, ms));
+    return () => timers.forEach((t) => window.clearTimeout(t));
+  }, [lenisRef]);
 
   /* Mount the clips only once the section is worth the bytes, and stop them
      again when it is gone. */
@@ -105,11 +128,11 @@ export function ApartmentTypes() {
             >
               <div className={styles.spec}>
                 <div className={styles.specCol}>
-                  <span className="l2 muted">Bedrooms</span>
-                  <span className="h5">{a.bedrooms}</span>
+                  <span className="l2 muted">Project type</span>
+                  <span className="h5">{a.projectType}</span>
                 </div>
                 <div className={styles.specCol}>
-                  <span className="l2 muted">Area up to</span>
+                  <span className="l2 muted">Typical size</span>
                   <span className="h5">{a.area}</span>
                 </div>
               </div>

@@ -196,6 +196,43 @@
   line-height: 1.55;
 }
 
+.pageMid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6cqw;
+}
+
+/* a small printed-ink pill, sized with the book like the rest of the page */
+.pageCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 1cqw 2.2cqw;
+  border: 1px solid currentColor;
+  border-radius: 100vw;
+  font-family: var(--font-body);
+  font-weight: 700;
+  /* the page's small print (0.57cqw) is ~5px at desktop sizes; the button's
+     label must actually be read, so it is kept at 9px or more */
+  font-size: max(9px, 0.95cqw);
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #29281f;
+  /* the spreads ignore the pointer; the first spread's link is live at load
+     (and under reduced motion, where the script never runs) */
+  pointer-events: auto;
+  transition:
+    background-color var(--dur-s) var(--ease-out),
+    color var(--dur-s) var(--ease-out);
+}
+
+.pageCta:hover,
+.pageCta:focus-visible {
+  background: #29281f;
+  color: #f5f0e7;
+}
+
 /* the printed photograph: inset on its page, not bleeding to the edge */
 .photo {
   position: absolute;
@@ -373,7 +410,22 @@
     top: 69%;
     aspect-ratio: 1.76;
   }
-  .progress .label { font-size: 7px; }
+  .progress .label { font-size: 10px; }
+
+  /*
+   * The printed pages are sized in `cqw` of an 88vw book, which put their small
+   * print at 2-4px on a phone. The page title is stepped up to stay legible;
+   * the kicker, foot line and caption are dropped (they are decoration at this
+   * size), and the body gets the whole page width at a size that can be read.
+   */
+  .copyPage { padding: 6cqw 4.5cqw 5cqw 5cqw; justify-content: flex-start; gap: 3cqw; }
+  .copyPage > .pageLabel,
+  .copyPage > div > .pageLabel,
+  .caption { display: none; }
+  .pageTitle { margin: 0; font-size: 6.6cqw; }
+  .pageBody { max-width: none; font-size: max(10px, 2.9cqw); line-height: 1.4; }
+  .pageMid { gap: 3cqw; }
+  .pageCta { font-size: max(9px, 1.9cqw); padding: 1.6cqw 3cqw; }
   .portalCopy {
     left: 7vw;
     right: 7vw;

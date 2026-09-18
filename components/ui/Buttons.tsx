@@ -53,31 +53,13 @@ interface CircleProps {
   className?: string;
 }
 
-/** The large circular CTA — label wraps in two lines inside a ringed disc. */
+/**
+ * The standalone CTA. It used to be a ringed disc; every CTA on the site now
+ * shares the pill's rounded-rectangle shape, so this renders a `ButtonPill`.
+ * The `.circle*` styles are kept in Buttons.module.css should the disc return.
+ */
 export function ButtonCircle({ label, href, onClick, className }: CircleProps) {
-  const inner = (
-    <>
-      <span aria-hidden className={styles.circleBg} data-hover="bg" />
-      <span className={`l2 ${styles.circleLabel}`} data-hover="text">
-        {label}
-      </span>
-    </>
-  );
-
-  const cls = [styles.circle, className].filter(Boolean).join(" ");
-
-  if (href) {
-    return (
-      <Link href={href} className={cls} hover-btn="" aria-label={label}>
-        {inner}
-      </Link>
-    );
-  }
-  return (
-    <button type="button" className={cls} hover-btn="" onClick={onClick} aria-label={label}>
-      {inner}
-    </button>
-  );
+  return <ButtonPill label={label} href={href} onClick={onClick} className={className} />;
 }
 
 interface NavItemProps {

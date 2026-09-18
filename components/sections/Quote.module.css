@@ -87,5 +87,14 @@
 @media (max-width: 991px) {
   /* the reference gives this 0.46 of a screen at 390 — the render is short here */
   .section { min-height: auto; padding-block: var(--u-48); }
-  .quote { max-width: 100%; margin-left: 0; }
+  .quote { max-width: 100%; margin: 0; }
+
+  /* On a phone the quote covers the whole render, not just its lower third,
+     so the wash has to as well — the white type sat straight on the bright
+     room and was hard to read. */
+  .shade {
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.7));
+  }
+  .text { text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45); }
 }

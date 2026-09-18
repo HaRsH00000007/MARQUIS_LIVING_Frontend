@@ -63,6 +63,22 @@ export function Footer() {
     };
   }, []);
 
+  /*
+   * Arriving from another page's "Contact" link (`/#contact`): once the page
+   * has laid out, settle at the bottom where the contact details sit. The
+   * footer is the last thing on the page, so the bottom is its resting place.
+   */
+  useEffect(() => {
+    if (window.location.hash !== "#contact") return;
+    const t = window.setTimeout(
+      () => scrollTo(document.documentElement.scrollHeight - window.innerHeight),
+      400,
+    );
+    return () => window.clearTimeout(t);
+    // run once on arrival
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toTop = () => scrollTo(0);
 
   const scale = 0.75 + progress * 0.25;
@@ -70,6 +86,7 @@ export function Footer() {
 
   return (
     <footer
+      id="contact"
       ref={footerRef}
       data-theme="dark"
       data-canvas="sky"

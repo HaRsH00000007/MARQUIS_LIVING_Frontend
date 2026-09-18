@@ -147,7 +147,8 @@ export function Amenities() {
 
     gsap.killTweensOf(slides);
     slides.forEach((slide, i) => {
-      if (i !== index && i !== from) gsap.set(slide, { visibility: "hidden", zIndex: 0, clipPath: "none" });
+      if (i !== index && i !== from)
+        gsap.set(slide, { visibility: "hidden", zIndex: 0, clipPath: "none" });
     });
     gsap.set(outgoing, { visibility: "visible", zIndex: 1, clipPath: "none" });
     gsap.set(incoming, { visibility: "visible", zIndex: 2 });
@@ -254,24 +255,28 @@ export function Amenities() {
           className={`container ${styles.foot}`}
           style={{ opacity: copyOpacity, transition: "opacity 0.1s ease-out" }}
         >
-          <div className={styles.tabs} role="tablist" aria-label="Amenities" data-hover-group="">
-            {amenities.map((a, i) => (
-              <button
-                key={a.id}
-                type="button"
-                role="tab"
-                aria-selected={i === index}
-                data-hover-item=""
-                className={`l2 ${styles.tab} ${i === index ? `is-active ${styles.tabOn}` : ""}`}
-                onClick={() => select(i)}
-              >
-                {a.name}
-              </button>
-            ))}
-          </div>
+          {/* the tab list and the CTA share one column, the button directly
+              beneath the last tab */}
+          <div className={styles.rail}>
+            <div className={styles.tabs} role="tablist" aria-label="Amenities" data-hover-group="">
+              {amenities.map((a, i) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === index}
+                  data-hover-item=""
+                  className={`l2 ${styles.tab} ${i === index ? `is-active ${styles.tabOn}` : ""}`}
+                  onClick={() => select(i)}
+                >
+                  {a.name}
+                </button>
+              ))}
+            </div>
 
-          <div className={`b-desk ${styles.cta}`}>
-            <ButtonCircle label={amenitiesCta.label} href={amenitiesCta.href} />
+            <div className={`b-desk ${styles.cta}`}>
+              <ButtonCircle label={amenitiesCta.label} href={amenitiesCta.href} />
+            </div>
           </div>
         </div>
       </div>

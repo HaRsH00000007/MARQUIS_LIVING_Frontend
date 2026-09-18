@@ -216,18 +216,36 @@
     0 2px 20px rgba(8, 6, 5, 0.6);
 }
 
+/* left strap | CTA | right strap: the equal outer tracks keep the CTA on the
+   screen's centre line whatever the two straps' lengths */
 .straps {
   position: absolute;
   inset: auto 0 7%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
   gap: var(--u-48);
   padding-inline: var(--offset);
 }
 
-.strapCol { max-width: var(--col-4); }
-.left { text-align: left; }
-.right { text-align: right; }
+/* each strap fills its own track (the outer third either side of the CTA);
+   the old `--col-4` cap resolved against the track, not the row, and folded
+   the strapline onto four lines */
+.strapCol { max-width: none; }
+.left { grid-column: 1; grid-row: 1; text-align: left; }
+.right { grid-column: 3; grid-row: 1; justify-self: end; text-align: right; }
+
+/* level with the large strapline: the button's middle on that line's middle
+   (half the 1.5vw line less half the ~50px button) */
+.strapCta {
+  grid-column: 2;
+  grid-row: 1;
+  margin-bottom: calc(0.75vw - 25px);
+  color: var(--c-white);
+}
+
+/* a soft dark backing keeps the outline and label legible over the render */
+.strapCta a { background: rgba(18, 10, 8, 0.55); }
 
 .strapSmall {
   color: var(--c-white);
@@ -244,26 +262,6 @@
   text-shadow:
     0 1px 3px rgba(8, 6, 5, 0.9),
     0 2px 16px rgba(8, 6, 5, 0.6);
-}
-
-/* Centred circular CTA with the strapline beneath it, as on the reference.
-   It rises in from below the fold on the same ease as the copy. */
-.foot {
-  position: absolute;
-  inset: auto 0 var(--u-48);
-  z-index: 12;
-  transform: translateY(calc(28vh * (1 - var(--hero-copy, 0))));
-  padding-inline: var(--offset);
-  color: var(--c-white);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--u-24);
-}
-
-.footDesc {
-  max-width: var(--col-4);
-  color: rgba(255, 255, 255, 0.8);
 }
 
 /* ------------------------------------------------------------- responsive */
@@ -286,10 +284,11 @@
   .tagline { font-size: 5vw; }
   .strapSmall { font-size: 2.9vw; }
   .strapLarge { font-size: 4.4vw; }
-  .straps { flex-direction: column; gap: var(--u-24); }
+  .straps { display: flex; flex-direction: column; gap: var(--u-24); }
+  /* on phones the CTA follows both statements */
+  .strapCta { order: 1; margin-bottom: 0; }
   .right { text-align: left; }
   .title { inset: 14% 0 auto; }
   .tagline { inset: 42% 0 auto; }
 
-  .footDesc { max-width: 100%; }
 }
