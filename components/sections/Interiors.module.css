@@ -19,20 +19,9 @@
   --dome-gap: 6vw;
   /* the dome's own curve, the same as the shared `.arch` */
   --dome-rise: 26vw;
-  /*
-   * The hanging pair. `--chandelier-top` is where the fixture itself hangs;
-   * the cords above it run past the crown line and `.ceiling` trims them to the
-   * dome's curve, so each rope meets the ceiling flush whatever the curve is
-   * doing at its x.
-   */
-  --chandelier-inset: 9%;
-  --chandelier-top: 11vw;
-  --chandelier-w: 8.5vw;
   margin-top: calc(var(--dome-overlap) * -1);
   /* The reference lets the title sit high inside the dome rather than clearing
-     it — measured, its whole section is 2979 with only ~575 of padding. Raised
-     from 20vw so the title sits up under the crown, its cap line above the
-     chandeliers' top globes rather than dropping below the pair. */
+     it — measured, its whole section is 2979 with only ~575 of padding. */
   padding-top: calc(8vw + var(--u-24));
   /* painted by the two layers below instead, so the dome can be narrower than
      the section */
@@ -71,35 +60,6 @@
   inset-inline: 0;
   bottom: 0;
 }
-
-/* ---------------------------------------------------------- chandeliers ---- */
-
-/*
- * The ceiling the pair hangs from: the same box and the same curve as the dome
- * itself (`.section::before`), clipping its children. The cords are positioned
- * above the crown line so this clip is what ends them — they meet the curve
- * flush at whatever x they sit at, with no gap and no cord over the render
- * outside the dome.
- */
-.ceiling {
-  position: absolute;
-  inset: 0 calc(var(--dome-gap) * (1 - var(--dome-open, 0)));
-  border-top-left-radius: 50% var(--dome-rise);
-  border-top-right-radius: 50% var(--dome-rise);
-  overflow: hidden;
-  /* only the fixtures themselves take the pointer, not this full-bleed box */
-  pointer-events: none;
-  /*
-   * Above `.title`, which is a full-width block that reaches across both
-   * fixtures: at an equal z-index the later heading won the hit test and ate
-   * the hover that lights them. Only the two fixture boxes are raised with it
-   * — the rest of this layer is transparent to the pointer — and they sit in
-   * the margins, clear of the type.
-   */
-  z-index: 3;
-}
-
-.ceiling > * { pointer-events: auto; }
 
 /*
  * `overflow: clip` masks the display lines' rise, but its box ends on the
@@ -220,8 +180,6 @@
     --dome-overlap: 18vw;
     --dome-rise: 45vw;
     /* the rounder mobile crown drops far lower at the sides */
-    --chandelier-top: 24vw;
-    --chandelier-w-m: 16vw;
     padding-top: calc(45vw + var(--u-64));
   }
   /* same collision, same fix, at the mobile type size. The script also steps

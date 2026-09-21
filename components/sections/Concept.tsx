@@ -6,6 +6,7 @@ import { concept } from "@/lib/content";
 import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { FlipGallery } from "../ui/FlipGallery";
+import { Chandelier } from "../ui/Chandelier";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { useFlipPin } from "@/hooks/useFlipPin";
 import { scrollProgress } from "@/lib/layout";
@@ -28,7 +29,10 @@ function IntroPanel({ intro, scale, opacity, repeat = false }: IntroPanelProps) 
   return (
     <article className={`${styles.panel} ${styles.panelIntro}`} aria-hidden={repeat || undefined}>
       {/* first in the panel, so the copy below always paints over it */}
-      <FlipGallery photos={intro.photos} />
+      <FlipGallery photos={intro.photos} rightOnlyOnDesktop />
+      {/* In the left gutter the photo reel left: unlit here, at both ends of
+          the flip. The Built on Ambition page carries the lit one. */}
+      <Chandelier side="left" variant="spiral" hover={false} className={styles.chandelierIntro} />
       <div
         className={styles.introInner}
         style={{
@@ -162,6 +166,10 @@ export function Concept() {
 
           {/* ---------------------------------------------------- panel 2 */}
           <article className={`${styles.panel} ${styles.panelPlace}`}>
+            {/* Lit by the flip itself (useFlipPin): it catches as this page
+                swings in and goes down as it swings out. */}
+            <Chandelier side="right" variant="spiral" hover={false} flipLight className={styles.chandelierPlace} />
+
             <div className={styles.country}>
               <p className="c1 a-center">{place.country}</p>
             </div>
@@ -200,17 +208,16 @@ export function Concept() {
               />
             </FadeIn>
 
+            {/* The CTA leads the copy block, directly above its heading, so the
+                three travel together wherever the block sits. */}
             <div className={styles.placeCopy}>
+              <div className={styles.placeBtn}>
+                <ButtonCircle label={place.cta.label} href={place.cta.href} />
+              </div>
+              <div className="u-32" />
               <h4 className={`h5 a-left ${styles.placeCaption}`}>{place.caption}</h4>
               <div className="u-16" />
               <p className="p1">{place.body}</p>
-            </div>
-
-            {/* The reference parks a 187px circle CTA on the panel's right
-                edge, level with the title. The previous build had a pill in
-                the bottom-left corner because the 1440 panel had no room. */}
-            <div className={styles.placeBtn}>
-              <ButtonCircle label={place.cta.label} href={place.cta.href} />
             </div>
           </article>
 

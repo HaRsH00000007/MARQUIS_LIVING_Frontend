@@ -15,13 +15,41 @@ import styles from "./Chandelier.module.css";
  *
  * Purely decorative: the fixture is hidden from the accessibility tree and the
  * timeline is skipped entirely under `prefers-reduced-motion`.
+ *
+ * With `hover={false}` the fixture ignores the pointer and its light is driven
+ * from outside instead: `flipLight` marks it for `useFlipPin`, which lights it
+ * as its page flips in and dims it as the page flips out (see `lightTimeline`).
  */
-export function Chandelier({ side }: { side: "left" | "right" }) {
+/*
+ * The fixtures. `pendant` is the arched sections' lamp, whose plates carry
+ * extra cord above the fixture; `spiral` is the leaf spiral cut from the
+ * client's render (frames 28 and 2 of chandelier_warm_lights.gif), trimmed
+ * below its ceiling canopy so the wires run straight off the top of the plate.
+ */
+const PLATES = {
+  pendant: { dim: "/images/chandelier-dim.png", lit: "/images/chandelier-lit.png", w: 226, h: 1061 },
+  spiral: { dim: "/images/chandelier-spiral-wires-dim.webp", lit: "/images/chandelier-spiral-wires-lit.webp", w: 340, h: 603 },
+} as const;
+
+export function Chandelier({
+  side,
+  variant = "pendant",
+  hover = true,
+  flipLight = false,
+  className = "",
+}: {
+  side: "left" | "right";
+  variant?: keyof typeof PLATES;
+  hover?: boolean;
+  flipLight?: boolean;
+  className?: string;
+}) {
+  const plate = PLATES[variant];
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    if (!root || !hover) return;
 
     const dim = root.querySelector(`.${styles.dim}`);
     const lit = root.querySelector(`.${styles.lit}`);
@@ -71,32 +99,63 @@ export function Chandelier({ side }: { side: "left" | "right" }) {
     }, root);
 
     return () => ctx.revert();
-  }, []);
+  }, [hover]);
 
   return (
     <div
       ref={rootRef}
-      className={`${styles.chandelier} ${side === "left" ? styles.left : styles.right}`}
+      className={`${styles.chandelier} ${side === "left" ? styles.left : styles.right} ${styles[variant]} ${className}`}
+      data-flip-light={flipLight ? "" : undefined}
       aria-hidden
     >
-      <span className={styles.spill} />
-      <span className={styles.glow} />
+      <span className={styles.spill} data-light="spill" />
+      <span className={styles.glow} data-light="glow" />
       <Image
-        src="/images/chandelier-dim.png"
+        src={plate.dim}
         alt=""
-        width={226}
-        height={1061}
+        width={plate.w}
+        height={plate.h}
         className={`${styles.plate} ${styles.dim}`}
         sizes="12vw"
+        data-light="dim"
       />
       <Image
-        src="/images/chandelier-lit.png"
+        src={plate.lit}
         alt=""
-        width={226}
-        height={1061}
+        width={plate.w}
+        height={plate.h}
         className={`${styles.plate} ${styles.lit}`}
         sizes="12vw"
+        data-light="lit"
       />
     </div>
   );
+}
+
+/**
+ * The lamp catching (or going out) as a standalone, un-paused timeline, for a
+ * host to nest in its own scrubbed timeline. The same surge-and-settle as the
+ * hover version, with every tween left un-rendered until the playhead reaches
+ * it, so building the "off" pass never flashes the lamp on at load: the
+ * stylesheet's own resting state (unlit) stands until scrolling moves it.
+ */
+export function lightTimeline(root: Element, on: boolean): gsap.core.Timeline {
+  const part = (key: string) => root.querySelector(`[data-light="${key}"]`);
+  const [lit, dim, glow, spill] = ["lit", "dim", "glow", "spill"].map(part);
+  const tl = gsap.timeline({ defaults: { immediateRender: false } });
+  if (!lit || !dim || !glow || !spill) return tl;
+
+  if (on) {
+    tl.fromTo(dim, { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "In" }, 0)
+      .fromTo(lit, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "Out" }, 0)
+      .fromTo(glow, { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1.12, duration: 0.45, ease: "Out" }, 0.1)
+      .to(glow, { scale: 1, duration: 0.45, ease: "InOut" }, 0.55)
+      .fromTo(spill, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "Out" }, 0.2);
+  } else {
+    tl.fromTo(spill, { opacity: 1 }, { opacity: 0, duration: 0.5, ease: "In" }, 0)
+      .fromTo(glow, { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.72, duration: 0.55, ease: "In" }, 0)
+      .fromTo(lit, { opacity: 1 }, { opacity: 0, duration: 0.5, ease: "In" }, 0.25)
+      .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "Out" }, 0.3);
+  }
+  return tl;
 }

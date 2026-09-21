@@ -2,6 +2,15 @@
 
 import { useEffect, type RefObject } from "react";
 import { gsap } from "@/lib/gsap";
+import { lightTimeline } from "@/components/ui/Chandelier";
+
+/**
+ * How much of a lit panel's rest the lamp takes to catch after it has swung
+ * in, and how early before it swings out the lamp starts to go down — so both
+ * changes are seen face-on, not only while the page is edge-on.
+ */
+const LIGHT_ON_SETTLE = 0.3;
+const LIGHT_OFF_LEAD = 0.3;
 
 /**
  * The scroll length the section had when its panels slid sideways: two panels
@@ -91,8 +100,25 @@ export function useFlipPin(
 
       tl.to({}, { duration: lead + rest });
       for (let i = 0; i < flips; i++) {
-        tl.fromTo(panels[i], { rotationY: 0 }, { rotationY: -90, duration: FLIP / 2, ease: "In" })
+        /* A `[data-flip-light]` lamp on the outgoing panel goes down across
+           the end of its rest and the swing out. Nested at absolute times
+           (inserted, not appended) so no later flip moves. */
+        const outLights = panels[i].querySelectorAll("[data-flip-light]");
+        const outAt = tl.duration();
+        outLights.forEach((lamp) => {
+          const early = rest * LIGHT_OFF_LEAD;
+          tl.add(lightTimeline(lamp, false).duration(early + FLIP / 2), outAt - early);
+        });
+
+        tl.fromTo(panels[i], { rotationY: 0 }, { rotationY: -90, duration: FLIP / 2, ease: "In" }, outAt)
           .fromTo(panels[i + 1], { rotationY: 90 }, { rotationY: 0, duration: FLIP / 2, ease: "Out" });
+
+        /* …and one on the incoming panel catches as it swings in, glowing up
+           to full early in its rest. */
+        const inAt = outAt + FLIP / 2;
+        panels[i + 1].querySelectorAll("[data-flip-light]").forEach((lamp) => {
+          tl.add(lightTimeline(lamp, true).duration(FLIP / 2 + rest * LIGHT_ON_SETTLE), inAt);
+        });
 
         /* The zoom starts with the flip-in ("<") and runs on into the rest;
            the rest is shortened by the same amount, so every later flip lands
@@ -100,9 +126,11 @@ export function useFlipPin(
         const zoom = panels[i + 1].querySelectorAll<HTMLElement>("[data-flip-zoom]");
         const settle = zoom.length ? rest * ZOOM_SETTLE : 0;
         if (zoom.length) {
-          tl.fromTo(zoom, { scale: ZOOM_FROM }, { scale: 1, duration: FLIP / 2 + settle, ease: "Out" }, "<");
+          tl.fromTo(zoom, { scale: ZOOM_FROM }, { scale: 1, duration: FLIP / 2 + settle, ease: "Out" }, inAt);
         }
-        tl.to({}, { duration: (i === flips - 1 ? rest + lead : rest) - settle });
+        /* The rest is appended from the end of the swing-in, not from
+           whatever nested tween ends last, so the schedule is unchanged. */
+        tl.to({}, { duration: (i === flips - 1 ? rest + lead : rest) }, inAt + FLIP / 2);
       }
     }, section);
 

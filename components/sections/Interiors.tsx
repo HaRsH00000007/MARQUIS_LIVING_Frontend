@@ -5,7 +5,6 @@ import Image from "next/image";
 import { interiors } from "@/lib/content";
 import { SplitReveal, FadeIn, AccentReveal } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
-import { Chandelier } from "../ui/Chandelier";
 import styles from "./Interiors.module.css";
 
 type FounderInfo = (typeof interiors.founders)[number];
@@ -70,16 +69,6 @@ export function Interiors() {
       className={`section arch clip ${styles.section}`}
       aria-labelledby="interiors-title"
     >
-      {/*
-        * The chandeliers hang from the dome's ceiling, so they are masked by the
-        * dome's own shape: the cords run up past the curve and are cut off
-        * exactly where it falls, leaving no gap between rope and ceiling. The
-        * mask follows `--dome-open` with the dome as it widens.
-        */}
-      <div className={styles.ceiling} aria-hidden>
-        <Chandelier side="left" />
-        <Chandelier side="right" />
-      </div>
 
       <div className="container">
         <h2 id="interiors-title" className={`h1 a-center ${styles.title}`}>

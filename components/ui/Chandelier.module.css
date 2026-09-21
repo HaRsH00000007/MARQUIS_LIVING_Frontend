@@ -110,6 +110,19 @@
   filter: blur(24px);
 }
 
+/*
+ * The leaf spiral: its wires run off the top of the plate (the canopy is
+ * trimmed away), so there is no extra cord to lift above `--chandelier-top`, and the glow sits on the middle of
+ * the spiral rather than a lower cluster. Its real render lights evenly down
+ * the whole fixture, so the bloom is tall and narrower.
+ */
+.spiral { --cord-ext: 0; }
+.spiral .plate { aspect-ratio: 340 / 603; }
+.spiral .glow { top: 50%; width: 170%; translate: -50% -50%; }
+.spiral .spill { top: 48%; width: 360%; translate: -50% -50%; }
+/* the right-hand spiral is not mirrored: the render is lit from one side */
+.spiral.right { transform: none; }
+
 @media (max-width: 991px) {
   .chandelier {
     width: var(--chandelier-w-m, 18vw);

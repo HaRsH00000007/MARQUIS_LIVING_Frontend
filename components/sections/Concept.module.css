@@ -186,13 +186,31 @@
 /* fills its 396-wide column and sets on one line, as the reference does */
 .placeCaption { display: block; }
 
-/* The CTA is a pill now, not the reference's 187px disc: it keeps the disc's
-   right edge (87.36% + 10.6%) and sizes to its label. */
-.placeBtn {
-  position: absolute;
-  right: 2.04%;
-  top: 39.56%;
+/* The CTA pill sits in the copy block, above the heading, sized to its label. */
+.placeBtn { display: flex; }
+
+/* ---------------------------------------------------------- chandeliers ---- */
+
+/*
+ * One leaf-spiral fixture per page, its wires running straight up off the
+ * top of the screen. Width is capped against the height too, as the photo reels are,
+ * so a short, wide screen does not swamp the copy; at 2:1 the fixture runs
+ * just over half the screen's height.
+ *
+ * Intro pages: centred in the left gutter the photo reel used to fill (13.5%,
+ * one reel wide). Built on Ambition: right of the portrait (ends 69%), above
+ * the pill CTA and the copy that sit lower down.
+ */
+.chandelierIntro,
+.chandelierPlace {
+  --chandelier-w: min(12.8vw, 27vh);
+  --chandelier-top: 0px;
 }
+
+.chandelierIntro { --chandelier-inset: calc(13.5% + (min(10vw, 21vh) - var(--chandelier-w)) / 2); }
+
+/* nudged right, clear of the portrait; still short of the nav in the corner */
+.chandelierPlace { --chandelier-inset: 11%; }
 
 /* ----------------------------------------------------------- page flip ---- */
 
@@ -234,6 +252,10 @@
 /* ----------------------------------------------------------- responsive ---- */
 
 @media (max-width: 991px) {
+  /* the pages stack and never flip here; the photo reels keep both sides */
+  .chandelierIntro,
+  .chandelierPlace { display: none; }
+
   .screen { height: auto; }
   .track { display: block; width: 100%; height: auto; }
 
@@ -262,14 +284,10 @@
   .country,
   .placeTitleWrap,
   .placeImg,
-  .placeCopy,
-  .placeBtn {
+  .placeCopy {
     position: static;
     width: 100%;
   }
-  /* the pill sizes to its label and centres, rather than stretching across
-     the whole column */
-  .placeBtn { width: auto; align-self: center; }
   /* Each word is its own span, so nowrap only stops mid-word breaks
      ("GOLDE / N"); any overhang is clipped by the panel. */
   .placeWord1,
