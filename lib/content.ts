@@ -515,8 +515,9 @@ export const footer = {
     { label: "Terms of use", href: "/terms-of-use" },
   ],
   creditsLabel: "Made by",
-  creditsName: "THEFIRSTTHELAST",
-  creditsHref: "https://thefirstthelast.com",
+  creditsName: "GLOCAL STUDIO",
+  /* TODO: Glocal Studio's site — the credit renders as plain text until set */
+  creditsHref: "",
 } as const;
 
 export const cookies = {

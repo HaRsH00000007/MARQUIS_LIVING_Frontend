@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { footer } from "@/lib/content";
+import { gsap } from "@/lib/gsap";
+import { documentTop } from "@/lib/layout";
+import { clamp01 } from "@/lib/motion";
 import { EraMark } from "../ui/EraMark";
 import { useScrollTo } from "@/components/SmoothScroll";
 import { SplitReveal } from "../ui/Reveal";
@@ -15,51 +18,85 @@ import styles from "./Footer.module.css";
  * The reference reveals this with `.footer-s` scaling 0.75 -> 1 and fading in
  * (`trigger .footer-w, start "top 30%", end "bottom bottom", scrub .5`).
  *
- * The clip-path that goes with it belongs to the *CTA*, not here:
- * `[data-footer-clip]` is on the CTA's container, and the same timeline runs it
- * to `inset(8% 22% 8% 22%)`. So the render above contracts inward on all four
- * sides while the sky comes up behind it — which is why an earlier attempt to
- * inset this element horizontally read as a violet rectangle floating over the
- * CTA. See CallToAction.
+ * The clip-path that goes with it is applied to the *CTA*, not here:
+ * `[data-footer-clip]` is on the CTA's container, and this same timeline runs
+ * it to `inset(8% 22% 8% 22%)`. So the render above contracts inward on all
+ * four sides while the sky comes up behind it — which is why an earlier attempt
+ * to inset this element horizontally read as a violet rectangle floating over
+ * the CTA. See CallToAction.
  */
 export function Footer() {
   const scrollTo = useScrollTo();
   const footerRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0);
+  const innerRef = useRef<HTMLDivElement>(null);
 
+  /*
+   * The reference's footer timeline, verbatim: one ScrollTrigger on the footer
+   * drives both the CTA's `[data-footer-clip]` contracting inward and this
+   * block scaling up, so the two can never drift apart. `end "bottom bottom"`
+   * is the very bottom of the page, so both finish exactly as scrolling does.
+   * Pages without a CTA (contact, 404) just get the scale-in.
+   *
+   * The window is measured live every frame rather than handed to
+   * ScrollTrigger: the sections above set their own heights after mount (the
+   * book, the sticky panels), and a trigger measured before that fired while
+   * the CTA was still on screen — clipping the render the moment it arrived.
+   * `scrub: 0.5` is reproduced as a 0.5s ease toward the live target.
+   */
   useEffect(() => {
     const el = footerRef.current;
-    if (!el) return;
-    let frame = 0;
+    const inner = innerRef.current;
+    if (!el || !inner) return;
+    const clipEl = document.querySelector<HTMLElement>("[data-footer-clip]");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 992px)");
 
-    const update = () => {
-      frame = 0;
-      const rect = el.getBoundingClientRect();
-      const viewH = window.innerHeight;
-      /*
-       * Progress must complete on *entry*, not on exit: the footer is the last
-       * element on the page, so it never scrolls past the top and a
-       * `height + viewport` denominator would cap it at 0.5 — leaving the
-       * footer permanently at 87.5% scale and 80% opacity. Measuring against
-       * the travel needed to bring it fully into view reaches 1 at the bottom.
-       */
-      const travel = Math.min(rect.height, viewH) || 1;
-      const p = Math.min(1, Math.max(0, (viewH - rect.top) / travel));
-      setProgress(p);
+    const state = { p: 0 };
+    let target = -1;
+
+    const apply = () => {
+      const p = state.p;
+      if (clipEl) {
+        const [v, h] = desktop.matches ? [8, 22] : [4, 32];
+        clipEl.style.clipPath =
+          p > 0 ? `inset(${p * v}% ${p * h}% ${p * v}% ${p * h}%)` : "";
+      }
+      inner.style.opacity = String(p);
+      inner.style.transform = `scale(${0.75 + p * 0.25})`;
     };
 
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(update);
+    const tick = () => {
+      if (reduced.matches) {
+        if (target !== 1) {
+          target = state.p = 1;
+          apply();
+          if (clipEl) clipEl.style.clipPath = "";
+        }
+        return;
+      }
+      /* "top 30%" -> "bottom bottom", in layout space */
+      const vh = window.innerHeight;
+      const top = documentTop(el);
+      const start = top - vh * 0.3;
+      const end = top + el.offsetHeight - vh;
+      const y = window.scrollY;
+      const next = end > start ? clamp01((y - start) / (end - start)) : y >= start ? 1 : 0;
+      if (next === target) return;
+      const first = target < 0;
+      target = next;
+      if (first) {
+        state.p = next;
+        apply();
+      } else {
+        gsap.to(state, { p: next, duration: 0.5, ease: "power3.out", overwrite: true, onUpdate: apply });
+      }
     };
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", update);
+    gsap.ticker.add(tick);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", update);
-      if (frame) cancelAnimationFrame(frame);
+      gsap.ticker.remove(tick);
+      gsap.killTweensOf(state);
+      if (clipEl) clipEl.style.clipPath = "";
     };
   }, []);
 
@@ -81,9 +118,6 @@ export function Footer() {
 
   const toTop = () => scrollTo(0);
 
-  const scale = 0.75 + progress * 0.25;
-  const opacity = Math.min(1, progress * 1.6);
-
   return (
     <footer
       id="contact"
@@ -92,15 +126,7 @@ export function Footer() {
       data-canvas="sky"
       className={`section bleed theme_on-brand ${styles.section}`}
     >
-      <div
-        className={`container ${styles.inner}`}
-        style={{
-          transform: `scale(${scale})`,
-          opacity: opacity,
-          transformOrigin: "center center",
-          willChange: "transform, opacity",
-        }}
-      >
+      <div ref={innerRef} className={`container ${styles.inner}`}>
         {/* ------------------------------------------------------- contact */}
         <div className={styles.contact}>
           <EraMark className={styles.mark} />
@@ -173,9 +199,9 @@ export function Footer() {
 
           <div className={styles.credits}>
             <a
-              href={footer.creditsHref}
-              target="_blank"
-              rel="noreferrer"
+              href={footer.creditsHref || undefined}
+              target={footer.creditsHref ? "_blank" : undefined}
+              rel={footer.creditsHref ? "noreferrer" : undefined}
               className={styles.creditsLink}
             >
               <span className={styles.creditsMark} aria-hidden>

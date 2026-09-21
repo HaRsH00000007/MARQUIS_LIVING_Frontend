@@ -22,7 +22,6 @@ import styles from "./CallToAction.module.css";
 export function CallToAction() {
   const ref = useRef<HTMLElement>(null);
   const [shift, setShift] = useState(0);
-  const [clip, setClip] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -36,16 +35,6 @@ export function CallToAction() {
       /* "top bottom" -> "bottom top": the section's whole pass up the screen. */
       const p = clamp01((window.scrollY + vh - top) / (el.offsetHeight + vh));
       setShift(lerp(-15, 15, p));
-
-      /*
-       * The reference's `[data-footer-clip]` sits on this container and is run
-       * by the footer's own timeline — `trigger .footer-w, start "top 30%",
-       * end "bottom bottom", scrub .5`. The footer is the block directly after
-       * this one, so its top is this section's bottom; that window works out
-       * at 0.3 of a screen.
-       */
-      const footerTop = top + el.offsetHeight;
-      setClip(clamp01((window.scrollY - (footerTop - vh * 0.3)) / (vh * 0.3)));
     };
     const onScroll = () => {
       if (frame) return;
@@ -68,11 +57,12 @@ export function CallToAction() {
       data-theme="dark"
       data-canvas="cream"
       className={`section bleed bleed-top bleed-bottom theme_on-color ${styles.section}`}
-      style={{ "--cta-shift": `${shift}%`, "--cta-clip": clip } as React.CSSProperties}
+      style={{ "--cta-shift": `${shift}%` } as React.CSSProperties}
     >
       {/* Everything the footer clip contracts — render and type together, as
-          `[data-footer-clip]` wraps both on the reference. */}
-      <div className={styles.clip}>
+          `[data-footer-clip]` wraps both on the reference. The clip-path itself
+          is driven by the Footer's timeline, which owns the trigger. */}
+      <div data-footer-clip="" className={styles.clip}>
         <div className={styles.bg} aria-hidden>
           <span className={styles.imgWrap}>
             <Image src={callToAction.image} alt="" fill sizes="100vw" className={styles.img} />

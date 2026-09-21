@@ -50,15 +50,10 @@
 /*
  * `[data-footer-clip]` on the reference: as the footer arrives this container
  * contracts to `inset(8% 22% 8% 22%)`, so the render pulls inward on all four
- * sides and the sky below comes up around it.
+ * sides and the sky below comes up around it. The Footer's GSAP timeline
+ * writes the clip-path inline.
  */
-.clip {
-  position: relative;
-  clip-path: inset(
-    calc(var(--cta-clip, 0) * 8%) calc(var(--cta-clip, 0) * 22%)
-    calc(var(--cta-clip, 0) * 8%) calc(var(--cta-clip, 0) * 22%)
-  );
-}
+.clip { position: relative; }
 
 .lead { max-width: 68%; margin-inline: auto; }
 
@@ -67,14 +62,8 @@
 .cta { display: flex; justify-content: center; }
 
 @media (max-width: 991px) {
-  /* the reference switches this column to `aspect-ratio: 2/6` below 992, and
-     narrows the footer clip to `inset(4% 32% 4% 32%)` */
+  /* the reference switches this column to `aspect-ratio: 2/6` below 992 (the
+     footer clip narrows to `inset(4% 32% 4% 32%)` there — see Footer) */
   .inner { aspect-ratio: 2 / 6; }
-  .clip {
-    clip-path: inset(
-      calc(var(--cta-clip, 0) * 4%) calc(var(--cta-clip, 0) * 32%)
-      calc(var(--cta-clip, 0) * 4%) calc(var(--cta-clip, 0) * 32%)
-    );
-  }
   .lead { max-width: 100%; }
 }

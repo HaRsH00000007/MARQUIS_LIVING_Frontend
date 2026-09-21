@@ -13,6 +13,9 @@
 .section {
   --footer-overlap: calc(var(--u-96) + var(--u-160));
   position: relative;
+  /* above the CTA's `.bleed-bottom::after` fade (z 1), which sits inside the
+     overlap and otherwise veils the top of the footer — the strap line */
+  z-index: 2;
   min-height: var(--vh100);
   margin-top: calc(var(--footer-overlap) * -1);
   overflow: clip;
@@ -25,6 +28,9 @@
 }
 
 .inner {
+  /* scaled 0.75 -> 1 and faded in by the footer timeline (see Footer) */
+  transform-origin: center center;
+  will-change: transform, opacity;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
