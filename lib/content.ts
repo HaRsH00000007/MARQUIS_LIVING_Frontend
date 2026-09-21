@@ -26,6 +26,9 @@ export const site = {
 
 export const nav = {
   primary: { label: "See Our \nWork", href: "/apartments" },
+  /* the header's top-right link; there is no gallery index, so it opens the
+     first gallery, as the site's other "See our work" links do */
+  gallery: { label: "Gallery", href: "/gallery/residential" },
   secondary: [
     { label: "Book a consultation", href: "#book-a-call", modal: true },
     { label: "Contact", href: "/contact", modal: false },

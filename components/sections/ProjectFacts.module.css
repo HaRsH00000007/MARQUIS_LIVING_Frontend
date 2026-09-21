@@ -45,12 +45,58 @@
   text-align: center;
   /* the hairline is what holds the row together now the cards have no rules */
   border-top: 1px solid var(--line);
-  padding-top: var(--u-24);
+  padding-top: var(--u-12);
   transform: translate3d(calc(var(--drift) * var(--travel, 0) * 1vw), 0, 0);
   will-change: transform;
 }
 
+/*
+ * The hover lift lives on this inner block, not the card: the card's own
+ * transform is the scroll drift, and a hover transform there would fight it.
+ * The side padding is cancelled by negative margins so the copy keeps its
+ * measure; the padding only gives the pop-up box room around the copy.
+ */
+.cardInner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% + var(--u-16) * 2);
+  margin-inline: calc(var(--u-16) * -1);
+  padding: var(--u-12) var(--u-16) var(--u-24);
+  transition: transform var(--dur-m) var(--ease-out);
+}
+
+/* the box itself: a faint cream panel that scales up into place */
+.cardInner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--surface);
+  border: 1px solid var(--ink-disabled);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity var(--dur-m) var(--ease-out),
+    transform var(--dur-m) var(--ease-out);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .card:hover .cardInner { transform: translateY(calc(var(--u-12) * -1)); }
+  .card:hover .cardInner::before { opacity: 1; transform: scale(1); }
+}
+
 .index { color: var(--ink-muted); }
+
+/* the counter sits over an invisible copy of the final figure, which fixes
+   the width so the row never shifts while the digits run */
+.count { position: relative; display: inline-block; }
+.countSizer { visibility: hidden; }
+.countLive { position: absolute; inset: 0; text-align: center; white-space: nowrap; }
 
 .label {
   margin: var(--u-12) 0 var(--u-20);
@@ -111,4 +157,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card { transform: none; will-change: auto; }
+  .cardInner,
+  .cardInner::before { transition: none; }
 }

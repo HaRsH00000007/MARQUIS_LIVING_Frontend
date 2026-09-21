@@ -71,16 +71,20 @@
 }
 
 /*
- * The reference stacks two bottom gradients 389 of 1080 tall over this render —
- * 36% — which is what gives the white quote type its footing. Expressed here as
- * one gradient of the equivalent density.
+ * The reference stacks two bottom gradients 36% tall over this render. This
+ * render is brighter (a pale sofa behind the quote), so the wash runs taller
+ * and deeper to give the white quote type its footing.
  */
 .shade {
   position: absolute;
   inset: auto 0 0;
   z-index: 1;
-  height: 36%;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.62));
+  height: 65%;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.35) 40%,
+    rgba(0, 0, 0, 0.82)
+  );
 }
 
 

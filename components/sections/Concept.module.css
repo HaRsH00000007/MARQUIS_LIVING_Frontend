@@ -118,7 +118,8 @@
 
 /* 259 of 1440 — a deliberately narrow centred column, not a full measure */
 .eyebrow { width: 17.98%; margin-inline: auto; }
-.introBody { width: 17.98%; color: var(--ink-muted); }
+/* wider than the eyebrow's column, so the body sets in three lines */
+.introBody { width: 31%; margin-inline: auto; color: var(--ink-muted); }
 
 /*
  * Held clear of the photo reels either side, which is what sets this measure

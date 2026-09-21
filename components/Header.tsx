@@ -102,25 +102,17 @@ export function Header() {
         </Link>
 
         <nav className={styles.nav} aria-label="Main">
-          <Link href={nav.primary.href} className={styles.primary} hover-nav-item="">
+          <Link href={nav.gallery.href} className={styles.primary} hover-nav-item="">
             <span className={styles.primaryStack}>
               <span className={styles.primaryLine} data-hover="text">
-                <span className="h6 a-right">
-                  Select
-                  <br />
-                  Gallery
-                </span>
+                <span className="h6 a-right">{nav.gallery.label}</span>
               </span>
               <span
                 className={`${styles.primaryLine} ${styles.primaryLine2}`}
                 data-hover="text"
                 aria-hidden
               >
-                <span className="h6 a-right">
-                  Select
-                  <br />
-                  Gallery
-                </span>
+                <span className="h6 a-right">{nav.gallery.label}</span>
               </span>
             </span>
           </Link>

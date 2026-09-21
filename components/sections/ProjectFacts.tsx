@@ -5,6 +5,7 @@ import { projectFacts } from "@/lib/content";
 import { EraMark } from "../ui/EraMark";
 import { SplitReveal } from "../ui/Reveal";
 import { scrollProgress } from "@/lib/layout";
+import { gsap } from "@/lib/gsap";
 import styles from "./ProjectFacts.module.css";
 
 /*
@@ -22,6 +23,73 @@ import styles from "./ProjectFacts.module.css";
  * right edge.
  */
 const TRAVEL = [1.2, 2.0, 2.8, 3.5];
+
+/**
+ * A figure such as "500+" that counts up from 0 each time it scrolls into
+ * view. The server renders the final figure (and it stays put under reduced
+ * motion); the counter is laid over an invisible copy of it, so the width is
+ * fixed at the final value and the row never shifts as the digits change.
+ */
+function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const match = value.match(/^(\D*)(\d+)(.*)$/);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !match) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const [, prefix, digits, suffix] = match;
+    const target = Number(digits);
+    const write = (n: number) => {
+      el.textContent = `${prefix}${Math.round(n)}${suffix}`;
+    };
+    write(0);
+
+    /* Replays on every visit: counts up each time the figure comes into view,
+       and drops back to 0 once it has fully left, ready for the next pass. */
+    const state = { n: 0 };
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[entries.length - 1];
+        if (entry.intersectionRatio >= 0.6) {
+          gsap.killTweensOf(state);
+          state.n = 0;
+          write(0);
+          gsap.to(state, {
+            n: target,
+            duration: 4,
+            ease: "power2.out",
+            onUpdate: () => write(state.n),
+          });
+        } else if (!entry.isIntersecting) {
+          gsap.killTweensOf(state);
+          state.n = 0;
+          write(0);
+        }
+      },
+      { threshold: [0, 0.6] },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      gsap.killTweensOf(state);
+    };
+    // the figure is static content; `match` is derived from it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  return (
+    <span className={styles.count}>
+      <span className={styles.countSizer} aria-hidden>
+        {value}
+      </span>
+      <span ref={ref} className={styles.countLive} aria-hidden>
+        {value}
+      </span>
+    </span>
+  );
+}
 
 /**
  * The measures the place is composed to.
@@ -114,9 +182,13 @@ export function ProjectFacts() {
               className={styles.card}
               style={reduced ? undefined : { "--travel": TRAVEL[i] ?? 0 } as React.CSSProperties}
             >
-              <span className={`l1 reg ${styles.index}`}>{item.index}</span>
-              <h3 className={`h4 ${styles.label}`}>{item.label}</h3>
-              <p className={`p1 ${styles.body}`}>{item.value}</p>
+              <div className={styles.cardInner}>
+                <span className={`l1 reg ${styles.index}`}>{item.index}</span>
+                <h3 className={`h4 ${styles.label}`} aria-label={item.label}>
+                  <CountUp value={item.label} />
+                </h3>
+                <p className={`p1 ${styles.body}`}>{item.value}</p>
+              </div>
             </li>
           ))}
         </ul>
