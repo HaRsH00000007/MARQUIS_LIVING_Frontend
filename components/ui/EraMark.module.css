@@ -22,6 +22,15 @@
   height: 36%;
 }
 
+/* The badge's centre symbol: /icons/marquis-lotus.svg, traced from the
+   client's logo, used as a mask over the inherited colour. */
+.lotus {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: url("/icons/marquis-lotus.svg") center / contain no-repeat;
+  mask: url("/icons/marquis-lotus.svg") center / contain no-repeat;
+}
+
 @media (max-width: 991px) {
   .badge { width: var(--u-96); }
 }

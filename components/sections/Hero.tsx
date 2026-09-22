@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { hero } from "@/lib/content";
-import { SplitReveal, FadeIn, AccentReveal } from "../ui/Reveal";
+import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
+import { useReveal } from "@/hooks/useReveal";
 import {
   COPY_TRAVEL_VH,
   PARALLAX_VH,
@@ -15,6 +16,27 @@ import {
   zoomEase,
 } from "@/lib/heroCurves";
 import styles from "./Hero.module.css";
+
+/**
+ * The MARQUIS Living lockup, traced from the client's artwork into two
+ * vectors — the capitals and the script — so each takes its own colour:
+ * white capitals, the script in the champagne the old "living" line used.
+ * Both are masks over a flat fill, so the artwork's hairlines stay sharp at
+ * any size. The capitals rise in first; the script then writes on left to
+ * right, as the per-letter reveal did.
+ */
+function HeroLockup() {
+  const ref = useReveal<HTMLHeadingElement>(true);
+  return (
+    <h1 ref={ref} className={styles.lockup}>
+      <span className="sr-only">
+        {hero.wordmark[0]} {hero.accent}
+      </span>
+      <span className={styles.lockupWordmark} aria-hidden />
+      <span className={styles.lockupScript} aria-hidden />
+    </h1>
+  );
+}
 
 /**
  * Hero. The reference pins this section for ~5.8 viewport heights and drives
@@ -100,14 +122,7 @@ export function Hero() {
       <div className={styles.copyMask}>
       <div className={styles.screen}>
         <div className={styles.title}>
-          <h1 className={`h1 a-center ${styles.titleLine}`}>
-            <SplitReveal mode="char" delay={0.9} immediate>
-              {hero.wordmark[0]}
-            </SplitReveal>
-          </h1>
-          <AccentReveal className={`a2 ${styles.script}`} delay={1.2} step={0.09} immediate>
-            {hero.accent}
-          </AccentReveal>
+          <HeroLockup />
         </div>
 
         <p className={`h3 a-center ${styles.tagline}`}>

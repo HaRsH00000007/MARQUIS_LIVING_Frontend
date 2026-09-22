@@ -148,61 +148,59 @@
   text-align: center;
 }
 
-.titleLine {
-  white-space: nowrap;
-  font-size: 10vw;
-  letter-spacing: 0.02em;
-  color: var(--c-white);
-  /* The plate is a bright interior, so every line carries a soft shadow rather
-     than a heavier wash over the photograph. */
-  text-shadow:
-    0 1px 3px rgba(8, 6, 5, 0.85),
-    0 2px 22px rgba(8, 6, 5, 0.65);
-}
-
 /*
- * The script closes over the wordmark's lower half, as it does on the plate.
- * It writes on letter by letter: each glyph slides in from the left and fades
- * up on its own staggered delay (set per character by AccentReveal), so
- * "Living" appears to be drawn across the wordmark one letter at a time.
+ * The lockup: two vector masks stacked in one box of the artwork's own
+ * proportions (723 x 235). The photo plate is bright, so the shadow the type
+ * lines carried is cast by the whole box — a filter on each masked layer
+ * would be cut away by its own mask.
  */
-.script {
-  display: block;
-  margin-top: -0.38em;
-  line-height: 1;
-  font-size: 6.4vw;
-  color: #f4dcb4;
-  text-shadow:
-    0 1px 3px rgba(8, 6, 5, 0.85),
-    0 2px 20px rgba(8, 6, 5, 0.6);
+.lockup {
+  position: relative;
+  /* Squeezed: 88% of the artwork's width at its full height (the masks
+     stretch to the box), and set a little right of the centre line. */
+  width: 37vw;
+  height: calc(42vw * 235 / 723);
+  margin: 0 auto;
+  translate: 3vw 0;
+  filter:
+    drop-shadow(0 1px 2px rgba(8, 6, 5, 0.8))
+    drop-shadow(0 2px 14px rgba(8, 6, 5, 0.55));
 }
 
-/* Raised specificity so these beat the shared [data-accent-reveal] rules.
-   The tracking collapse is switched off — the per-letter slide carries the
-   motion here, and the two together read as drift. */
-.script:global([data-accent-reveal]) {
-  --accent-track: 0em;
-  margin-right: 0;
-  transition: none;
+.lockupWordmark,
+.lockupScript {
+  position: absolute;
+  inset: 0;
 }
 
-.script :global(.accent-char) {
+.lockupWordmark {
+  background-color: var(--c-white);
+  -webkit-mask: url("/icons/marquis-wordmark.svg") center / 100% 100% no-repeat;
+  mask: url("/icons/marquis-wordmark.svg") center / 100% 100% no-repeat;
   opacity: 0;
-  /* each letter starts a little to the left of, and just below, its seat */
-  transform: translate3d(-0.5em, 0.14em, 0);
+  transform: translate3d(0, 0.35em, 0);
+  font-size: 4vw;
   transition:
-    opacity 0.55s var(--ease-out) var(--reveal-delay, 0s),
-    transform 0.8s var(--ease-write) var(--reveal-delay, 0s);
-  will-change: transform, opacity;
+    opacity 0.9s var(--ease-out) 0.9s,
+    transform 1.1s var(--ease-out) 0.9s;
 }
 
-.script:global(.is-revealed) :global(.accent-char) {
-  opacity: 1;
-  transform: none;
+/* the script's own champagne, as the old "living" line was set */
+.lockupScript {
+  background-color: #f4dcb4;
+  -webkit-mask: url("/icons/marquis-script.svg") center / 100% 100% no-repeat;
+  mask: url("/icons/marquis-script.svg") center / 100% 100% no-repeat;
+  /* written on left to right: the clip opens across the flourish */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.6s var(--ease-write) 1.2s;
 }
+
+.lockup:global(.is-revealed) .lockupWordmark { opacity: 1; transform: none; }
+.lockup:global(.is-revealed) .lockupScript { clip-path: inset(0 0 0 0); }
 
 @media (prefers-reduced-motion: reduce) {
-  .script :global(.accent-char) { opacity: 1; transform: none; }
+  .lockupWordmark,
+  .lockupScript { opacity: 1; transform: none; clip-path: none; transition: none; }
 }
 
 .tagline {
@@ -279,8 +277,8 @@
   /* Portrait: one column of statement — the right-hand repeat has nowhere to
      sit once the frame is narrower than the type — and the display sizes step
      up, since the root font-size is 1vw and a desktop vw reads tiny at 390. */
-  .titleLine { font-size: 20vw; }
-  .script { font-size: 13.3vw; }
+  /* the lockup at the width the stacked title held on a phone */
+  .lockup { width: 74vw; height: calc(84vw * 235 / 723); translate: 3vw 0; }
   .tagline { font-size: 5vw; }
   .strapSmall { font-size: 2.9vw; }
   .strapLarge { font-size: 4.4vw; }

@@ -179,7 +179,9 @@ export function EraBadge({ className }: { className?: string }) {
           </textPath>
         </text>
       </svg>
-      <EraMark className={styles.mark} />
+      {/* the Marquis lotus, painted in the header's current ink through a
+          mask so it turns navy or cream with the theme, as the ring does */}
+      <span className={`${styles.mark} ${styles.lotus}`} aria-hidden />
     </span>
   );
 }
