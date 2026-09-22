@@ -7,6 +7,7 @@ import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { FlipGallery } from "../ui/FlipGallery";
 import { Chandelier } from "../ui/Chandelier";
+import { EraMark } from "../ui/EraMark";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { useFlipPin } from "@/hooks/useFlipPin";
 import { scrollProgress } from "@/lib/layout";
@@ -58,8 +59,7 @@ function IntroPanel({ intro, scale, opacity, repeat = false }: IntroPanelProps) 
         <div className={styles.introFoot}>
           <p className={`p1 a-center ${styles.introBody}`}>{intro.body}</p>
           <div className="u-32" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/era-mark.svg" alt="" className={styles.mark} />
+          <EraMark className={styles.mark} />
         </div>
       </div>
     </article>
