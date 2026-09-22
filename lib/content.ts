@@ -523,9 +523,3 @@ export const footer = {
   creditsHref: "",
 } as const;
 
-export const cookies = {
-  title: "Cookies",
-  body: "This website uses cookies to ensure you get the best experience on website.",
-  accept: "Accept",
-  decline: "Decline",
-} as const;

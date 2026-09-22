@@ -9,7 +9,6 @@ import { PageCanvas } from "@/components/PageCanvas";
 import { ModalProvider } from "@/components/ModalProvider";
 import { Header } from "@/components/Header";
 import { ScrollRail } from "@/components/ScrollRail";
-import { CookieConsent } from "@/components/CookieConsent";
 import { Preloader } from "@/components/Preloader";
 import { site } from "@/lib/content";
 
@@ -71,7 +70,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <ScrollRail />
             <main id="main">{children}</main>
-            <CookieConsent />
             <div className="grain" aria-hidden />
           </ModalProvider>
         </SmoothScroll>
