@@ -6,7 +6,6 @@ import { architecture, architectureNotes } from "@/lib/content";
 import { SplitReveal } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { documentTop } from "@/lib/layout";
-import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { clamp01, ease, lerp, phase } from "@/lib/motion";
 import styles from "./Architecture.module.css";
 
@@ -53,23 +52,6 @@ const RIGHT = {
   open: { x0: 0, x1: 55.556, y0: 18.519, y1: 81.481 },
 };
 
-/*
- * The same reveal in portrait. Each shutter covers half the screen, so these
- * are percentages of that half: the window runs from 6vw in on the left to
- * 6vw in on the right, and opens down the upper half of the screen — which
- * leaves the cream below it for the two notes (see the stylesheet).
- */
-const LEFT_PHONE = {
-  from: { x0: 22, x1: 100, y0: 13, y1: 37 },
-  mid: { x0: 12, x1: 100, y0: 5, y1: 45 },
-  open: { x0: 12, x1: 100, y0: 5, y1: 45 },
-};
-const RIGHT_PHONE = {
-  from: { x0: 0, x1: 78, y0: 13, y1: 37 },
-  mid: { x0: 0, x1: 88, y0: 5, y1: 45 },
-  open: { x0: 0, x1: 88, y0: 5, y1: 45 },
-};
-
 type Hole = { x0: number; x1: number; y0: number; y1: number };
 
 const mixHole = (a: Hole, b: Hole, t: number): Hole => ({
@@ -90,8 +72,6 @@ const cover = (h: Hole, slitX: number) =>
 
 export function Architecture() {
   const sectionRef = useRef<HTMLElement>(null);
-  /* the window the shutters open is shaped for the screen it is on */
-  const isDesktop = useIsDesktop();
   /** Progress over the reference's own trigger window, not the sticky range. */
   const [intro, setIntro] = useState(0);
   /** Progress over the whole scroll area, for the render's parallax. */
@@ -131,10 +111,9 @@ export function Architecture() {
   /* 0 -> .5 open, .5 -> .6 run out to the centre line. */
   const openA = phase(intro, 0, 0.5);
   const openB = phase(intro, 0.5, 0.6);
-  const l = isDesktop ? LEFT : LEFT_PHONE;
-  const r = isDesktop ? RIGHT : RIGHT_PHONE;
-  const left = openB > 0 ? mixHole(l.mid, l.open, openB) : mixHole(l.from, l.mid, openA);
-  const right = openB > 0 ? mixHole(r.mid, r.open, openB) : mixHole(r.from, r.mid, openA);
+  const left = openB > 0 ? mixHole(LEFT.mid, LEFT.open, openB) : mixHole(LEFT.from, LEFT.mid, openA);
+  const right =
+    openB > 0 ? mixHole(RIGHT.mid, RIGHT.open, openB) : mixHole(RIGHT.from, RIGHT.mid, openA);
 
   /* .6 -> 1, on the reference's `InOut`. */
   const lift = ease.inOut(phase(intro, 0.6, 1));

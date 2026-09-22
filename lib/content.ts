@@ -10,14 +10,11 @@ export const site = {
   description:
     "Exclusive interiors in Dubai for the true connoisseurs of fine living. Consultancy, turnkey solutions and furniture, delivered by one studio from first sketch to final handover.",
   url: "https://marquis-living-frontend.vercel.app",
-  /*
-   * TODO — PLACEHOLDER, DO NOT SHIP. The content deck gives "<PHONE NUMBER>"
-   * and no street address for the Dubai studio, so `phone` / `phoneHref` are
-   * still the previous project's Spanish line and are wrong wherever they
-   * print. `footer.offices` has the same gap.
-   */
-  phone: "+34 (655) 408-648",
-  phoneHref: "tel:+34655408648",
+  /* the line the footer prints; the menu, the booking modal and the contact
+     panel all read it from here. TODO: no street address for the Dubai studio
+     yet — `address` below and `footer.offices` still carry what we were given. */
+  phone: "+91 9211733881",
+  phoneHref: "tel:+919211733881",
   addressLabel: "Studio",
   address: "Dubai, United Arab Emirates",
   mapHref:

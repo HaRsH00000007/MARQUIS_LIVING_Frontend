@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { EraBadge } from "./ui/EraMark";
 import { NavItem } from "./ui/Buttons";
 import { MenuIcon, CloseIcon } from "./ui/Icons";
@@ -25,6 +25,7 @@ export function Header() {
   const lenisRef = useLenis();
   const scrollTo = useScrollTo();
   const router = useRouter();
+  const pathname = usePathname();
 
   /*
    * "Contact" goes to the contact details in the footer. On the home page it
@@ -38,6 +39,18 @@ export function Header() {
     } else {
       router.push("/#contact");
     }
+  };
+
+  /*
+   * The badge is home: from another page it routes there, and on the home page
+   * itself — where the route would not change and nothing would happen — it
+   * glides back up to the hero instead.
+   */
+  const goHome = (e: React.MouseEvent) => {
+    setOpen(false);
+    if (pathname !== "/") return;
+    e.preventDefault();
+    scrollTo(0);
   };
 
   /*
@@ -97,7 +110,12 @@ export function Header() {
           .filter(Boolean)
           .join(" ")}
       >
-        <Link href="/" className={styles.badge} aria-label={`${site.name} — home`}>
+        <Link
+          href="/"
+          onClick={goHome}
+          className={styles.badge}
+          aria-label={`${site.name} — home`}
+        >
           <EraBadge />
         </Link>
 
@@ -143,8 +161,10 @@ export function Header() {
       >
         <ul className={styles.sheetList}>
           <li>
-            <Link href={nav.primary.href} className="h3" onClick={() => setOpen(false)}>
-              Apartments
+            {/* the gallery, which the desktop header carries in its own link;
+                the phone header has only the menu button */}
+            <Link href={nav.gallery.href} className="h3" onClick={() => setOpen(false)}>
+              {nav.gallery.label}
             </Link>
           </li>
           <li>

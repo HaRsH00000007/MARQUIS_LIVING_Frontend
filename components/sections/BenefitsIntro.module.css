@@ -62,11 +62,18 @@
   /* the arch climbs the hero here too — 1.23 screens on the reference.
      The crown is 45vw deep at this width, so the arc of type starts below it
      rather than riding over the curve, where `clip` cut its caps off. */
-  .section { margin-top: -123vh; padding-block: 34vw var(--u-64); }
+  .section { margin-top: -123vh; padding-block: 38vw var(--u-64); }
   .lockup { gap: var(--u-24); }
+  /*
+   * Narrower than the dome: at full width the arc's ends ("DESIGNED", "LIFE")
+   * ran up into the curve at the sides, whatever the padding above it. The
+   * SVG scales its own type, so the size is stepped up to match.
+   */
+  .curved { width: 88%; margin-inline: auto; margin-bottom: var(--u-48); }
   /* viewBox units, not CSS px: the SVG is 1000 units wide against a 390px
      screen, so the original 42 painted at ~16px — smaller than the label
-     beneath it. 92 paints at ~36px and its caps stay inside the arch. */
-  .curvedText { font-size: 92px; }
-  .curved { margin-bottom: var(--u-48); }
+     beneath it. */
+  /* the letters keep the display face's own tracking; the words are spaced
+     by the arc layout in the component (`open`), not by letter-spacing */
+  .curvedText { font-size: 88px; }
 }

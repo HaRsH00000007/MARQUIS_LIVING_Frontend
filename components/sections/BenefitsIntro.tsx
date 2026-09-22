@@ -91,7 +91,10 @@ export function BenefitsIntro() {
     const widths = wordRefs.current.map((w) => w?.getComputedTextLength() ?? 0);
     const used = widths.reduce((sum, w) => sum + w, 0);
     const span = total * (1 - END_PAD * 2);
-    const gap = Math.max(0, (span - used) / Math.max(1, words.length - 1)) * OPEN_GAP;
+    /* the words stand further apart on a phone, where the arc is short and
+       four words set close together read as one block of type */
+    const open = window.matchMedia("(max-width: 991px)").matches ? 1 : OPEN_GAP;
+    const gap = Math.max(0, (span - used) / Math.max(1, words.length - 1)) * open;
     const wideLen = used + gap * (words.length - 1);
 
     const place = (start: number, g: number) => {

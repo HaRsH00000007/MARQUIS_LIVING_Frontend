@@ -257,42 +257,68 @@
  * drawn at all and the panel is an ordinary block.
  */
 @media (max-width: 991px) {
-  /*
-   * The same reveal as the desktop, in portrait: three screens of scroll area
-   * for the shutters to open and the render to take the screen.
-   */
-  .section { height: 300vh; }
+  .section { height: auto; }
+
+  .shutters { display: none; }
 
   /*
-   * The window the shutters open runs down the upper half of the screen
-   * (LEFT_PHONE / RIGHT_PHONE in the component), so the notes stack in the
-   * cream below it rather than in side bands a phone has no room for. They
-   * still drift out and fade as the cream leaves.
+   * No reveal on mobile, so the notes come out of their layer and read as a
+   * plain stacked block. The scroll-driven inline transform and fade are
+   * overridden here — there is nothing left for them to track.
    */
+  .notes {
+    position: relative;
+    display: grid;
+    gap: var(--u-48);
+    height: auto;
+    margin-bottom: 0;
+    padding: var(--u-64) var(--offset);
+    background-color: var(--c-cream);
+  }
+
   .noteLeft,
   .noteRight {
-    left: var(--offset);
-    right: var(--offset);
-    top: auto;
-    width: auto;
+    position: static;
+    inset: auto;
+    width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
   }
-  /* clear of the window (which ends at 45% of the screen) and of each other */
-  .noteLeft { bottom: 29%; }
-  .noteRight { bottom: 4%; }
 
-  .noteTitle { font-size: calc(26 * var(--u)); line-height: 1.1; }
-  .noteKicker { font-size: 12px; }
-  .noteLine { font-size: 13px; line-height: 1.45; }
+  /* one note here: stacked, the second ran straight into the first and said
+     the same thing twice over on a phone screen */
+  .noteRight { display: none; }
 
-  /* one screen of render, held while the shutters open and then scrolled
-     away with its type as the area runs out */
-  .stage { height: 150svh; }
+  .noteTitle { font-size: calc(40 * var(--u)); }
 
-  .inner { padding-block: var(--u-64); gap: var(--u-96); }
+  .stage {
+    position: relative;
+    height: auto;
+    /* the copy inside sets the height now (see .inner); the render covers it */
+    min-height: 120svh;
+    transform: none;
+  }
+  .img { transform: none; }
+
+  /*
+   * Nearly the render's full height, with the title at the top and the quote
+   * and credits at the foot (the inner is `space-between`): that lands them on
+   * the pale sofa in the lower third of the picture.
+   */
+  .inner { min-height: 132svh; padding-block: var(--u-64) var(--u-48); gap: var(--u-48); }
+  /* down onto the panelled wall, clear of the chandelier the title sits over */
+  .introCopy { margin-top: 24svh; }
+
+  /* cream type on a cream sofa: the same shadow the hero's lines carry */
+  .bottom {
+    text-shadow:
+      0 1px 3px rgba(8, 6, 5, 0.85),
+      0 2px 18px rgba(8, 6, 5, 0.6);
+  }
   .bottom { height: auto; }
   /* capped against the screen: at 150u the word ran wider than the column
      and `overflow: clip` cut it */
-  .title { white-space: normal; font-size: min(calc(150 * var(--u)), 19vw); }
+  .title { white-space: normal; font-size: min(calc(150 * var(--u)), 21.5vw); }
   .bottom { flex-direction: column; align-items: flex-start; }
   .quote { width: 100%; margin-left: 0; }
 }

@@ -525,7 +525,9 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
         <button type="button" className={`l2 ${styles.back}`} onClick={goBack}>
           &larr; Back
         </button>
-        <span className="l2 muted">Scroll or drag to explore &middot; click a photo to open</span>
+        <span className={`l2 muted ${styles.hint}`}>
+          Scroll or drag to explore &middot; click a photo to open
+        </span>
       </div>
     </section>
   );
