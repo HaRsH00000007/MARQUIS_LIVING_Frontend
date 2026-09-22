@@ -217,7 +217,6 @@ export const galleryItems = [
   { src: "/images/flip-03.webp", w: 1200, h: 800, title: "Open Plan", caption: "One continuous room for living and gathering" },
   { src: "/images/architecture-render-19.webp", w: 1122, h: 1402, title: "Structure & Warmth", caption: "Architecture and interior speaking one language" },
   { src: "/images/flip-02.webp", w: 960, h: 1200, title: "Layered Neutrals", caption: "Texture doing the work that colour usually does" },
-  { src: "/images/benefit-gathering-room.webp", w: 1325, h: 679, title: "The Gathering Room", caption: "A long table set for the whole family" },
   { src: "/images/book-living.webp", w: 2400, h: 2999, title: "Quiet Grandeur", caption: "Scale held in check by softness" },
   { src: "/images/flip-06.webp", w: 1200, h: 960, title: "Dining in Stone", caption: "A marble table as the room's anchor" },
   { src: "/images/concept-place-interiors.webp", w: 1181, h: 1331, title: "A Considered Place", caption: "Every piece chosen for how it will be used" },

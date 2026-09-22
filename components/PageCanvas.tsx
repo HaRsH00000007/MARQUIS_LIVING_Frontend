@@ -83,10 +83,18 @@ export function PageCanvas() {
     let frame = 0;
 
     const measure = () => {
+      /* `data-canvas-phone` overrides `data-canvas` below 992px, for a seam
+         whose dissolve is wrong on a phone — see Interiors, where the cream
+         swept up around the climbing dome. Read at measure time, and the
+         measure re-runs on resize, so the desktop value is never stale. */
+      const phone = window.innerWidth < 992;
       const stops: Stop[] = [...document.querySelectorAll<HTMLElement>("[data-canvas]")]
         .map((node) => ({
           at: documentTop(node),
-          rgb: readToken(node.dataset.canvas ?? "", cache),
+          rgb: readToken(
+            (phone ? node.dataset.canvasPhone : undefined) ?? node.dataset.canvas ?? "",
+            cache,
+          ),
         }))
         .sort((a, b) => a.at - b.at);
 

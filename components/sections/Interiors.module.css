@@ -174,10 +174,18 @@
 .founderBio { margin: 0; }
 
 @media (max-width: 991px) {
-  /* the reference does not overlap these two on mobile — the pin is gone,
-     so the arch simply follows the amenity stack */
+  /*
+   * The dome climbs here too, as the first one does under the hero: the
+   * section is pulled up over the amenity stack's tail (which reserves the
+   * same 80vh, see Amenities), so scrolling carries the crown up over the
+   * render rather than simply arriving below it.
+   *
+   * The overlap also has to clear the crown's own rise. At 18vw the square
+   * ground below the dome started a fifth of the way into the curve and
+   * covered its shoulders, which is what flattened the arch to a sliver.
+   */
   .section {
-    --dome-overlap: 18vw;
+    --dome-overlap: 80vh;
     --dome-rise: 45vw;
     /* the rounder mobile crown drops far lower at the sides */
     padding-top: calc(45vw + var(--u-64));
@@ -196,4 +204,21 @@
   /* the plate only has to sit under the portrait, caption and lead; its
      desktop floor of 756px left an empty plum block below them */
   .featureLeft::before { min-height: 0; }
+
+  /*
+   * The 62% / 88% measures and their 8-16% indents are a composition for the
+   * desktop's half-width column; on one phone column they left the portrait
+   * and its copy stranded in the middle of the screen. Full width here.
+   */
+  .featureLeft .featureMedia { width: 100%; margin-left: 0; }
+  .founderLeft,
+  .leadLeft,
+  .leadRight { width: 100%; margin-left: 0; }
+
+  /* the plum plate follows the column instead of bleeding off one edge and
+     stopping short of the other, and stops short of the title above it */
+  .featureLeft::before {
+    right: calc(var(--offset) * -1);
+    top: calc(var(--u-32) * -1);
+  }
 }

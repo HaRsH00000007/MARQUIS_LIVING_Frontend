@@ -66,6 +66,9 @@ export function Interiors() {
       id="interiors"
       data-theme="light"
       data-canvas="cream"
+      /* the dome paints its own cream here; on a phone the canvas dissolving
+         to cream at this seam read as a wash sweeping up around it */
+      data-canvas-phone="sky"
       className={`section arch clip ${styles.section}`}
       aria-labelledby="interiors-title"
     >

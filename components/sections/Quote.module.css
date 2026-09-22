@@ -89,8 +89,20 @@
 
 
 @media (max-width: 991px) {
-  /* the reference gives this 0.46 of a screen at 390 — the render is short here */
-  .section { min-height: auto; padding-block: var(--u-48); }
+  /*
+   * A set height, and the render fills it. Left to the copy's height the
+   * section was shorter than the picture's own 4:3 — which is bottom-anchored
+   * at its natural size — so a bare band of ground showed above it.
+   */
+  .section { min-height: 78svh; padding-block: var(--u-48); }
+  .bg { inset: 0; }
+  .img {
+    height: 100%;
+    object-fit: cover;
+    /* the room reads best from its middle once it is cropped to the screen */
+    object-position: 50% 40%;
+    transform: none;
+  }
   .quote { max-width: 100%; margin: 0; }
 
   /* On a phone the quote covers the whole render, not just its lower third,

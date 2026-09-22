@@ -4,8 +4,6 @@ import Image from "next/image";
 import { useRef } from "react";
 import { masterPlan } from "@/lib/content";
 import { SplitReveal } from "../ui/Reveal";
-import { useIsDesktop } from "@/hooks/useMediaQuery";
-import { useDragPan } from "@/hooks/useDragPan";
 import styles from "./MasterPlan.module.css";
 
 /**
@@ -22,9 +20,9 @@ import styles from "./MasterPlan.module.css";
  * than being squeezed to an unreadable width — the fallback the reference uses.
  */
 export function MasterPlan() {
+  /* The plan is shown whole at every width now — full-bleed on desktop, at its
+     own proportions on phones — so there is nothing left to drag. */
   const panRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useIsDesktop();
-  useDragPan(panRef, !isDesktop);
 
   return (
     <section
@@ -37,8 +35,10 @@ export function MasterPlan() {
           <Image
             src={masterPlan.image}
             alt="A Marquis Living project in Dubai"
-            width={2400}
-            height={1350}
+            /* the file's own size: declared 2400x1350 it was stretched on
+               phones, where the plan is laid out at its intrinsic ratio */
+            width={1402}
+            height={1122}
             sizes="(max-width: 991px) 180vw, 100vw"
             className={styles.plan}
           />
@@ -48,7 +48,6 @@ export function MasterPlan() {
       <span className={styles.veilEnd} aria-hidden />
 
       <div className={`container ${styles.head}`}>
-        <p className={`l1 b-mob ${styles.hint}`}>{masterPlan.dragHint}</p>
         <div className={styles.headText}>
           <span className="line-v" aria-hidden />
           <div className="u-24" />

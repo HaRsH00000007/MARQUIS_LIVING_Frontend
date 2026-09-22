@@ -59,9 +59,14 @@
 .mark { width: var(--u-48); height: var(--u-48); }
 
 @media (max-width: 991px) {
-  /* the arch climbs the hero here too — 1.23 screens on the reference */
-  .section { margin-top: -123vh; padding-block: 26vw var(--u-64); }
+  /* the arch climbs the hero here too — 1.23 screens on the reference.
+     The crown is 45vw deep at this width, so the arc of type starts below it
+     rather than riding over the curve, where `clip` cut its caps off. */
+  .section { margin-top: -123vh; padding-block: 34vw var(--u-64); }
   .lockup { gap: var(--u-24); }
-  .curvedText { font-size: 42px; }
+  /* viewBox units, not CSS px: the SVG is 1000 units wide against a 390px
+     screen, so the original 42 painted at ~16px — smaller than the label
+     beneath it. 92 paints at ~36px and its caps stay inside the arch. */
+  .curvedText { font-size: 92px; }
   .curved { margin-bottom: var(--u-48); }
 }

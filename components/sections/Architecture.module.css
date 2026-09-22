@@ -257,47 +257,42 @@
  * drawn at all and the panel is an ordinary block.
  */
 @media (max-width: 991px) {
-  .section { height: auto; }
-
-  .shutters { display: none; }
+  /*
+   * The same reveal as the desktop, in portrait: three screens of scroll area
+   * for the shutters to open and the render to take the screen.
+   */
+  .section { height: 300vh; }
 
   /*
-   * No reveal on mobile, so the notes come out of their layer and read as a
-   * plain stacked block. The scroll-driven inline transform and fade are
-   * overridden here — there is nothing left for them to track.
+   * The window the shutters open runs down the upper half of the screen
+   * (LEFT_PHONE / RIGHT_PHONE in the component), so the notes stack in the
+   * cream below it rather than in side bands a phone has no room for. They
+   * still drift out and fade as the cream leaves.
    */
-  .notes {
-    position: relative;
-    display: grid;
-    gap: var(--u-48);
-    height: auto;
-    margin-bottom: 0;
-    padding: var(--u-64) var(--offset);
-    background-color: var(--c-cream);
-  }
-
   .noteLeft,
   .noteRight {
-    position: static;
-    inset: auto;
-    width: 100%;
-    opacity: 1 !important;
-    transform: none !important;
+    left: var(--offset);
+    right: var(--offset);
+    top: auto;
+    width: auto;
   }
+  /* clear of the window (which ends at 45% of the screen) and of each other */
+  .noteLeft { bottom: 29%; }
+  .noteRight { bottom: 4%; }
 
-  .noteTitle { font-size: calc(40 * var(--u)); }
+  .noteTitle { font-size: calc(26 * var(--u)); line-height: 1.1; }
+  .noteKicker { font-size: 12px; }
+  .noteLine { font-size: 13px; line-height: 1.45; }
 
-  .stage {
-    position: relative;
-    height: auto;
-    min-height: 120vh;
-    transform: none;
-  }
-  .img { transform: none; }
+  /* one screen of render, held while the shutters open and then scrolled
+     away with its type as the area runs out */
+  .stage { height: 150svh; }
 
   .inner { padding-block: var(--u-64); gap: var(--u-96); }
   .bottom { height: auto; }
-  .title { white-space: normal; font-size: calc(150 * var(--u)); }
+  /* capped against the screen: at 150u the word ran wider than the column
+     and `overflow: clip` cut it */
+  .title { white-space: normal; font-size: min(calc(150 * var(--u)), 19vw); }
   .bottom { flex-direction: column; align-items: flex-start; }
   .quote { width: 100%; margin-left: 0; }
 }

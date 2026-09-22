@@ -160,33 +160,49 @@
 }
 
 @media (max-width: 991px) {
-  .section { height: auto; }
+  /*
+   * One screen held, then 80vh of tail for the Interiors dome to climb over —
+   * the hero/benefits pairing, at phone scale. Without the hold the dome rose
+   * with the page rather than across this section, and read as static.
+   */
+  .section { height: calc(100svh + 80vh); }
 
   .sticky {
-    position: static;
-    height: auto;
+    position: sticky;
+    top: 0;
+    height: 100svh;
     display: block;
-    padding-block: var(--u-96);
+    padding-block: var(--u-64) 0;
+    overflow: hidden;
   }
 
-  .stage { position: relative; height: 60vh; margin-bottom: var(--u-32); }
+  /* svh, as the rest of the phone layout uses: plain vh grows and shrinks with
+     Safari's toolbar and shifted the copy below it on every scroll */
+  .stage { position: relative; height: 52svh; margin-bottom: var(--u-24); }
   .copy { position: static; inset: auto; }
   .copyInner { width: 100%; margin-left: 0; }
 
+  /*
+   * The four names sit on the render, at its foot, as they do on the desktop —
+   * the slide's own scrim darkens that band, so they read against it. Anchored
+   * to the bottom of the stage: the sticky's top padding plus the stage's own
+   * height, then pulled back up over itself.
+   */
   .foot {
-    position: static;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--u-64) + 52svh);
+    translate: 0 -100%;
     display: block;
     /* keeps the container's side gutter — at 0 the tab list ran flush
        against the left edge of the screen */
-    padding: 0 var(--offset);
-    margin-top: var(--u-48);
+    padding: 0 var(--offset) var(--u-24);
+    margin-top: 0;
   }
   .rail { width: 100%; margin-right: 0; }
   .tab { min-height: 44px; opacity: 0.55; }
   .tabOn { opacity: 1; }
 
-  /* Clears the tab list out from under the next section's dome, which climbs
-     18vw over this one, and from the colour dissolve above that dome — the
-     last tab was washing out into cream. */
-  .sticky { padding-bottom: calc(18vw + 12vh + var(--u-48)); }
+
 }

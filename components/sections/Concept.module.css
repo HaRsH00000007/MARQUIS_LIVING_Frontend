@@ -275,11 +275,13 @@
   .introBody { width: 100%; }
   .leadWrap { width: 100%; }
 
+  /* one centred column: title, render, then the CTA and its copy */
   .panelPlace {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--u-32);
+    text-align: center;
   }
   .country,
   .placeTitleWrap,
@@ -288,8 +290,15 @@
     position: static;
     width: 100%;
   }
+  .placeTitle,
+  .placeCopy { text-align: center; }
+  /* beats the heading's own `a-left` utility, which is one class too */
+  .placeCopy .placeCaption { text-align: center; }
+  .placeBtn { justify-content: center; }
   /* Each word is its own span, so nowrap only stops mid-word breaks
-     ("GOLDE / N"); any overhang is clipped by the panel. */
+     ("GOLDE / N"); capped against the screen so the longest ("Ambition")
+     is not clipped by the panel. */
+  .placeTitle { font-size: min(var(--h1-size), 16vw); }
   .placeWord1,
   .placeWord2,
   .placeWord3 { margin-left: 0; }

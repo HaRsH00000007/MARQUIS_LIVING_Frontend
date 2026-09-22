@@ -190,6 +190,10 @@
 
   .contact { position: static; inset: auto; }
 
+  /* h2 would set this number ~430px wide inside a 345px clipped box, cutting
+     off both ends; sized to the screen it fits on one line */
+  .phone { font-size: min(var(--h2-size), 9.2vw); }
+
   /* the two offices stack rather than squeeze into half a phone screen */
   .offices { grid-template-columns: 1fr; gap: var(--u-32); width: 100%; }
 

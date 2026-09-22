@@ -30,6 +30,33 @@ const TURN: [number, number] = [0.86, 0.98];
  */
 const ZOOM_SPREAD = 0;
 const TURN_PLAIN: [number, number] = [0.35, 0.85];
+/*
+ * How much of the pinned scroll each spread takes, relative to the others. The
+ * first carries the zoom out to full screen and back, so it keeps the long
+ * stretch; the later spreads only turn a page, and at an equal share that cost
+ * three screens of scrolling each. At a sixth of the first they turn on a
+ * single flick of the wheel.
+ */
+const CYCLE_WEIGHT = [1, 1 / 6, 1 / 6];
+const WEIGHT_TOTAL = CYCLE_WEIGHT.reduce((a, b) => a + b, 0);
+/** Where each spread's stretch begins, as a share of the whole pin. */
+const CYCLE_START = CYCLE_WEIGHT.reduce<number[]>(
+  (acc, w, i) => [...acc, acc[i] + w / WEIGHT_TOTAL],
+  [0],
+);
+
+/** The spread `p` (0..1 of the pin) falls in, and how far through it is. */
+const cycleAt = (p: number, last: number) => {
+  let cycle = last;
+  for (let i = 0; i <= last; i++) {
+    if (p < CYCLE_START[i + 1]) {
+      cycle = i;
+      break;
+    }
+  }
+  const span = CYCLE_START[cycle + 1] - CYCLE_START[cycle];
+  return { cycle, local: clamp((p - CYCLE_START[cycle]) / (span || 1)) };
+};
 /** How far the right page swings over the spine. */
 const TURN_DEG = 164;
 /** Seconds per page when the book closes back to its first spread. */
@@ -109,7 +136,7 @@ export function Book() {
       heldLenis = lenis ?? null;
       const sectionTop = rect.top + window.scrollY;
       const span = section.offsetHeight - vh;
-      const rest = sectionTop + span * (REWIND_REST / spreads.length);
+      const rest = sectionTop + span * (CYCLE_WEIGHT[0] / WEIGHT_TOTAL) * REWIND_REST;
       const pinEnd = sectionTop + span;
       rewind = { s: last, veil };
 
@@ -170,8 +197,9 @@ export function Book() {
       if (rect.bottom < -vh || rect.top > vh * 2) return;
 
       const p = clamp(-rect.top / Math.max(1, section.offsetHeight - vh));
-      let cycle = Math.min(last, Math.floor(p * spreads.length));
-      const local = clamp(p * spreads.length - cycle);
+      const at = cycleAt(p, last);
+      let cycle = at.cycle;
+      const local = at.local;
       const zooms = cycle === ZOOM_SPREAD;
       let zoomIn = zooms ? smooth(local, ...ZOOM_IN) : 0;
       let zoomOut = zooms ? smooth(local, ...ZOOM_OUT) : 0;

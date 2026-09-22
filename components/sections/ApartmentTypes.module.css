@@ -141,9 +141,33 @@
     width: 100%;
   }
 
-  .media { aspect-ratio: 3 / 2; height: auto; translate: none; margin-block: var(--u-16); }
-  .spec { flex-direction: row; gap: var(--u-48); }
-  .aside { padding-top: var(--u-24); }
-  .name { margin-top: var(--u-24); }
+  /*
+   * The render keeps the desktop's portrait panel, at about half the column:
+   * full width and landscape it filled the screen on its own and pushed the
+   * name, the copy and the pager off the bottom.
+   */
+  .media {
+    width: 58%;
+    margin-inline: auto;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    translate: none;
+    margin-block: var(--u-24);
+  }
+
+  /* the two labels side by side above the render, as the desktop sets them */
+  .spec { flex-direction: row; justify-content: space-between; gap: var(--u-32); }
+
+  /* the name centred under the render, capped so the longest ("Residential")
+     does not run past the column at h2 */
+  .name {
+    margin-top: var(--u-16);
+    text-align: center;
+    font-size: min(var(--h2-size), 13vw);
+  }
+
+  /* the body and its button follow, centred on the same line */
+  .aside { padding-top: var(--u-24); align-items: center; text-align: center; }
+
   .pag { position: static; width: 100%; margin-top: var(--u-32); }
 }

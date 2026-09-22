@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { galleryCategories, galleryItems, type GalleryCategory } from "@/lib/content";
+import { ArrowLeft, ArrowRight } from "../ui/Icons";
 import styles from "./ParallaxGallery.module.css";
 
 /*
@@ -33,24 +34,28 @@ const DRAG_GAIN = 1.6;
 const ROLL = 0.00035;
 /* how quickly the roll eases in and out when it pauses or resumes, per frame */
 const ROLL_EASE = 0.05;
-/* how long the pointer rests on a card before its photograph opens full screen */
-const DWELL_MS = 420;
 /* the open/close glide; matches .zoomBox's transition in the module CSS */
 const ZOOM_MS = 750;
 
 type Rect = { left: number; top: number; width: number; height: number };
 type Zoom = { i: number; from: Rect; box: Rect; phase: "from" | "open" | "closing" };
 
+/* the clear lane either side of the open photograph that holds its arrows;
+   phones have no room for one, so there the arrows sit inside the photo */
+const RAIL = 96;
+
 /* the photograph's full-screen box: as large as fits, at its own proportions,
    so it shows uncropped */
 const fitBox = (aspect: number): Rect => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const m = Math.max(16, Math.min(vw, vh) * 0.03);
+  const m = Math.max(16, Math.min(vw, vh) * 0.03) + (vw >= 992 ? RAIL : 0);
   let width = vw - m * 2;
   let height = width / aspect;
-  if (height > vh - m * 2) {
-    height = vh - m * 2;
+  /* the lane is only needed left and right; the vertical margin stays as it was */
+  const mv = Math.max(16, Math.min(vw, vh) * 0.03);
+  if (height > vh - mv * 2) {
+    height = vh - mv * 2;
     width = height * aspect;
   }
   return { left: (vw - width) / 2, top: (vh - height) / 2, width, height };
@@ -73,7 +78,7 @@ const rectOf = (el: Element | null | undefined): Rect | null => {
  * move the strip on top of that; it glides
  * toward that target, the photographs drift inside their cards against the
  * motion, and the strip loops seamlessly. Each card's title and caption rise in
- * beneath it on hover.
+ * beneath it on hover, and clicking one opens it full screen.
  *
  * Positions are written straight onto the elements from one rAF loop, so moving
  * the strip never re-renders React.
@@ -92,23 +97,22 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
   const goBack = () => router.push("/#apartments");
 
   /*
-   * Full-screen view. Resting the pointer on a card (or tapping it) opens its
-   * photograph: a box at the photo's own proportions grows from the card to
-   * fill the screen, the full-quality file fading in over the card's copy.
-   * Moving off the photo, clicking, Esc or scrolling sends it back.
+   * Full-screen view. Clicking a card opens its photograph: a box at the
+   * photo's own proportions grows from the card to fill the screen, the
+   * full-quality file fading in over the card's copy. Clicking it, its arrows'
+   * neighbours aside, Esc or scrolling sends it back.
    */
   const [zoom, setZoom] = useState<Zoom | null>(null);
   const zoomRef = useRef<Zoom | null>(null);
   const [hiLoaded, setHiLoaded] = useState(false);
-  const dwell = useRef<number | undefined>(undefined);
-  /* a card that has just been closed stays quiet until the pointer leaves it */
-  const quiet = useRef<number | null>(null);
+
+  /* the timer that clears a photograph away once it has shrunk back */
+  const closeTimer = useRef<number | undefined>(undefined);
   /* written by the strip's loop: how far it still has to glide, and whether
      the current press has become a drag */
   const glide = useRef(0);
   const dragged = useRef(false);
-  /* a card under the mouse: the roll eases to a stop so it can be looked at
-     (and so the dwell-to-open, which waits for the strip to settle, can fire) */
+  /* a card under the mouse: the roll eases to a stop so it can be looked at */
   const hovering = useRef(false);
 
   useEffect(() => {
@@ -118,6 +122,12 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
   const frameOf = (i: number) => cardRefs.current[i]?.firstElementChild;
 
   const openZoom = useCallback((i: number) => {
+    /* A photograph still shrinking away is not in the way: dropping it here
+       lets a click on the next card open it at once. */
+    if (zoomRef.current?.phase === "closing") {
+      window.clearTimeout(closeTimer.current);
+      zoomRef.current = null;
+    }
     if (zoomRef.current) return;
     const from = rectOf(frameOf(i));
     if (!from) return;
@@ -134,53 +144,53 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
     );
   }, []);
 
-  /* `stillOver`: closed by click, Esc or scroll, where the pointer may still
-     rest on the card; that card then waits for the pointer to leave before it
-     can open again. Closed by moving off the photo, the pointer is already
-     elsewhere, so the card stays ready. */
-  const closeZoom = useCallback((stillOver = true) => {
+  const closeZoom = useCallback(() => {
     const z = zoomRef.current;
     if (!z || z.phase === "closing") return;
-    quiet.current = stillOver ? z.i : null;
     // shrink back to wherever the card is now
     const next: Zoom = { ...z, from: rectOf(frameOf(z.i)) ?? z.from, phase: "closing" };
     zoomRef.current = next;
     setZoom(next);
-    window.setTimeout(() => {
+    closeTimer.current = window.setTimeout(() => {
       zoomRef.current = null;
       setZoom((cur) => (cur && cur.phase === "closing" ? null : cur));
     }, ZOOM_MS);
   }, []);
 
-  const onCardEnter = (i: number) => {
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  /* the open photograph's arrows: step to the neighbouring photo in place,
+     looping at either end; the box re-fits to the new photo's proportions */
+  const stepZoom = useCallback((dir: 1 | -1) => {
+    const z = zoomRef.current;
+    if (!z || z.phase !== "open") return;
+    const n = galleryItems.length;
+    const i = (z.i + dir + n) % n;
+    const item = galleryItems[i];
+    const next: Zoom = { ...z, i, box: fitBox(item.w / item.h) };
+    zoomRef.current = next;
+    setHiLoaded(false);
+    setZoom(next);
+  }, []);
+
+  /* the roll pauses while a card is under the mouse, and resumes when it is not */
+  const onCardEnter = () => {
     hovering.current = true;
-    if (quiet.current === i || zoomRef.current) return;
-    window.clearTimeout(dwell.current);
-    dwell.current = window.setTimeout(() => {
-      // only once the strip has come (nearly) to rest and no drag is under way
-      if (glide.current < 8 && !dragged.current) openZoom(i);
-    }, DWELL_MS);
   };
-  const onCardLeave = (i: number) => {
+  const onCardLeave = () => {
     hovering.current = false;
-    window.clearTimeout(dwell.current);
-    if (quiet.current === i) quiet.current = null;
   };
 
   useEffect(() => {
     if (!zoom) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeZoom();
-    // the pointer leaving the window
-    const onOut = (e: MouseEvent) => !e.relatedTarget && closeZoom(false);
-    window.addEventListener("keydown", onKey);
-    document.addEventListener("mouseout", onOut);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.removeEventListener("mouseout", onOut);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeZoom();
+      if (e.key === "ArrowRight") stepZoom(1);
+      if (e.key === "ArrowLeft") stepZoom(-1);
     };
-  }, [zoom, closeZoom]);
-
-  useEffect(() => () => window.clearTimeout(dwell.current), []);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoom, closeZoom, stepZoom]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -320,7 +330,6 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
         if (Math.abs(e.clientX - dragX) < 4) return;
         dragging = true;
         dragged.current = true;
-        window.clearTimeout(dwell.current);
         root.setPointerCapture(e.pointerId);
         root.dataset.dragging = "";
       }
@@ -384,10 +393,10 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
             }}
             className={styles.card}
             data-zoomed={zoom?.i === i || undefined}
-            onPointerEnter={(e) => e.pointerType === "mouse" && onCardEnter(i)}
-            onPointerLeave={() => onCardLeave(i)}
+            onPointerEnter={(e) => e.pointerType === "mouse" && onCardEnter()}
+            onPointerLeave={() => onCardLeave()}
             onClick={() => {
-              // a tap, or a click that did not end a drag, opens it too
+              // a click (or tap) that did not end a drag opens the photograph
               if (!dragged.current) openZoom(i);
             }}
           >
@@ -455,10 +464,6 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
                 height: zoom.box.height,
                 transform: zoom.phase === "open" ? "none" : fromTransform(zoom.from, zoom.box),
               }}
-              onPointerLeave={(e) => {
-                if (e.pointerType === "mouse" && zoomRef.current?.phase === "open")
-                  closeZoom(false);
-              }}
             >
               {/* the card's own copy is already loaded, so something shows at once */}
               <Image
@@ -483,7 +488,35 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
                 <span className={styles.captionTitle}>{zoomItem.title}</span>
                 <span className={styles.captionBody}>{zoomItem.caption}</span>
               </div>
+
             </div>
+
+            {/* In the lane either side of the photograph (inside its edges on
+                phones, which have no lane), placed against the box's own rect.
+                Clicks stop here rather than closing the view. */}
+            {(["prev", "next"] as const).map((dir) => (
+              <button
+                key={dir}
+                type="button"
+                data-zoom-arrow=""
+                className={`${styles.zoomArrow} ${dir === "prev" ? styles.zoomPrev : styles.zoomNext}`}
+                style={
+                  {
+                    "--zb-left": `${zoom.box.left}px`,
+                    "--zb-top": `${zoom.box.top}px`,
+                    "--zb-w": `${zoom.box.width}px`,
+                    "--zb-h": `${zoom.box.height}px`,
+                  } as React.CSSProperties
+                }
+                aria-label={dir === "prev" ? "Previous photo" : "Next photo"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  stepZoom(dir === "prev" ? -1 : 1);
+                }}
+              >
+                {dir === "prev" ? <ArrowLeft /> : <ArrowRight />}
+              </button>
+            ))}
           </div>,
           document.body,
         )}
@@ -492,7 +525,7 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
         <button type="button" className={`l2 ${styles.back}`} onClick={goBack}>
           &larr; Back
         </button>
-        <span className="l2 muted">Scroll or drag to explore</span>
+        <span className="l2 muted">Scroll or drag to explore &middot; click a photo to open</span>
       </div>
     </section>
   );

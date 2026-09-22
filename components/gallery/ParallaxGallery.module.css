@@ -51,6 +51,11 @@
   transition: transform 0.6s var(--ease-out);
 }
 
+/* clicking a card opens it, so it takes the zoom cursor rather than the
+   strip's grab — except while the strip is actually being dragged */
+.card { cursor: zoom-in; }
+.gallery[data-dragging] .card { cursor: grabbing; }
+
 /* the hovered card comes to the front of any neighbour overlapping it (the
    script sets each card's resting z-index inline, hence !important) */
 .card:hover { z-index: 1500 !important; }
@@ -146,6 +151,70 @@
   will-change: transform;
 }
 .zoom[data-phase="from"] .zoomBox { transition: none; }
+/* on its way out it must not swallow the hover of the card underneath */
+.zoom[data-phase="closing"] { pointer-events: none; }
+/* stepping between photos re-fits the box to the next one's proportions */
+.zoom[data-phase="open"] .zoomBox {
+  transition:
+    transform 0.75s var(--ease-in-out),
+    left 0.6s var(--ease-in-out),
+    top 0.6s var(--ease-in-out),
+    width 0.6s var(--ease-in-out),
+    height 0.6s var(--ease-in-out);
+}
+
+/*
+ * Previous / next, in the clear lane beside the photograph (`RAIL` in the
+ * component leaves it). They are placed against the box's own rect, handed
+ * down as `--zb-*`, so they follow it as it re-fits to each photo.
+ */
+.zoomArrow {
+  position: fixed;
+  top: calc(var(--zb-top) + var(--zb-h) / 2);
+  left: calc(var(--zb-left) - var(--u-24) - var(--u-56));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--u-56);
+  height: var(--u-56);
+  min-width: 44px;
+  min-height: 44px;
+  translate: 0 -50%;
+  border: 1px solid rgba(243, 243, 236, 0.55);
+  border-radius: 50%;
+  background: rgba(22, 0, 3, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--c-cream);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.4s var(--ease-out),
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+.zoomArrow svg { width: 40%; height: 40%; }
+.zoomNext { left: calc(var(--zb-left) + var(--zb-w) + var(--u-24)); }
+.zoom[data-phase="open"] .zoomArrow {
+  opacity: 1;
+  transition:
+    opacity 0.4s var(--ease-out) 0.45s,
+    left 0.6s var(--ease-in-out),
+    top 0.6s var(--ease-in-out),
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+/* no lane at phone widths: the arrows sit just inside the photograph */
+@media (max-width: 991px) {
+  .zoomArrow { left: calc(var(--zb-left) + var(--u-16)); }
+  .zoomNext { left: calc(var(--zb-left) + var(--zb-w) - var(--u-16) - var(--u-56)); }
+}
+.zoomArrow:hover,
+.zoomArrow:focus-visible {
+  background: rgba(22, 0, 3, 0.75);
+  border-color: var(--c-cream);
+}
 
 /* the full-quality file fades in over the card's copy once it has loaded */
 .zoomHi {
@@ -253,6 +322,15 @@
 
 @media (max-width: 991px) {
   .edge { width: 10vw; }
-  .head { bottom: calc(var(--u-64) + var(--u-32)); }
+  /* `rem` resolves to 1vw on this site, so the desktop 40rem/26rem measures
+     are 40vw/26vw here — the whole heading block was crushed into the
+     bottom-left corner. Full width, and the title stepped down to match. */
+  .head {
+    bottom: calc(var(--u-64) + var(--u-32));
+    right: var(--offset);
+    max-width: none;
+  }
+  .title { font-size: clamp(34px, 12vw, 96px); }
+  .lead { max-width: none; }
   .foot { left: var(--offset); flex-direction: row; justify-content: space-between; }
 }

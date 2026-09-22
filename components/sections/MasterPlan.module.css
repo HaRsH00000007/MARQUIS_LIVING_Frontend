@@ -121,7 +121,6 @@
   color: var(--ink);
 }
 
-.hint { color: var(--ink-muted); }
 
 /* ---------------------------------------------------------- responsive ---- */
 
@@ -132,7 +131,7 @@
     padding-top: var(--u-48);
   }
 
-  /* back into flow, so the plan can be panned rather than cropped */
+  /* back into flow, and shown whole rather than panned */
   .plate { position: relative; }
 
   /*
@@ -150,19 +149,32 @@
     background: linear-gradient(rgba(38, 0, 4, 0), var(--c-sky));
   }
   .veilEnd { display: none; }
-  .head { background: var(--c-sky); }
-  .planViewport { overflow-x: auto; scrollbar-width: none; cursor: grab; }
-  .planViewport::-webkit-scrollbar { display: none; }
-  .planViewport:active { cursor: grabbing; }
-  .plan { width: 180vw; max-width: none; height: auto; object-fit: fill; }
+  /*
+   * The whole render, at its own proportions. At 180vw it was laid out to be
+   * dragged sideways, so only about half of the room was ever on screen — on a
+   * phone that reads as a picture cut in half, not as something to explore.
+   */
+  .planViewport { overflow: hidden; }
+  .plan { width: 100%; max-width: none; height: auto; object-fit: contain; }
 
   /* the section is in flow here, so it needs far less run-up */
   .veilEnd { height: 20vh; }
 
+  /*
+   * Over the render's foot, ranged right — the desktop composition, at phone
+   * scale. The plate's own gradient (above) is what the type stands on, so it
+   * no longer needs a band of burgundy under the picture to be legible.
+   */
   .head {
+    position: absolute;
+    inset: auto 0 0;
     flex-direction: column;
-    align-items: flex-start;
-    padding-block: var(--u-32) var(--u-64);
+    align-items: flex-end;
+    padding-block: 0 var(--u-32);
   }
-  .headText { margin-left: 0; max-width: 100%; }
+  .headText { margin-left: auto; max-width: 74%; }
+  /* the desktop clamps floor at 30px / 20px, which is a third of a phone
+     screen for the title's longest line */
+  .headText :global(.l1) { font-size: clamp(20px, 6.2vw, 30px); }
+  .headText :global(.p1) { font-size: clamp(13px, 3.6vw, 20px); }
 }

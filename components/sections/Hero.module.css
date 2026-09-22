@@ -267,26 +267,52 @@
 @media (max-width: 991px) {
   .section { height: 320vh; }
 
-  /* The mobile header is shorter (16u padding, 96u badge) and the wordmark runs
-     nearly edge to edge, so the clear zone shrinks and the centre band widens. */
+  /*
+   * No masked corners here. The band that keeps the centre column clear is
+   * 44% of the screen on desktop, where the corner statements sit out in the
+   * margins; on a phone the lockup alone is 84% wide, so that band cut the top
+   * off it. The whole width stays clear instead — the header paints over this
+   * layer anyway, so nothing needs dissolving out of its way.
+   */
   .copyMask {
     --header-clear: calc(var(--u-16) * 2 + var(--u-96));
-    --mask-center: 44%;
+    --mask-center: 100%;
   }
 
-  /* Portrait: one column of statement — the right-hand repeat has nowhere to
-     sit once the frame is narrower than the type — and the display sizes step
-     up, since the root font-size is 1vw and a desktop vw reads tiny at 390. */
-  /* the lockup at the width the stacked title held on a phone */
-  .lockup { width: 74vw; height: calc(84vw * 235 / 723); translate: 3vw 0; }
-  .tagline { font-size: 5vw; }
-  .strapSmall { font-size: 2.9vw; }
-  .strapLarge { font-size: 4.4vw; }
-  .straps { display: flex; flex-direction: column; gap: var(--u-24); }
-  /* on phones the CTA follows both statements */
-  .strapCta { order: 1; margin-bottom: 0; }
-  .right { text-align: left; }
-  .title { inset: 14% 0 auto; }
-  .tagline { inset: 42% 0 auto; }
+  /*
+   * Portrait: one centred column. The display sizes step up, since the root
+   * font-size is 1vw and a desktop vw reads tiny at 390.
+   */
+  /* the lockup centred and at full width here: the desktop squeeze and its
+     nudge right of the centre line are a wide-screen composition */
+  .lockup { width: 84vw; height: calc(84vw * 235 / 723); translate: none; }
+  .tagline { font-size: 5.4vw; }
+  .strapSmall { font-size: 3.2vw; }
+  .strapLarge { font-size: 4.6vw; }
 
+  /*
+   * The row becomes a stack, so `align-items: end` — the cross axis once the
+   * direction is a column — was pinning every line to the right edge. Centred
+   * instead, with the statements reading as one block above the button.
+   */
+  .straps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inset: auto 0 9%;
+    gap: var(--u-32);
+    text-align: center;
+  }
+  .strapCol { display: flex; flex-direction: column; align-items: center; gap: var(--u-4); }
+  .left,
+  .right { text-align: center; }
+  /* on phones the CTA follows both statements */
+  .strapCta { order: 1; margin-bottom: 0; margin-top: var(--u-8); }
+
+  /* the three blocks evenly spaced down the screen rather than bunched at the
+     top: wordmark, tagline, then the statements and the button */
+  /* clear of the badge and the menu button in the corners above it */
+  .title { inset: 18% 0 auto; }
+  .tagline { inset: 40% 0 auto; padding-inline: var(--offset); }
+  .strapLarge { margin-top: var(--u-4); }
 }

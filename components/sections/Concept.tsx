@@ -225,11 +225,10 @@ export function Concept() {
           {/* The concept intro again, closing the flip on the panel it opened
               with. By the time it arrives the section's progress has carried
               the copy to full scale and opacity. */}
-          {/* Desktop only: it closes the flip. In the phones' vertical stack it
-              was the same block of copy and photographs a second time. */}
-          {isDesktop && (
-            <IntroPanel intro={intro} scale={introScale} opacity={introOpacity} repeat />
-          )}
+          {/* On phones the pages stack rather than flip, so this reads as the
+              same panel twice; it is kept so the running order matches the
+              desktop, with its copy hidden from assistive tech (`repeat`). */}
+          <IntroPanel intro={intro} scale={introScale} opacity={introOpacity} repeat />
         </div>
       </div>
     </section>
