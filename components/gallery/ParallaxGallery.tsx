@@ -28,6 +28,11 @@ const EASE = 0.075;
 /* scroll / drag gain */
 const WHEEL_GAIN = 1.1;
 const DRAG_GAIN = 1.6;
+/* the camera-roll drift: the strip travels left to right on its own at this
+   share of the viewport width per 60fps frame (about 40px/s at 1920) */
+const ROLL = 0.00035;
+/* how quickly the roll eases in and out when it pauses or resumes, per frame */
+const ROLL_EASE = 0.05;
 /* how long the pointer rests on a card before its photograph opens full screen */
 const DWELL_MS = 420;
 /* the open/close glide; matches .zoomBox's transition in the module CSS */
@@ -63,7 +68,9 @@ const rectOf = (el: Element | null | undefined): Rect | null => {
 
 /**
  * An endless horizontal strip of interiors, after parallaxgalleryfx.framer.website.
- * The wheel (either axis), a drag or the arrow keys move the strip; it glides
+ * It rolls slowly left to right on its own, like a camera roll, pausing while
+ * the mouse rests on a card. The wheel (either axis), a drag or the arrow keys
+ * move the strip on top of that; it glides
  * toward that target, the photographs drift inside their cards against the
  * motion, and the strip loops seamlessly. Each card's title and caption rise in
  * beneath it on hover.
@@ -100,6 +107,9 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
      the current press has become a drag */
   const glide = useRef(0);
   const dragged = useRef(false);
+  /* a card under the mouse: the roll eases to a stop so it can be looked at
+     (and so the dwell-to-open, which waits for the strip to settle, can fire) */
+  const hovering = useRef(false);
 
   useEffect(() => {
     zoomRef.current = zoom;
@@ -143,6 +153,7 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
   }, []);
 
   const onCardEnter = (i: number) => {
+    hovering.current = true;
     if (quiet.current === i || zoomRef.current) return;
     window.clearTimeout(dwell.current);
     dwell.current = window.setTimeout(() => {
@@ -151,6 +162,7 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
     }, DWELL_MS);
   };
   const onCardLeave = (i: number) => {
+    hovering.current = false;
     window.clearTimeout(dwell.current);
     if (quiet.current === i) quiet.current = null;
   };
@@ -225,12 +237,17 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
     };
 
     /* motion: `target` is where input has asked to be, `current` glides to it.
-       Starting a screen back makes the strip sweep in from the right. */
+       Starting a screen ahead makes the strip sweep in from the left, the same
+       way the camera roll then carries it. */
     let target = 0;
-    let current = reduce ? 0 : -1;
+    let current = reduce ? 0 : 1;
     let started = false;
     let raf = 0;
     let last = performance.now();
+    /* the roll's current speed, 0..1 of ROLL: eased, so pausing and resuming
+       never jolt the strip */
+    let roll = 0;
+    let dragging = false;
 
     const draw = () => {
       for (let i = 0; i < cards.length; i++) {
@@ -251,9 +268,18 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
       const dt = Math.min(64, now - last) / (1000 / 60);
       last = now;
       if (!started) {
-        // first frame: place the strip a screen to the right of its rest
-        current = reduce ? 0 : -vw;
+        // first frame: place the strip a screen to the left of its rest
+        current = reduce ? 0 : vw;
         started = true;
+      }
+      /* The camera roll: the target itself drifts, so wheel and drag simply add
+         to it and the glide below carries both. Decreasing the offset moves
+         every card rightward on screen. Held under an open photograph, a
+         drag, or a card the mouse is resting on. */
+      if (!reduce) {
+        const run = zoomRef.current || dragging || hovering.current ? 0 : 1;
+        roll += (run - roll) * (1 - Math.pow(1 - ROLL_EASE, dt));
+        target -= vw * ROLL * roll * dt;
       }
       const k = reduce ? 1 : 1 - Math.pow(1 - EASE, dt);
       current += (target - current) * k;
@@ -280,7 +306,6 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
      * links or buttons (the Back link, the header), whose clicks must land.
      */
     let dragX: number | null = null;
-    let dragging = false;
     const onDown = (e: PointerEvent) => {
       if (e.button !== 0) return;
       if ((e.target as Element).closest("a, button")) return;
