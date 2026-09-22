@@ -56,9 +56,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
        * directly — a restarting curve shows up as a stutter in the hero zoom
        * and the amenities tabs.
        */
-      lerp: 0.085,
+      lerp: 0.1,
       smoothWheel: true,
-      wheelMultiplier: 1,
+      /* each wheel notch travels 40% further than the browser's own step —
+         at 1 the long pinned sections felt like a slow crawl */
+      wheelMultiplier: 1.4,
       /*
        * Touch is left to the browser. `syncTouch` re-implemented finger
        * scrolling in JavaScript — every frame of a swipe went through the main
