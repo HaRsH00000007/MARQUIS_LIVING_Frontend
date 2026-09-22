@@ -7,8 +7,8 @@ import styles from "./Preloader.module.css";
 /**
  * Marquis Living Opening Animation & Preloader.
  * Replicates the authentic intro splash sequence from the reference:
- *  - 1st visit: 4s full intro splash with the quatrefoil mark, Interior /
- *    Marquis Living / Dubai typography, animated progress fill track,
+ *  - 1st visit: 4s full intro splash with the lotus mark, Interior /
+ *    MARQUIS Living lockup / Design, the city beneath, animated progress fill track,
  *    architectural decor frame lines, watermark background,
  *    and expanding arch mask reveal.
  *  - Repeat visits: sleek short arch reveal without blocking repeat visitors.
@@ -167,7 +167,7 @@ export function Preloader() {
   return (
     <div ref={containerRef} className={`${styles.preloader} theme_on-dark`} data-preloader aria-hidden>
       <div className={styles.ctn}>
-        {/* Top ERA Logo symbol */}
+        {/* Top lotus mark */}
         <div className={styles.t}>
           <div className="u-48" />
           <div className={styles.sLogo}>
@@ -182,20 +182,24 @@ export function Preloader() {
           <div className="container">
             <div className="grid">
               <div className={styles.titleL}>
-                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>Interior</div>
+                <div data-part="h" className={`c1 a-center ${styles.tracked} ${styles.partInitial}`}>Interior</div>
               </div>
+              {/* The same MARQUIS Living lockup as the hero (the traced
+                  capitals and script vectors, same colours and squeeze), with
+                  the city set beneath it as a caption rather than a script
+                  laid across the letters. */}
               <div className={styles.logo}>
-                <div data-part="h" className={`h3 a-center ${styles.partInitial}`}>
-                  Marquis<br />Living
+                <div data-part="h" className={`${styles.lockup} ${styles.partInitial}`}>
+                  <span className={styles.lockupWordmark} />
+                  <span className={styles.lockupScript} />
                 </div>
-                <div className={styles.logoA}>
-                  <div data-part="a" className={`a2 ${styles.preloaderA} a-center ${styles.partInitial}`}>
-                    Dubai
-                  </div>
+                <div className="u-24" />
+                <div data-part="a" className={`c1 a-center ${styles.city} ${styles.tracked} ${styles.partInitial}`}>
+                  Dubai
                 </div>
               </div>
               <div className={styles.titleR}>
-                <div data-part="h" className={`c1 a-center ${styles.partInitial}`}>Design</div>
+                <div data-part="h" className={`c1 a-center ${styles.tracked} ${styles.partInitial}`}>Design</div>
               </div>
             </div>
           </div>

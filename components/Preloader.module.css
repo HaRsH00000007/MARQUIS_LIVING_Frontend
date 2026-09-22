@@ -99,18 +99,52 @@
   position: relative;
 }
 
-.logoA {
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  transform: translateX(-50%);
-  width: 100%;
-  pointer-events: none;
+/*
+ * The hero's lockup, at preloader scale: /icons/marquis-wordmark.svg and
+ * /icons/marquis-script.svg as masks over flat colour, in a box of the
+ * artwork's height and 88% of its width — the same squeeze the hero sets.
+ */
+.lockup {
+  --lockup-w: 28vw;
+  position: relative;
+  width: calc(var(--lockup-w) * 0.88);
+  height: calc(var(--lockup-w) * 235 / 723);
+  margin-inline: auto;
 }
 
-.preloaderA {
+.lockupWordmark,
+.lockupScript {
+  position: absolute;
+  inset: 0;
+}
+
+.lockupWordmark {
+  background-color: var(--c-cream);
+  -webkit-mask: url("/icons/marquis-wordmark.svg") center / 100% 100% no-repeat;
+  mask: url("/icons/marquis-wordmark.svg") center / 100% 100% no-repeat;
+}
+
+/* the champagne the hero's script is set in */
+.lockupScript {
+  background-color: #f4dcb4;
+  -webkit-mask: url("/icons/marquis-script.svg") center / 100% 100% no-repeat;
+  mask: url("/icons/marquis-script.svg") center / 100% 100% no-repeat;
+}
+
+.city {
   color: var(--c-cream);
   white-space: nowrap;
+}
+
+/*
+ * Wide tracking leaves one letter-space after the last glyph, so a centred
+ * word sat half a space left of its centre — "Interior" further out than
+ * "Design". Pulling that trailing space back puts each word on its true centre.
+ */
+.tracked { margin-right: calc(var(--c1-ls) * -1); }
+
+@media (max-width: 991px) {
+  .lockup { --lockup-w: 72vw; }
 }
 
 .b {
