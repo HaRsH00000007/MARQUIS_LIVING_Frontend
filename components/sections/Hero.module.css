@@ -1,6 +1,10 @@
 .section {
-  /* ~5.8 screens of scroll, as measured on the reference */
-  height: 580vh;
+  /*
+   * 3.3 screens. The reference runs 5.8, but with the benefits dome climbing
+   * over the last 2 of them the crown only appeared after two full screens of
+   * scrolling; at this length it starts after about one.
+   */
+  height: 330vh;
   background: var(--c-plum);
   /* Keep the layer z-indexes below local to this section, so the arch section
      that scrolls over the hero's tail still paints above all of them. */
@@ -265,7 +269,8 @@
 /* ------------------------------------------------------------- responsive */
 
 @media (max-width: 991px) {
-  .section { height: 320vh; }
+  /* as on the desktop: the dome's crown arrives after about one screen */
+  .section { height: 240vh; }
 
   /*
    * No masked corners here. The band that keeps the centre column clear is

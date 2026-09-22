@@ -177,7 +177,9 @@
 
 .pageLabel {
   font-family: var(--font-body);
-  font-size: 0.57cqw;
+  /* 0.57cqw painted at ~6px on a desktop book — below the floor anything on a
+     printed page needs to be read at all */
+  font-size: max(11px, 0.95cqw);
   line-height: 1.5;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -197,7 +199,7 @@
   max-width: 55%;
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1.04cqw;
+  font-size: max(15px, 1.45cqw);
   line-height: 1.55;
 }
 
@@ -217,9 +219,7 @@
   border-radius: 100vw;
   font-family: var(--font-body);
   font-weight: 700;
-  /* the page's small print (0.57cqw) is ~5px at desktop sizes; the button's
-     label must actually be read, so it is kept at 9px or more */
-  font-size: max(9px, 0.95cqw);
+  font-size: max(11px, 1.15cqw);
   line-height: 1;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -256,7 +256,7 @@
   left: 6.2%;
   bottom: 5.5%;
   font-family: var(--font-body);
-  font-size: 0.57cqw;
+  font-size: max(10px, 0.8cqw);
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: #38332d;

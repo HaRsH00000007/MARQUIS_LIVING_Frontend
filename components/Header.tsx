@@ -46,8 +46,12 @@ export function Header() {
    * itself — where the route would not change and nothing would happen — it
    * glides back up to the hero instead.
    */
-  const goHome = (e: React.MouseEvent) => {
+  const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setOpen(false);
+    /* A pointer click leaves the badge focused, and with no navigation to
+       follow it the focus ring sits on screen as a box around the logo.
+       `detail` is 0 for a keyboard activation, which keeps its ring. */
+    if (e.detail > 0) e.currentTarget.blur();
     if (pathname !== "/") return;
     e.preventDefault();
     scrollTo(0);
