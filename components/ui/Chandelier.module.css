@@ -117,7 +117,7 @@
  * the whole fixture, so the bloom is tall and narrower.
  */
 .spiral { --cord-ext: 0; }
-.spiral .plate { aspect-ratio: 340 / 603; }
+.spiral .plate { aspect-ratio: 560 / 1001; }
 .spiral .glow { top: 50%; width: 170%; translate: -50% -50%; }
 .spiral .spill { top: 48%; width: 360%; translate: -50% -50%; }
 /* the right-hand spiral is not mirrored: the render is lit from one side */

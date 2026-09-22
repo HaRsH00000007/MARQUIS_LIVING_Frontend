@@ -22,13 +22,15 @@ import styles from "./Chandelier.module.css";
  */
 /*
  * The fixtures. `pendant` is the arched sections' lamp, whose plates carry
- * extra cord above the fixture; `spiral` is the leaf spiral cut from the
- * client's render (frames 28 and 2 of chandelier_warm_lights.gif), trimmed
- * below its ceiling canopy so the wires run straight off the top of the plate.
+ * extra cord above the fixture; `spiral` is the brass leaf spiral from the
+ * client's lit render, trimmed below its ceiling canopy so the wires run
+ * straight off the top of the plate. The lit plate is that render as supplied;
+ * the unlit one is the same pixels with the lamps' glow graded down, so the two
+ * share one silhouette and only the light crosses the fade.
  */
 const PLATES = {
   pendant: { dim: "/images/chandelier-dim.png", lit: "/images/chandelier-lit.png", w: 226, h: 1061 },
-  spiral: { dim: "/images/chandelier-spiral-wires-dim.webp", lit: "/images/chandelier-spiral-wires-lit.webp", w: 340, h: 603 },
+  spiral: { dim: "/images/chandelier-leaf-dim.webp", lit: "/images/chandelier-leaf-lit.webp", w: 560, h: 1001 },
 } as const;
 
 export function Chandelier({
