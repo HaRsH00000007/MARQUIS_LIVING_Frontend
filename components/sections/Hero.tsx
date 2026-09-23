@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { hero } from "@/lib/content";
 import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
@@ -54,12 +54,18 @@ function HeroLockup() {
  */
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0);
+  /*
+   * The curves' resting values. Everything past this first frame is written
+   * straight onto the element below: re-rendering the whole section on every
+   * scrolled frame — which is what a state update here means — is what made
+   * the opening scroll stutter once the hero was shortened and the values
+   * began moving further per pixel.
+   */
   const stage = {
-    "--hero-p": progress,
-    "--hero-copy": copyEase(progress),
-    "--hero-parallax": parallaxEase(progress),
-    "--hero-zoom": zoomEase(progress),
+    "--hero-p": 0,
+    "--hero-copy": 0,
+    "--hero-parallax": 0,
+    "--hero-zoom": 0,
     "--copy-travel": `${COPY_TRAVEL_VH * 100}vh`,
     "--parallax-travel": `${PARALLAX_VH * 100}vh`,
     "--zoom-range": ZOOM_TO - 1,
@@ -75,7 +81,11 @@ export function Hero() {
       frame = 0;
       const rect = el.getBoundingClientRect();
       const distance = el.offsetHeight - window.innerHeight;
-      setProgress(distance > 0 ? Math.min(1, Math.max(0, -rect.top / distance)) : 0);
+      const p = distance > 0 ? Math.min(1, Math.max(0, -rect.top / distance)) : 0;
+      el.style.setProperty("--hero-p", p.toFixed(4));
+      el.style.setProperty("--hero-copy", copyEase(p).toFixed(4));
+      el.style.setProperty("--hero-parallax", parallaxEase(p).toFixed(4));
+      el.style.setProperty("--hero-zoom", zoomEase(p).toFixed(4));
     };
     const onScroll = () => {
       if (frame) return;
