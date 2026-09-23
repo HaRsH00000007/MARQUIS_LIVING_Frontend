@@ -6,13 +6,13 @@
  * proportions hold at any screen size.
  */
 /*
- * Five screens of pin, not nine. The spreads no longer take an equal share of
- * it (see CYCLE_WEIGHT in Book.tsx): the first keeps roughly the three screens
- * its zoom needs, and the two that only turn a page get half a screen each.
+ * Five and a half screens of pin, not nine. The spreads no longer take an equal
+ * share of it (see CYCLE_WEIGHT in Book.tsx): the first keeps roughly the three
+ * screens its zoom needs, and the two that only turn a page get about one each.
  */
 .section {
   position: relative;
-  height: 500vh;
+  height: 560vh;
   background: #d8d3c8;
 }
 
@@ -250,6 +250,9 @@
 }
 
 .photoImg { object-fit: cover; }
+
+/* the box is cut to the picture's own shape, so nothing is cropped either way */
+.frameImg { object-fit: contain; }
 
 .caption {
   position: absolute;

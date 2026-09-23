@@ -272,6 +272,8 @@ export const amenitiesCta = { label: "Book a consultation", href: "#book-a-call"
 /* ----------------------------------------------------------- interiors ---- */
 
 export const interiors = {
+  /* opens the booking modal (there is no page behind it) */
+  cta: { label: "Know more" },
   title: ["The", "Minds", "Behind"],
   accent: "Marquis Living",
   upgradesTitle: "The studio works across:",
@@ -284,7 +286,6 @@ export const interiors = {
   /* the right column's answering punchline, set in the same display face as `lead` */
   leadRight: "Every space tells a story. We just make sure it's told properly",
   body: "As a bespoke interior design company in Dubai, we work across single rooms, full homes, offices, and hospitality spaces, with every project carrying the same studio, the same account manager, and the same standard from first sketch to handover.",
-  cta: { label: "Know more", href: "/marquis" },
   featureImage: "/images/founder-kunal-jaggi.png",
   sideImage: "/images/founder-shruti-sodhi.png",
   founders: [

@@ -34,10 +34,10 @@ const TURN_PLAIN: [number, number] = [0.35, 0.85];
  * How much of the pinned scroll each spread takes, relative to the others. The
  * first carries the zoom out to full screen and back, so it keeps the long
  * stretch; the later spreads only turn a page, and at an equal share that cost
- * three screens of scrolling each. At a sixth of the first they turn on a
- * single flick of the wheel.
+ * three screens of scrolling each. At a third of the first, a page turns over
+ * about half a screen of scrolling — quick, but not a snap.
  */
-const CYCLE_WEIGHT = [1, 1 / 6, 1 / 6];
+const CYCLE_WEIGHT = [1, 1 / 3, 1 / 3];
 const WEIGHT_TOTAL = CYCLE_WEIGHT.reduce((a, b) => a + b, 0);
 /** Where each spread's stretch begins, as a share of the whole pin. */
 const CYCLE_START = CYCLE_WEIGHT.reduce<number[]>(
@@ -265,10 +265,32 @@ export function Book() {
           const s = sticky.getBoundingClientRect();
           const x = r.left - s.left;
           const y = r.top - s.top;
-          live.style.left = `${x * (1 - zoom)}px`;
-          live.style.top = `${y * (1 - zoom)}px`;
-          live.style.width = `${r.width + (s.width - r.width) * zoom}px`;
-          live.style.height = `${r.height + (s.height - r.height) * zoom}px`;
+
+          /*
+           * The photograph opens as large as it can be with nothing trimmed:
+           * its own proportions, filling the screen on whichever axis binds
+           * first. These are portrait pictures on a landscape screen, so that
+           * is the full height, centred — grown to the screen's own shape they
+           * lost their top and bottom to `cover`.
+           */
+          const img = live.querySelector("img");
+          const ratio =
+            img && img.naturalWidth && img.naturalHeight
+              ? img.naturalWidth / img.naturalHeight
+              : r.width / r.height;
+          let tw = s.width;
+          let th = tw / ratio;
+          if (th > s.height) {
+            th = s.height;
+            tw = th * ratio;
+          }
+          const tx = (s.width - tw) / 2;
+          const ty = (s.height - th) / 2;
+
+          live.style.left = `${x + (tx - x) * zoom}px`;
+          live.style.top = `${y + (ty - y) * zoom}px`;
+          live.style.width = `${r.width + (tw - r.width) * zoom}px`;
+          live.style.height = `${r.height + (th - r.height) * zoom}px`;
           live.style.opacity = "1";
           shownFrame = cycle;
 
@@ -435,7 +457,10 @@ export function Book() {
                 fill
                 sizes="100vw"
                 quality={90}
-                className={styles.photoImg}
+                /* eager: the frame is 0x0 until the zoom starts, so a lazy
+                   image has no intrinsic size to open to at that moment */
+                priority
+                className={styles.frameImg}
               />
               <span className={styles.frameScrim} data-frame-scrim />
             </div>

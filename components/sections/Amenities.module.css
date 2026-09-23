@@ -6,7 +6,9 @@
    * the benefits dome. `HOLD` in Amenities.tsx must match `--amenity-hold`.
    * The total, 4.64 screens, is what the page below is measured against.
    */
-  --amenity-options: 184vh;
+  /* 0.92 of a screen per option, not 0.46: at the old pace a single flick of
+     the wheel carried two or three of them past */
+  --amenity-options: 368vh;
   --amenity-hold: 180vh;
   height: calc(100vh + var(--amenity-options) + var(--amenity-hold));
   /* the render arrives out of the sky the apartment sections leave behind */

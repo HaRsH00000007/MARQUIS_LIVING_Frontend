@@ -32,12 +32,18 @@
 }
 
 .hint {
+  /* a button now: it takes the pointer and glides the page back to the hero */
+  cursor: pointer;
+  color: inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--u-16);
   transition: opacity var(--dur-m) var(--ease-out);
 }
+
+/* out of the way at the foot of the page, and not clickable while hidden */
+.hintOut { pointer-events: none; }
 
 /* At the very bottom the footer shows its own "To top" control in this
    column, so the scroll hint steps aside rather than stacking with it. */

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ButtonCircle } from "../ui/Buttons";
+import { useModal } from "../ModalProvider";
 import Image from "next/image";
 import { interiors } from "@/lib/content";
 import { SplitReveal, FadeIn, AccentReveal } from "../ui/Reveal";
-import { ButtonCircle } from "../ui/Buttons";
 import styles from "./Interiors.module.css";
 
 type FounderInfo = (typeof interiors.founders)[number];
@@ -25,6 +26,7 @@ function Founder({ founder, className = "" }: { founder: FounderInfo; className?
  * accent, then a two-column feature.
  */
 export function Interiors() {
+  const { open: openModal } = useModal();
   const sectionRef = useRef<HTMLElement>(null);
 
   /*
@@ -129,7 +131,8 @@ export function Interiors() {
               </p>
             </div>
             <div className="u-48" />
-            <ButtonCircle label={interiors.cta.label} href={interiors.cta.href} />
+            {/* the booking modal, not a page: this used to link to /marquis */}
+            <ButtonCircle label={interiors.cta.label} onClick={() => openModal("book")} />
           </div>
         </div>
 

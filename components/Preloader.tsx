@@ -65,7 +65,9 @@ export function Preloader() {
     import("gsap").then(({ default: gsap }) => {
       if (isCancelled) return;
 
-      const durL = 1.2;
+      /* the splash ran ~4s on a first visit before the hero appeared; at 0.75
+         the same sequence plays through in a little over two and a half */
+      const durL = 0.75;
 
       const tl = gsap.timeline();
 
@@ -91,7 +93,7 @@ export function Preloader() {
         }
 
         if (progressTrackRef.current) {
-          tl.fromTo(progressTrackRef.current, { yPercent: -100 }, { yPercent: 0, duration: 2.4, ease: "power1.inOut" }, 0.4);
+          tl.fromTo(progressTrackRef.current, { yPercent: -100 }, { yPercent: 0, duration: 1.05, ease: "power1.inOut" }, 0.25);
         }
 
         // Arch expand & lift
@@ -100,7 +102,7 @@ export function Preloader() {
           "--arch-y": "15vh",
           duration: 1.25 * durL,
           ease: "power2.inOut",
-        }, "+=0.2")
+        }, "+=0.05")
         .to(el, {
           "--arch-w": "125vw",
           "--arch-y": "-100vh",

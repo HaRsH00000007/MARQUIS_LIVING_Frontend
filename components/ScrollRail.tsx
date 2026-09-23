@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLong } from "./ui/Icons";
 import { useSectionTheme } from "@/hooks/useSectionTheme";
+import { useScrollTo } from "./SmoothScroll";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
 import styles from "./ScrollRail.module.css";
 
@@ -22,6 +23,7 @@ function Rail() {
   const [progress, setProgress] = useState(0);
   const frame = useRef(0);
   const dark = useSectionTheme();
+  const scrollTo = useScrollTo();
 
   useEffect(() => {
     const update = () => {
@@ -44,18 +46,27 @@ function Rail() {
   }, []);
 
   return (
-    <div className={`${styles.rail} ${dark ? "theme_on-image" : "theme_on-light"}`} aria-hidden>
-      <div className={styles.track}>
+    <div className={`${styles.rail} ${dark ? "theme_on-image" : "theme_on-light"}`}>
+      <div className={styles.track} aria-hidden>
         <div className={styles.thumb} style={{ top: `${progress * 100}%` }}>
           <span className="l1">{String(Math.round(progress * 100)).padStart(2, "0")}</span>
         </div>
       </div>
-      <div className={`${styles.hint} ${progress > 0.985 ? styles.hintOut : ""}`}>
+      {/* the hint doubles as the way back: a click glides to the hero */}
+      <button
+        type="button"
+        className={`${styles.hint} ${progress > 0.985 ? styles.hintOut : ""}`}
+        onClick={(e) => {
+          if (e.detail > 0) e.currentTarget.blur();
+          scrollTo(0);
+        }}
+        aria-label="Back to the top"
+      >
         <span className="l2">Scroll</span>
-        <span className={styles.arrow}>
+        <span className={styles.arrow} aria-hidden>
           <ArrowLong />
         </span>
-      </div>
+      </button>
     </div>
   );
 }
