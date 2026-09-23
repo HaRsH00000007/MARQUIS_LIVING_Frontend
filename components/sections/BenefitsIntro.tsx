@@ -24,6 +24,12 @@ import styles from "./BenefitsIntro.module.css";
 const VIEW_W = 1000;
 /* how far inside the rim the baseline sits, in viewBox units */
 const INSET = 68;
+/*
+ * The same distance on a phone, where the SVG is a third of the width, works
+ * out at ~23px — less than the cap height of the type sitting on it, so the
+ * letters crossed the dome's edge. Set deeper in, in the SVG's own units.
+ */
+const INSET_PHONE = 118;
 /* where the path ends on each shoulder: degrees above the ellipse's centre */
 const END_ANGLE = 28;
 /* share of the path left empty at each end */
@@ -63,8 +69,9 @@ export function BenefitsIntro() {
       const crownY = (sRect.top - vRect.top) * k;
       const cy = crownY + ry;
 
-      const a = rx - INSET;
-      const b = ry - INSET;
+      const inset = window.matchMedia("(max-width: 991px)").matches ? INSET_PHONE : INSET;
+      const a = rx - inset;
+      const b = ry - inset;
       const t = (END_ANGLE * Math.PI) / 180;
       const x0 = cx - a * Math.cos(t);
       const x1 = cx + a * Math.cos(t);
