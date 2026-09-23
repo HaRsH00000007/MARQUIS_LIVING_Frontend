@@ -268,16 +268,14 @@
     padding: var(--u-96) var(--offset);
   }
 
-  /* clear of the photo reel above it: the eyebrow was sitting right under the
-     last card rather than opening the panel */
-  /* the block sits low in the panel: a deep run-in above it, and only a small
-     tail below, so it ends just short of the next section */
-  .panelIntro {
-    padding-top: calc(var(--u-96) * 8);
-    padding-bottom: var(--u-48);
-  }
+  .panelIntro { padding-bottom: var(--u-48); }
 
-  .introInner { height: auto; }
+  /*
+   * The photo reel is in the flow at the top of this panel on a phone, so the
+   * gap has to sit between it and the copy — padding on the panel itself only
+   * pushed the pictures down and took the copy with them.
+   */
+  .introInner { height: auto; margin-top: calc(var(--u-96) * 2); }
   .introTop { display: none; }
   .introFoot { padding-bottom: 0; margin-top: var(--u-96); }
   /* the mark sits further below the paragraph, as the copy has moved down */
