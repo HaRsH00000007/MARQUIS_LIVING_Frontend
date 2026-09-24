@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { book } from "@/lib/content";
 import { gsap } from "@/lib/gsap";
-import { useLenis } from "@/components/SmoothScroll";
+import { isScrollJump, useLenis } from "@/components/SmoothScroll";
 import styles from "./Book.module.css";
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
@@ -218,7 +218,10 @@ export function Book() {
        * "on the last page".
        */
       const onScreen = rect.top <= 0 && rect.bottom > 0;
-      if (!rewind && goingUp && onScreen && last > 0 && cycle === last && zoom <= 0.001) {
+      /* not while the page is gliding somewhere on purpose: "To top" and the
+         badge both pass up through this section, and parking the scroll here
+         would strand them in the book */
+      if (!rewind && goingUp && onScreen && last > 0 && cycle === last && zoom <= 0.001 && !isScrollJump()) {
         startRewind(rect, vh, smooth(p, 0.96, 1));
       }
 

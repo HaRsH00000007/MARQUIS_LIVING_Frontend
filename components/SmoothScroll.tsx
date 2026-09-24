@@ -11,6 +11,17 @@ const LenisContext = createContext<RefObject<Lenis | null> | null>(null);
 export const useLenis = () => useContext(LenisContext);
 
 /**
+ * Whether a deliberate jump (the badge, the rail's hint, "To top", a hash
+ * arrival) is under way. Sections that hijack the scroll on their own — the
+ * book closing itself when the reader scrolls up off its last spread — check
+ * this and stand aside, or a glide to the hero is parked halfway up the page.
+ */
+export const isScrollJump = () =>
+  typeof document !== "undefined" && document.documentElement.dataset.scrollJump !== undefined;
+
+const JUMP_MS = 1600;
+
+/**
  * Scroll the page to `top`, through Lenis when it is running.
  *
  * `window.scrollTo({ behavior: "smooth" })` and Lenis are two animations racing
@@ -22,6 +33,13 @@ export function useScrollTo() {
   const lenisRef = useContext(LenisContext);
   return (top: number) => {
     const lenis = lenisRef?.current;
+    const root = document.documentElement;
+    root.dataset.scrollJump = "";
+    window.clearTimeout(Number(root.dataset.scrollJumpTimer ?? 0));
+    root.dataset.scrollJumpTimer = String(
+      window.setTimeout(() => delete root.dataset.scrollJump, JUMP_MS),
+    );
+
     if (lenis) {
       lenis.scrollTo(top, { duration: 1.4 });
       return;
