@@ -111,6 +111,7 @@ export function Book() {
     const stage = sticky.querySelector<HTMLElement>("[data-stage]");
     const veilTop = sticky.querySelector<HTMLElement>("[data-veil-top]");
     const veilBottom = sticky.querySelector<HTMLElement>("[data-veil-bottom]");
+    const backdrop = sticky.querySelector<HTMLElement>("[data-portal-backdrop]");
     const last = spreads.length - 1;
 
     let frame = 0;
@@ -326,6 +327,9 @@ export function Book() {
        * did was wash the room to flat cream behind a book that was still in
        * full view.
        */
+      // the rest of the screen dims away as the photograph opens, so at full
+      // screen only the picture and its words are left; it returns on the close
+      if (backdrop) backdrop.style.opacity = smooth(zoom, 0.45, 0.95).toFixed(4);
       if (heading) heading.style.opacity = (1 - smooth(zoom, 0.12, 0.62)).toFixed(4);
       if (progress) progress.style.opacity = (1 - smooth(zoom, 0.6, 0.95)).toFixed(4);
 
@@ -447,6 +451,7 @@ export function Book() {
         </div>
 
         <div className={styles.portal} aria-hidden>
+          <span className={styles.portalBackdrop} data-portal-backdrop />
           {book.spreads.map((spread, i) => (
             <div key={spread.image + i} className={styles.frame} data-frame={i}>
               {/* the frame fills the screen, so it takes the photograph at full

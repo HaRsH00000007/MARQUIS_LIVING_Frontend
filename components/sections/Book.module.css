@@ -279,6 +279,18 @@
   pointer-events: none;
 }
 
+/*
+ * Behind the frames: covers the room, the book and the heading as the zoom
+ * runs, so the opened photograph stands alone on the screen with its copy.
+ */
+.portalBackdrop {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: #0e0b08;
+  will-change: opacity;
+}
+
 .frame {
   position: absolute;
   left: 0;
