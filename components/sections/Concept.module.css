@@ -144,9 +144,9 @@
 
 .country {
   position: absolute;
-  /* out of the title's way, which now starts at 11.5% */
-  left: 2.6%;
-  top: 48.56%;
+  /* below the title, which now runs from 8.5% across the panel's left half */
+  left: 3%;
+  top: 78%;
   width: 14.68%;
   color: var(--ink-muted);
 }
@@ -158,9 +158,10 @@
  */
 .placeTitleWrap {
   position: absolute;
-  left: 11.5%;
+  left: 11.2%;
   top: 24.89%;
-  width: 31%;
+  /* ends short of the centred render */
+  width: 27%;
 }
 
 /* capped so "Ambition", the longest line, stays clear of the render even at
@@ -174,11 +175,14 @@
 .placeWord2 { margin-left: 20.42%; }
 .placeWord3 { margin-left: 0; }
 
+/* centred on the panel, with the title to its left and the copy to its right */
 .placeImg {
   position: absolute;
-  left: 38.78%;
+  /* a little narrower than the reference's 30.21%, which is what buys the
+     title beside it its size; still centred on the panel */
+  left: 37%;
   top: 4.78%;
-  width: 30.21%;
+  width: 26%;
   height: 90.44%;
   overflow: hidden;
 }
@@ -196,29 +200,6 @@
 
 /* The CTA pill sits in the copy block, above the heading, sized to its label. */
 .placeBtn { display: flex; }
-
-/* ---------------------------------------------------------- chandeliers ---- */
-
-/*
- * One leaf-spiral fixture per page, its wires running straight up off the
- * top of the screen. Width is capped against the height too, as the photo reels are,
- * so a short, wide screen does not swamp the copy; at 2:1 the fixture runs
- * just over half the screen's height.
- *
- * Intro pages: centred in the left gutter the photo reel used to fill (13.5%,
- * one reel wide). Built on Ambition: right of the portrait (ends 69%), above
- * the pill CTA and the copy that sit lower down.
- */
-.chandelierIntro,
-.chandelierPlace {
-  --chandelier-w: min(12.8vw, 27vh);
-  --chandelier-top: 0px;
-}
-
-.chandelierIntro { --chandelier-inset: calc(13.5% + (min(10vw, 21vh) - var(--chandelier-w)) / 2); }
-
-/* nudged right, clear of the portrait; still short of the nav in the corner */
-.chandelierPlace { --chandelier-inset: 11%; }
 
 /* ----------------------------------------------------------- page flip ---- */
 
@@ -260,10 +241,6 @@
 /* ----------------------------------------------------------- responsive ---- */
 
 @media (max-width: 991px) {
-  /* the pages stack and never flip here; the photo reels keep both sides */
-  .chandelierIntro,
-  .chandelierPlace { display: none; }
-
   .screen { height: auto; }
   .track { display: block; width: 100%; height: auto; }
 

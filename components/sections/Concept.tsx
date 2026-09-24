@@ -6,7 +6,6 @@ import { concept } from "@/lib/content";
 import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { FlipGallery } from "../ui/FlipGallery";
-import { Chandelier } from "../ui/Chandelier";
 import { EraMark } from "../ui/EraMark";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { useFlipPin } from "@/hooks/useFlipPin";
@@ -30,10 +29,7 @@ function IntroPanel({ intro, scale, opacity, repeat = false }: IntroPanelProps) 
   return (
     <article className={`${styles.panel} ${styles.panelIntro}`} aria-hidden={repeat || undefined}>
       {/* first in the panel, so the copy below always paints over it */}
-      <FlipGallery photos={intro.photos} rightOnlyOnDesktop />
-      {/* In the left gutter the photo reel left: unlit here, at both ends of
-          the flip. The Built on Ambition page carries the lit one. */}
-      <Chandelier side="left" variant="spiral" hover={false} className={styles.chandelierIntro} />
+      <FlipGallery photos={intro.photos} />
       <div
         className={styles.introInner}
         style={{
@@ -144,6 +140,9 @@ export function Concept() {
    */
   // no drift on phones: at 20% of a phone-width word it pushed "Built" and
   // "Ambition" off the edge of the screen
+  /* the burgundy page's own stretch of the pin, between the two cream ones */
+  const placeActive = progress > 0.34 && progress < 0.7;
+
   const drift = (from: number, to: number) => (isDesktop ? from + (to - from) * progress : 0);
   const lineShift1 = drift(-5, 5);
   const lineShift2 = drift(25, -25);
@@ -166,11 +165,16 @@ export function Concept() {
           <IntroPanel intro={intro} scale={introScale} opacity={introOpacity} />
 
           {/* ---------------------------------------------------- panel 2 */}
-          <article className={`${styles.panel} ${styles.panelPlace}`}>
-            {/* Lit by the flip itself (useFlipPin): it catches as this page
-                swings in and goes down as it swings out. */}
-            <Chandelier side="right" variant="spiral" hover={false} flipLight className={styles.chandelierPlace} />
-
+          {/*
+            * The header and the scroll rail take their ink from whichever
+            * themed box crosses their probe line. The section is light — its
+            * two cream pages — so this burgundy one says so for itself while
+            * it is the page on screen, or the navy logo vanishes into it.
+            */}
+          <article
+            className={`${styles.panel} ${styles.panelPlace}`}
+            data-theme={!isDesktop || placeActive ? "dark" : undefined}
+          >
             <div className={styles.country}>
               <p className="c1 a-center">{place.country}</p>
             </div>

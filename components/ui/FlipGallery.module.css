@@ -71,9 +71,6 @@
 .stripLeft { left: 13.5%; }
 .stripRight { right: 12%; }
 
-@media (min-width: 992px) {
-  .rightOnly .stripLeft { display: none; }
-}
 
 /*
  * The roll itself: the three photos, then the same three again. It travels

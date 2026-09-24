@@ -33,17 +33,9 @@ const STRIPS = {
  * appears to vanish in mid-air. The animation is CSS, so it costs no scroll
  * work, and it stops outright under reduced motion.
  */
-export function FlipGallery({
-  photos,
-  rightOnlyOnDesktop = false,
-}: {
-  photos: readonly Photo[];
-  /** Leaves the left gutter free on desktop (for the concept's chandelier);
-      phones keep both reels side by side. */
-  rightOnlyOnDesktop?: boolean;
-}) {
+export function FlipGallery({ photos }: { photos: readonly Photo[] }) {
   return (
-    <div className={`${styles.gallery} ${rightOnlyOnDesktop ? styles.rightOnly : ""}`} aria-hidden>
+    <div className={styles.gallery} aria-hidden>
       {(["left", "right"] as const).map((side) => (
         <div
           key={side}
