@@ -30,6 +30,9 @@
   z-index: 2;
 }
 
+/* desktop keeps the dome bare; the fixture is a phone-only composition */
+.domeLight { display: none; }
+
 /*
  * The cream ground, in two layers behind the content.
  *
@@ -187,8 +190,50 @@
   .section {
     --dome-overlap: 80vh;
     --dome-rise: 45vw;
-    /* the rounder mobile crown drops far lower at the sides */
-    padding-top: calc(45vw + var(--u-64));
+    /* the crown, plus the drop and the fixture under it (see .domeLight) */
+    padding-top: calc(126vw + var(--u-48));
+  }
+
+  /*
+   * The leaf spiral hangs on the dome's centre line, well down inside the
+   * crown. The render's own wires stop at the top of its plate, so the drop
+   * above it is drawn here — fine vertical lines on the cream, at the same
+   * pitch as the render's — and the fixture is set that far below the crown.
+   */
+  .domeLight {
+    display: block;
+    --drop: 26vw;
+    --chandelier-w: 56vw;
+    --chandelier-top: var(--drop);
+    /* the leaves sit left of centre within the plate, so the plate is nudged
+       right to put the fixture itself on the dome's centre line */
+    /* the fixture is centred in its own plate, so half the plate's width puts
+       it on the dome's centre line */
+    --chandelier-inset: calc(50% - 28vw);
+    z-index: 1;
+  }
+
+  /*
+   * The drop above the fixture is the render's own wires, continued: the top
+   * 8% of the plate (wire, no leaves) is stretched down the whole drop at the
+   * plate's width, so every wire lines up with itself. Drawn wires at an even
+   * pitch could not — the render's are irregular, 6px to 25px apart.
+   */
+  .domeLight::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: var(--drop);
+    background-image: url("/images/chandelier-leaf-dim.webp");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% calc(var(--drop) / 0.08);
+    /* they emerge from the cream rather than cutting across the crown line */
+    -webkit-mask-image: linear-gradient(transparent, #000 16%);
+    mask-image: linear-gradient(transparent, #000 16%);
+    pointer-events: none;
   }
   /* same collision, same fix, at the mobile type size. The script also steps
      down from a1: at 90px "Marquis Living" was wider than the phone and

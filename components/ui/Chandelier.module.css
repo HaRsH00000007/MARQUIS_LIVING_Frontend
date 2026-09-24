@@ -124,8 +124,13 @@
 .spiral.right { transform: none; }
 
 @media (max-width: 991px) {
+  /* `--chandelier-w-m` is the phone override, but it falls back to the host's
+     own width — without that, a host that set only `--chandelier-w` (the
+     Interiors dome) silently got the 18vw default here. */
   .chandelier {
-    width: var(--chandelier-w-m, 18vw);
-    top: calc(var(--chandelier-top, 12vw) - var(--cord-ext) * var(--chandelier-w-m, 18vw));
+    width: var(--chandelier-w-m, var(--chandelier-w, 18vw));
+    top: calc(
+      var(--chandelier-top, 12vw) - var(--cord-ext) * var(--chandelier-w-m, var(--chandelier-w, 18vw))
+    );
   }
 }

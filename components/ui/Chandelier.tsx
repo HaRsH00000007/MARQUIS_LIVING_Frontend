@@ -118,7 +118,7 @@ export function Chandelier({
         width={plate.w}
         height={plate.h}
         className={`${styles.plate} ${styles.dim}`}
-        sizes="12vw"
+        sizes="(max-width: 991px) 60vw, 14vw"
         data-light="dim"
       />
       <Image
@@ -127,7 +127,7 @@ export function Chandelier({
         width={plate.w}
         height={plate.h}
         className={`${styles.plate} ${styles.lit}`}
-        sizes="12vw"
+        sizes="(max-width: 991px) 60vw, 14vw"
         data-light="lit"
       />
     </div>

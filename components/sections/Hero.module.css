@@ -317,7 +317,7 @@
   /* the three blocks evenly spaced down the screen rather than bunched at the
      top: wordmark, tagline, then the statements and the button */
   /* clear of the badge and the menu button in the corners above it */
-  .title { inset: 18% 0 auto; }
-  .tagline { inset: 40% 0 auto; padding-inline: var(--offset); }
+  .title { inset: 17% 0 auto; }
+  .tagline { inset: 34% 0 auto; padding-inline: var(--offset); }
   .strapLarge { margin-top: var(--u-4); }
 }

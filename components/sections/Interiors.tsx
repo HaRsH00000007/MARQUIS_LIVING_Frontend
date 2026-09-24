@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ButtonCircle } from "../ui/Buttons";
+import { Chandelier } from "../ui/Chandelier";
 import { useModal } from "../ModalProvider";
 import Image from "next/image";
 import { interiors } from "@/lib/content";
@@ -74,6 +75,9 @@ export function Interiors() {
       className={`section arch clip ${styles.section}`}
       aria-labelledby="interiors-title"
     >
+      {/* phones only (see the stylesheet): the leaf spiral hangs from the
+          dome's crown, above the title */}
+      <Chandelier side="left" variant="spiral" hover={false} className={styles.domeLight} />
 
       <div className="container">
         <h2 id="interiors-title" className={`h1 a-center ${styles.title}`}>
