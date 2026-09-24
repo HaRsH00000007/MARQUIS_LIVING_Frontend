@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useModal } from "../ModalProvider";
 import styles from "./Buttons.module.css";
 
 interface PillProps {
@@ -57,8 +58,15 @@ interface CircleProps {
  * The standalone CTA. It used to be a ringed disc; every CTA on the site now
  * shares the pill's rounded-rectangle shape, so this renders a `ButtonPill`.
  * The `.circle*` styles are kept in Buttons.module.css should the disc return.
+ *
+ * A `#book-a-call` href has no section behind it: it opens the same booking
+ * dialog as the header's "Book a call".
  */
 export function ButtonCircle({ label, href, onClick, className }: CircleProps) {
+  const { open } = useModal();
+  if (href === "#book-a-call") {
+    return <ButtonPill label={label} onClick={() => open("book")} className={className} />;
+  }
   return <ButtonPill label={label} href={href} onClick={onClick} className={className} />;
 }
 
