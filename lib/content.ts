@@ -13,8 +13,8 @@ export const site = {
   /* the line the footer prints; the menu, the booking modal and the contact
      panel all read it from here. TODO: no street address for the Dubai studio
      yet — `address` below and `footer.offices` still carry what we were given. */
-  phone: "+91 9211733881",
-  phoneHref: "tel:+919211733881",
+  phone: "+971 52 241 9949",
+  phoneHref: "tel:+971522419949",
   addressLabel: "Studio",
   address: "Dubai, United Arab Emirates",
   mapHref:
@@ -50,7 +50,7 @@ export const hero = {
     },
     right: {
       small: "",
-      large: "Best Interior Design Company in Dubai",
+      large: "One of the best interior design firms in UAE",
     },
   },
   background: "/images/hero-02.jpg",
@@ -487,9 +487,9 @@ export const callToAction = {
 export const footer = {
   toTop: "To top",
   strap: "Come say hello at our Dubai studio.",
-  phone: "+91 9211733881",
-  phoneRegion: "(India)",
-  phoneHref: "tel:+919211733881",
+  phone: "+971 52 241 9949",
+  phoneRegion: "(UAE)",
+  phoneHref: "tel:+971522419949",
   reach: [{ label: "info@headfield.com", href: "mailto:info@headfield.com" }],
   /* the two offices again, as the foot of the panel */
   bottomLeft: {
