@@ -6,6 +6,7 @@ import { architecture, architectureNotes } from "@/lib/content";
 import { SplitReveal } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { documentTop } from "@/lib/layout";
+import { useIsDesktop } from "@/hooks/useMediaQuery";
 import { clamp01, ease, lerp, phase } from "@/lib/motion";
 import styles from "./Architecture.module.css";
 
@@ -72,6 +73,7 @@ const cover = (h: Hole, slitX: number) =>
 
 export function Architecture() {
   const sectionRef = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktop();
   /** Progress over the reference's own trigger window, not the sticky range. */
   const [intro, setIntro] = useState(0);
   /** Progress over the whole scroll area, for the render's parallax. */
@@ -133,7 +135,14 @@ export function Architecture() {
    * entry is the wrong signal inside a sticky section, because the type is on
    * screen from the moment the section arrives.
    */
-  const typeIn = progress >= 0.3;
+  /*
+   * The desktop holds the title until the scroll area is 30% past the top —
+   * the reference's own trigger, which it can afford across 3.75 screens of
+   * pin. On a phone the section is a plain stacked block, so the same share is
+   *ns most of a screen of scrolling before anything appears: there it reveals
+   * as soon as the section is under way.
+   */
+  const typeIn = progress >= (isDesktop ? 0.3 : 0.03);
 
   const vars = {
     "--stage-scale": stageScale,

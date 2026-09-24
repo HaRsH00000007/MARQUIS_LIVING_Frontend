@@ -191,7 +191,7 @@
     --dome-overlap: 80vh;
     --dome-rise: 45vw;
     /* the crown, plus the drop and the fixture under it (see .domeLight) */
-    padding-top: calc(126vw + var(--u-48));
+    padding-top: calc(108vw + var(--u-48));
   }
 
   /*
@@ -202,7 +202,7 @@
    */
   .domeLight {
     display: block;
-    --drop: 26vw;
+    --drop: 8vw;
     --chandelier-w: 56vw;
     --chandelier-top: var(--drop);
     /* the leaves sit left of centre within the plate, so the plate is nudged
