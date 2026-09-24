@@ -147,7 +147,8 @@ export function Concept() {
   const drift = (from: number, to: number) => (isDesktop ? from + (to - from) * progress : 0);
   const lineShift1 = drift(-5, 5);
   const lineShift2 = drift(25, -25);
-  const lineShift3 = drift(-15, 25);
+  /* the longest line: at +25% its tail ran under the render beside it */
+  const lineShift3 = drift(-12, 4);
 
   return (
     /*

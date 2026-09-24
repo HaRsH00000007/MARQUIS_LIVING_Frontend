@@ -188,7 +188,7 @@ export const apartmentTypes = [
    the site's own interiors; only the heading and lead change. */
 export const galleryCategories = {
   residential: {
-    title: "Residential",
+    title: "Our works",
     lead: "Full homes, apartments and renovations, shaped around how you actually live.",
   },
   commercial: {
@@ -490,33 +490,15 @@ export const footer = {
   phone: "+91 9211733881",
   phoneRegion: "(India)",
   phoneHref: "tel:+919211733881",
-  offices: [
-    {
-      label: "Corporate Headquarters",
-      places: [
-        ["Head Field Solutions Pvt. Ltd.", "Lajpat Nagar II New Delhi – 110024"],
-      ],
-    },
-    {
-      label: "Branch Offices",
-      places: [
-        ["Head Field Solutions Pvt. Ltd.", "B-73, Sector -57 NOIDA - 201 301 (UP)"],
-      ],
-    },
-  ],
-  reach: [
-    { label: "info@headfield.com", href: "mailto:info@headfield.com" },
-    { label: "+91 (931) 056 8481 (India)", href: "tel:+919310568481" },
-  ],
-  copyright: "Head Field Solutions Pvt. Ltd.",
-  rights: "©2026 All rights reserved",
-  legal: [
-    { label: "Privacy policy", href: "/privacy-policy" },
-    { label: "Terms of use", href: "/terms-of-use" },
-  ],
-  creditsLabel: "Made by",
-  creditsName: "GLOCAL STUDIO",
-  /* TODO: Glocal Studio's site — the credit renders as plain text until set */
-  creditsHref: "",
+  reach: [{ label: "info@headfield.com", href: "mailto:info@headfield.com" }],
+  /* the two offices again, as the foot of the panel */
+  bottomLeft: {
+    label: "Corporate headquarters",
+    lines: ["Head Field Solutions Pvt. Ltd.", "Lajpat Nagar II New Delhi – 110024"],
+  },
+  bottomRight: {
+    label: "Branch offices",
+    lines: ["Head Field Solutions Pvt. Ltd.", "B-73, Sector -57 NOIDA - 201 301 (UP)"],
+  },
 } as const;
 

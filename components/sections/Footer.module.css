@@ -65,27 +65,6 @@
 
 .strap { margin: 0; }
 
-/*
- * Two offices side by side under the number — the headquarters and then the
- * branches, which is why the right column carries two addresses and the left
- * one. Both range centre, as the reference sets everything in this block.
- */
-.offices {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--u-24) var(--u-96);
-  width: min(100%, calc(var(--u-272) * 2.2));
-  font-style: normal;
-}
-
-.office {
-  display: flex;
-  flex-direction: column;
-  gap: var(--u-8);
-}
-
-.place { margin: 0; }
-
 /* the direct lines, set as one row that wraps rather than a stack */
 .reach {
   display: flex;
@@ -120,31 +99,13 @@
 
 .info { display: flex; flex-direction: column; }
 
-.legal { margin: 0; }
-.legal a { text-underline-offset: 0.25em; }
-
-.credits { display: flex; }
-
-.creditsLink {
+/* the branch office, ranged right against the headquarters on the left */
+.credits {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--u-4);
+  text-align: right;
 }
-
-.creditsMark {
-  display: block;
-  width: var(--u-24);
-  height: var(--u-24);
-  margin-bottom: var(--u-12);
-  transition: transform var(--dur-m) var(--ease-out);
-}
-
-@media (min-width: 992px) {
-  .creditsLink:hover .creditsMark { transform: rotate(90deg); }
-}
-
-.creditsName { letter-spacing: 0.12em; }
 
 /* -------------------------------------------------------------- to top ---- */
 
@@ -194,8 +155,6 @@
      off both ends; sized to the screen it fits on one line */
   .phone { font-size: min(var(--h2-size), 9.2vw); }
 
-  /* the two offices stack rather than squeeze into half a phone screen */
-  .offices { grid-template-columns: 1fr; gap: var(--u-32); width: 100%; }
 
   /* Side by side, the company name and the legal links were squeezed into
      half a phone's width and broke mid-phrase ("TERMS OF / USE"). Stacked and
@@ -208,9 +167,8 @@
     gap: var(--u-32);
     text-align: center;
   }
-  .info { align-items: center; }
-  .creditsLink { align-items: center; }
-  .creditsLink > span { text-align: center; }
+  .info,
+  .credits { align-items: center; text-align: center; }
 
   .toTop { display: none; }
 }

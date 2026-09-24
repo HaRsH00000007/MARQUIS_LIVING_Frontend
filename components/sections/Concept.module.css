@@ -144,20 +144,28 @@
 
 .country {
   position: absolute;
-  left: 7.77%;
+  /* out of the title's way, which now starts at 11.5% */
+  left: 2.6%;
   top: 48.56%;
   width: 14.68%;
   color: var(--ink-muted);
 }
 
+/*
+ * Moved in from 15.53%: the render starts at 38.78%, and at the reference's
+ * offset the column had only 23% of the panel clear of it — less than the
+ * longest line needs at any readable size.
+ */
 .placeTitleWrap {
   position: absolute;
-  left: 15.53%;
+  left: 11.5%;
   top: 24.89%;
-  width: 37.98%;
+  width: 31%;
 }
 
-.placeTitle { margin: 0; }
+/* capped so "Ambition", the longest line, stays clear of the render even at
+   the far end of its drift */
+.placeTitle { margin: 0; font-size: min(var(--h1-size), calc(128 * var(--u))); }
 
 /* each line is its own block so the reference's per-line indents — and the
    scroll-driven shift already implemented in the component — still apply */

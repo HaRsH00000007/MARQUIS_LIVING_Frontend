@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { footer } from "@/lib/content";
 import { gsap } from "@/lib/gsap";
@@ -149,23 +148,6 @@ export function Footer() {
             <span className="l1 reg a-center">{footer.phoneRegion}</span>
           </div>
 
-          <div className="u-48" />
-
-          <address className={styles.offices}>
-            {footer.offices.map((office) => (
-              <div key={office.label} className={styles.office}>
-                <span className="l1 reg a-center">{office.label}</span>
-                {office.places.map((place) => (
-                  <p key={place[1]} className={`l1 a-center ${styles.place}`}>
-                    {place[0]}
-                    <br />
-                    {place[1]}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </address>
-
           <div className="u-32" />
 
           <ul className={styles.reach}>
@@ -182,37 +164,23 @@ export function Footer() {
         {/* -------------------------------------------------------- bottom */}
         <div className={styles.bottom}>
           <div className={styles.info}>
-            <span className="l1">{footer.copyright}</span>
-            <span className="l1 reg no-wrap">{footer.rights}</span>
-            <div className="u-12" />
-            <p className={`l1 reg ${styles.legal}`}>
-              {footer.legal.map((l, i) => (
-                <span key={l.href}>
-                  <Link href={l.href}>
-                    <u>{l.label}</u>
-                  </Link>
-                  {i < footer.legal.length - 1 && ", "}
-                </span>
-              ))}
-            </p>
+            <span className="l1 reg">{footer.bottomLeft.label}</span>
+            <div className="u-8" />
+            {footer.bottomLeft.lines.map((line) => (
+              <span key={line} className="l1">
+                {line}
+              </span>
+            ))}
           </div>
 
           <div className={styles.credits}>
-            <a
-              href={footer.creditsHref || undefined}
-              target={footer.creditsHref ? "_blank" : undefined}
-              rel={footer.creditsHref ? "noreferrer" : undefined}
-              className={styles.creditsLink}
-            >
-              <span className={styles.creditsMark} aria-hidden>
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10.5" stroke="currentColor" />
-                  <path d="M4 12h16" stroke="currentColor" />
-                </svg>
+            <span className="l1 reg a-right">{footer.bottomRight.label}</span>
+            <div className="u-8" />
+            {footer.bottomRight.lines.map((line) => (
+              <span key={line} className="l1 a-right">
+                {line}
               </span>
-              <span className="l1 reg a-right">{footer.creditsLabel}</span>
-              <span className={`l1 a-right ${styles.creditsName}`}>{footer.creditsName}</span>
-            </a>
+            ))}
           </div>
         </div>
       </div>

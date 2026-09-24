@@ -108,8 +108,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
               </h2>
               <div className="u-16" />
               <p className="p1 muted">
-                A short conversation is enough to understand which apartment fits your usecase.
-                Leave your details and the sales team will call you back.
+                Your dream interior starts with a conversation. Tell us about your space, and
+                let&rsquo;s bring your vision to life.
               </p>
               <div className="u-32" />
 
