@@ -294,20 +294,23 @@
   .stage {
     position: relative;
     height: auto;
-    /* the copy inside sets the height now (see .inner); the render covers it */
-    min-height: 120svh;
+    /* one screen: the render, title and credits are seen whole, at once,
+       rather than as a picture a third taller than the phone. The copy can
+       still grow it on a very short screen (see .inner). */
+    min-height: 100svh;
     transform: none;
   }
   .img { transform: none; }
 
   /*
-   * Nearly the render's full height, with the title at the top and the quote
-   * and credits at the foot (the inner is `space-between`): that lands them on
-   * the pale sofa in the lower third of the picture.
+   * The render's full height, one screen, with the title at the top and the
+   * quote and credits at the foot (the inner is `space-between`): that lands
+   * them on the pale sofa in the lower part of the picture.
    */
-  .inner { min-height: 132svh; padding-block: var(--u-64) var(--u-48); gap: var(--u-48); }
-  /* down onto the panelled wall, clear of the chandelier the title sits over */
-  .introCopy { margin-top: 24svh; }
+  /* the top padding clears the fixed header bar (~80px on a phone), which
+     otherwise sat over the title once the section reached the top */
+  .inner { min-height: 100svh; padding-block: calc(80px + var(--u-16)) var(--u-32); gap: var(--u-16); }
+  .introCopy { margin-top: 2svh; }
 
   /* cream type on a cream sofa: the same shadow the hero's lines carry */
   .bottom {
