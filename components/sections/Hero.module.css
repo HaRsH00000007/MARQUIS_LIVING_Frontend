@@ -315,7 +315,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    inset: auto 0 9%;
+    /* the block is anchored lower again, since the button now hangs well
+       below the three statements */
+    inset: auto 0 14%;
     gap: var(--u-32);
     text-align: center;
   }
@@ -323,7 +325,8 @@
   .left,
   .right { text-align: center; }
   /* on phones the CTA follows both statements */
-  .strapCta { order: 1; margin-bottom: 0; margin-top: var(--u-8); }
+  /* the button sits clear below the three statements, not tucked under them */
+  .strapCta { order: 1; margin-bottom: 0; margin-top: calc(var(--u-160) + var(--u-48)); }
 
   /* the three blocks evenly spaced down the screen rather than bunched at the
      top: wordmark, tagline, then the statements and the button */

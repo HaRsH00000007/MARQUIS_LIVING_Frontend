@@ -81,14 +81,14 @@ export const benefits = [
     title: "Value, by design",
     body: "Beautiful design and a sensible budget can absolutely coexist. Our process protects your investment at every stage, so you can see the quality in every detail.",
     kicker: "Refined choices,\nhonest costs",
-    image: "/images/benefit-gathering-room.webp",
+    image: "/images/benefit-value-by-design.webp",
   },
   {
     id: "one-familiar-voice",
     title: "One familiar voice",
     body: "Your account manager stays with you from the first call to the final walkthrough — the same person at every stage — which is exactly why our timelines hold.",
     kicker: "One person,\nstart to finish",
-    image: "/images/benefit-boutique-concept.webp",
+    image: "/images/benefit-one-familiar-voice.webp",
   },
 ] as const;
 

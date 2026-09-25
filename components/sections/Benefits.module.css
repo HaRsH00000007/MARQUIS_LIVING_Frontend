@@ -96,6 +96,10 @@
 /* ------------------------------------------------------------- responsive */
 
 @media (max-width: 991px) {
+  /* the run-in above the first slide is a desktop measure; at phone scale it
+     left a screen of empty ground under the dome's strapline */
+  .section { padding-block: var(--u-48) var(--u-64); }
+
   .frame { width: 100%; }
   .title { white-space: normal; margin-inline: 0; width: 100%; max-width: 100%; }
 }

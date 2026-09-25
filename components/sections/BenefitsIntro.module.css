@@ -62,14 +62,23 @@
   /* the arch climbs the hero here too — 1.23 screens on the reference.
      The crown is 45vw deep at this width, so the arc of type starts below it
      rather than riding over the curve, where `clip` cut its caps off. */
-  .section { margin-top: -123vh; padding-block: 38vw var(--u-64); }
+  .section { margin-top: -123vh; padding-block: 38vw var(--u-24); }
   .lockup { gap: var(--u-24); }
   /*
    * Narrower than the dome: at full width the arc's ends ("DESIGNED", "LIFE")
    * ran up into the curve at the sides, whatever the padding above it. The
    * SVG scales its own type, so the size is stepped up to match.
    */
-  .curved { width: 88%; margin-inline: auto; margin-bottom: var(--u-48); }
+  /*
+   * The rule between the lockup and the strapline is drawn at two grid cells
+   * on the desktop; at phone scale that, plus its two spacers, left the dome
+   * mostly empty between them.
+   */
+  .section :global(.divider) { height: var(--u-64); }
+  .section :global(.u-48) { height: var(--u-16); }
+
+  /* tighter under the arc: the lockup sat low in the dome */
+  .curved { width: 88%; margin-inline: auto; margin-bottom: var(--u-12); }
   /* viewBox units, not CSS px: the SVG is 1000 units wide against a 390px
      screen, so the original 42 painted at ~16px — smaller than the label
      beneath it. */
