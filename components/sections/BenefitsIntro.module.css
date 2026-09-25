@@ -69,7 +69,18 @@
      The crown is 45vw deep at this width, so the arc of type starts below it
      rather than riding over the curve, where `clip` cut its caps off. */
   .section { margin-top: -85vh; padding-block: 38vw var(--u-24); }
-  .lockup { gap: var(--u-24); }
+  /*
+   * Three columns, equal either side, so the mark sits dead centre over the
+   * rule below. As a centred flex row the group was centred instead, and
+   * "MARQUIS" being wider than "LIVING" pushed the mark right of the line.
+   */
+  .lockup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--u-24);
+  }
+  .lockup > :first-child { justify-self: end; }
+  .lockup > :last-child { justify-self: start; }
   /*
    * Narrower than the dome: at full width the arc's ends ("DESIGNED", "LIFE")
    * ran up into the curve at the sides, whatever the padding above it. The
