@@ -40,7 +40,9 @@
      like the `.h1` display titles ("The Minds Behind"). */
   font-weight: var(--display-weight);
   font-synthesis: none;
-  font-size: 44px;
+  /* `--title-scale` is set from scroll in the component: the words grow as the
+     dome rises */
+  font-size: calc(64px * var(--title-scale, 1));
   letter-spacing: -0.012em;
   text-transform: uppercase;
   fill: var(--ink);
@@ -83,6 +85,8 @@
      screen, so the original 42 painted at ~16px — smaller than the label
      beneath it. */
   /* the letters keep the display face's own tracking; the words are spaced
-     by the arc layout in the component (`open`), not by letter-spacing */
-  .curvedText { font-size: 88px; }
+     by the arc layout in the component (`open`), not by letter-spacing.
+     88 is the most the arc holds: any larger and "DESIGNED AROUND" runs off
+     the left end of the path once it is pivoted on the crown. */
+  .curvedText { font-size: calc(88px * var(--title-scale, 1)); }
 }

@@ -13,12 +13,23 @@ import styles from "./BenefitsIntro.module.css";
  *
  * The title's path is an ellipse inset from the dome's own edge (the section's
  * `border-top-*-radius: 50% 47vw`), measured at runtime so it tracks the rim at
- * every width. Each word is placed on its own, with equal gaps.
+ * every width. Each word is placed on its own, pivoting on the crown: the
+ * middle of the phrase (the gap between the two middle words) sits on the
+ * crown, so it reads as centred even though "DESIGNED" is twice "LIFE". Two
+ * layouts are blended by `BALANCE`: equal gaps between the words, and word
+ * centres at equal steps mirrored about the crown (even ends, uneven gaps).
+ *
+ * On a phone the arc is short and the type large, so pivoting on the crown
+ * left "DESIGNED AROUND" hanging much further down the left shoulder than
+ * "YOUR LIFE" on the right, and the title read as shifted left. There the
+ * whole phrase is centred instead, with equal gaps, so both ends sit the same
+ * distance from the dome's edge.
  *
  * Scroll scrub: as the dome rises, the words start gathered at the crown and
  * stretch apart along the rim until the title runs from the dome's left
  * shoulder to its right shoulder (fully open when the crown reaches the top of
- * the viewport). Scrolling back up gathers them again.
+ * the viewport). The type grows with it, from `MIN_SCALE` to full size.
+ * Scrolling back up gathers and shrinks them again.
  */
 
 const VIEW_W = 1000;
@@ -38,6 +49,10 @@ const END_PAD = 0.03;
 const TIGHT_GAP = 18;
 /* share of the full shoulder-to-shoulder gap used once the words have opened */
 const OPEN_GAP = 0.6;
+/* type size while the words are gathered, as a share of the full size */
+const MIN_SCALE = 0.45;
+/* 0 = equal gaps between words, 1 = word centres mirrored about the crown */
+const BALANCE = 0.5;
 
 const words = benefitsIntro.curvedTitle.split(" ");
 /* first paint, before measuring: spread the words evenly */
@@ -49,8 +64,13 @@ export function BenefitsIntro() {
   const arcRef = useRef<SVGPathElement>(null);
   const wordRefs = useRef<(SVGTextPathElement | null)[]>([]);
   const [arc, setArc] = useState("M 124,250 A 432,402 0 0 1 876,250");
-  const [layout, setLayout] = useState<{ tight: number[]; wide: number[] } | null>(null);
+  /* path length, and each word's width at full type size */
+  const [metrics, setMetrics] = useState<{ total: number; widths: number[] } | null>(null);
   const [spread, setSpread] = useState(0);
+  const scale = MIN_SCALE + (1 - MIN_SCALE) * spread;
+  /* the scale the words were painted at, so measured widths can be normalised */
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
 
   /* trace the dome's rim in the SVG's own coordinates */
   useLayoutEffect(() => {
@@ -94,30 +114,73 @@ export function BenefitsIntro() {
   useLayoutEffect(() => {
     const path = arcRef.current;
     if (!path) return;
-    const total = path.getTotalLength();
-    const widths = wordRefs.current.map((w) => w?.getComputedTextLength() ?? 0);
-    const used = widths.reduce((sum, w) => sum + w, 0);
+    const s = scaleRef.current;
+    setMetrics({
+      total: path.getTotalLength(),
+      widths: wordRefs.current.map((w) => (w?.getComputedTextLength() ?? 0) / s),
+    });
+  }, [arc, fontsReady]);
+
+  /* word centres along the path for the current spread and type size */
+  let offsets: number[] | null = null;
+  if (metrics) {
+    const { total } = metrics;
+    const widths = metrics.widths.map((w) => w * scale);
     const span = total * (1 - END_PAD * 2);
     /* the words stand further apart on a phone, where the arc is short and
        four words set close together read as one block of type */
-    const open = window.matchMedia("(max-width: 991px)").matches ? 1 : OPEN_GAP;
-    const gap = Math.max(0, (span - used) / Math.max(1, words.length - 1)) * open;
-    const wideLen = used + gap * (words.length - 1);
+    const phone =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 991px)").matches;
+    const open = phone ? 1 : OPEN_GAP;
+    const n = words.length;
+    const half = Math.max(0.5, (n - 1) / 2); // gaps on each side of the crown
+    const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
-    const place = (start: number, g: number) => {
-      let at = start;
-      return widths.map((w) => {
-        const mid = at + w / 2;
-        at += w + g;
+    /* equal gaps, with the middle of the phrase on the crown */
+    const sideW = (from: number, to: number) => {
+      let w = 0;
+      for (let i = from; i < to; i++) w += widths[i];
+      /* an odd middle word straddles the crown: half of it on each side */
+      return n % 2 ? w + widths[(n - 1) / 2] / 2 : w;
+    };
+    const longSide = Math.max(sideW(0, Math.floor(n / 2)), sideW(Math.ceil(n / 2), n));
+    const maxGap = (span / 2 - longSide) / half;
+    const gap = mix(TIGHT_GAP, Math.max(TIGHT_GAP, mix(TIGHT_GAP, maxGap, open)), spread);
+    const centres: number[] = [];
+    let at = 0;
+    widths.forEach((w) => {
+      centres.push(at + w / 2);
+      at += w + gap;
+    });
+    const pivot =
+      n % 2 ? centres[(n - 1) / 2] : (centres[n / 2 - 1] + centres[n / 2]) / 2;
+    const equal = centres.map((c) => c - pivot + total / 2);
+
+    /* word centres at equal steps, mirrored about the crown */
+    let tightStep = 0;
+    for (let i = 0; i < n - 1; i++) {
+      tightStep = Math.max(tightStep, (widths[i] + widths[i + 1]) / 2 + TIGHT_GAP);
+    }
+    const outer = Math.max(widths[0], widths[n - 1]) / 2;
+    const maxStep = (span / 2 - outer) / half;
+    const step = mix(tightStep, Math.max(tightStep, mix(tightStep, maxStep, open)), spread);
+    const mirrored = widths.map((_, i) => total / 2 + (i - (n - 1) / 2) * step);
+
+    if (phone) {
+      /* equal gaps, whole phrase centred on the path */
+      const used = widths.reduce((sum, w) => sum + w, 0);
+      const fullGap = Math.max(TIGHT_GAP, (span - used) / Math.max(1, n - 1));
+      const g = mix(TIGHT_GAP, fullGap, spread);
+      let x = (total - (used + g * (n - 1))) / 2;
+      offsets = widths.map((w) => {
+        const mid = x + w / 2;
+        x += w + g;
         return mid;
       });
-    };
-    const tightLen = used + TIGHT_GAP * (words.length - 1);
-    setLayout({
-      tight: place((total - tightLen) / 2, TIGHT_GAP),
-      wide: place((total - wideLen) / 2, gap),
-    });
-  }, [arc, fontsReady]);
+    } else {
+      offsets = equal.map((e, i) => mix(e, mirrored[i], BALANCE));
+    }
+  }
 
   /* scroll progress: 0 as the dome enters from below, 1 when its crown
      reaches the top of the viewport */
@@ -164,7 +227,10 @@ export function BenefitsIntro() {
           <defs>
             <path ref={arcRef} id="benefits-arc" d={arc} fill="none" />
           </defs>
-          <text className={styles.curvedText}>
+          <text
+            className={styles.curvedText}
+            style={{ "--title-scale": scale.toFixed(3) } as React.CSSProperties}
+          >
             {words.map((word, i) => (
               <textPath
                 key={word + i}
@@ -172,11 +238,7 @@ export function BenefitsIntro() {
                   wordRefs.current[i] = el;
                 }}
                 href="#benefits-arc"
-                startOffset={
-                  layout
-                    ? (layout.tight[i] + (layout.wide[i] - layout.tight[i]) * spread).toFixed(1)
-                    : `${fallbackOffsets[i]}%`
-                }
+                startOffset={offsets ? offsets[i].toFixed(1) : `${fallbackOffsets[i]}%`}
                 textAnchor="middle"
               >
                 {word}
