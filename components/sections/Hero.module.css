@@ -269,8 +269,12 @@
 /* ------------------------------------------------------------- responsive */
 
 @media (max-width: 991px) {
-  /* as on the desktop: the dome's crown arrives after about one screen */
-  .section { height: 240vh; }
+  /*
+   * The benefits dome is pulled up 123vh over this section, so the crown
+   * appears once 240 - 123 = 117vh has passed — about a swipe and a half.
+   * At 185 it arrives after about 60vh: one swipe.
+   */
+  .section { height: 185vh; }
 
   /*
    * A shorter render layer: at 144vh, scaled, a phone was compositing a
