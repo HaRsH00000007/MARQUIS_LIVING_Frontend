@@ -77,6 +77,18 @@ export function Hero() {
     if (!el) return;
     let frame = 0;
 
+    /*
+     * A phone composites the render at `--zoom-range` times the screen every
+     * frame; at the desktop's 2x that is a surface several times the screen on
+     * a device with a fraction of the memory bandwidth, and the scroll drags.
+     * A third of the zoom there keeps the move without the cost.
+     */
+    const phone = window.matchMedia("(max-width: 991px)");
+    const setZoomRange = () =>
+      el.style.setProperty("--zoom-range", phone.matches ? "0.35" : String(ZOOM_TO - 1));
+    setZoomRange();
+    phone.addEventListener("change", setZoomRange);
+
     const update = () => {
       frame = 0;
       const rect = el.getBoundingClientRect();
@@ -96,6 +108,7 @@ export function Hero() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", update);
     return () => {
+      phone.removeEventListener("change", setZoomRange);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", update);
       if (frame) cancelAnimationFrame(frame);

@@ -273,15 +273,20 @@
   .section { height: 240vh; }
 
   /*
-   * No masked corners here. The band that keeps the centre column clear is
-   * 44% of the screen on desktop, where the corner statements sit out in the
-   * margins; on a phone the lockup alone is 84% wide, so that band cut the top
-   * off it. The whole width stays clear instead — the header paints over this
-   * layer anyway, so nothing needs dissolving out of its way.
+   * A shorter render layer: at 144vh, scaled, a phone was compositing a
+   * surface close to three screens tall on every frame of the scroll.
+   */
+  .bgInner { height: 116vh; }
+
+  /*
+   * No mask at all here. The band that keeps the centre column clear is a
+   * desktop composition — on a phone it covered the full width anyway, and a
+   * mask over a layer that slides 80vh is composited afresh on every frame,
+   * which is a large part of why the scroll dragged.
    */
   .copyMask {
-    --header-clear: calc(var(--u-16) * 2 + var(--u-96));
-    --mask-center: 100%;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   /*
@@ -290,7 +295,13 @@
    */
   /* the lockup centred and at full width here: the desktop squeeze and its
      nudge right of the centre line are a wide-screen composition */
-  .lockup { width: 84vw; height: calc(84vw * 235 / 723); translate: none; }
+  /* one shadow rather than two: each is a blur pass over the moving layer */
+  .lockup {
+    width: 84vw;
+    height: calc(84vw * 235 / 723);
+    translate: none;
+    filter: drop-shadow(0 1px 3px rgba(8, 6, 5, 0.8));
+  }
   .tagline { font-size: 5.4vw; }
   .strapSmall { font-size: 3.2vw; }
   .strapLarge { font-size: 4.6vw; }
