@@ -57,6 +57,15 @@ const cycleAt = (p: number, last: number) => {
   const span = CYCLE_START[cycle + 1] - CYCLE_START[cycle];
   return { cycle, local: clamp((p - CYCLE_START[cycle]) / (span || 1)) };
 };
+/**
+ * Touch only: how much of the gap to the finger's position the book closes per
+ * 60fps frame. Touch scrolling is native (Lenis smooths the wheel alone), so
+ * the page turns followed the raw scroll steps and stuttered; easing the
+ * book's progress toward the scroll smooths them without delaying the pin.
+ */
+const TOUCH_EASE = 0.2;
+/** A gap larger than this (a jump, or re-entering the section) is snapped. */
+const TOUCH_SNAP = 0.15;
 /** How far the right page swings over the spine. */
 const TURN_DEG = 164;
 /** Seconds per page when the book closes back to its first spread. */
@@ -113,6 +122,17 @@ export function Book() {
     const veilBottom = sticky.querySelector<HTMLElement>("[data-veil-bottom]");
     const backdrop = sticky.querySelector<HTMLElement>("[data-portal-backdrop]");
     const last = spreads.length - 1;
+    /* looked up once: the scroll handler reads these on every frame */
+    const parts = spreads.map((spread) => ({
+      imagePage: spread.querySelector<HTMLElement>("[data-image-page]"),
+      copyPage: spread.querySelector<HTMLElement>("[data-copy-page]"),
+      cta: spread.querySelector<HTMLElement>("[data-page-cta]"),
+      printed: spread.querySelector<HTMLElement>("[data-photo]"),
+    }));
+    const touch = window.matchMedia("(pointer: coarse)");
+    /* the progress drawn, eased toward the scroll's on touch; -1 = snap next */
+    let shownP = -1;
+    let lastTime = 0;
 
     let frame = 0;
     let shownFrame = -1;
@@ -173,6 +193,9 @@ export function Book() {
         onComplete: () => {
           rewind = null;
           rewindTween = null;
+          // the scroll was parked at the rest point: start from there, rather
+          // than easing across the pages that were just turned back
+          shownP = -1;
           lenis?.start();
           lastY = window.scrollY;
           update();
@@ -195,9 +218,31 @@ export function Book() {
       const vh = window.innerHeight;
       const rect = section.getBoundingClientRect();
       // off screen entirely: nothing to draw
-      if (rect.bottom < -vh || rect.top > vh * 2) return;
+      if (rect.bottom < -vh || rect.top > vh * 2) {
+        shownP = -1;
+        return;
+      }
 
-      const p = clamp(-rect.top / Math.max(1, section.offsetHeight - vh));
+      const target = clamp(-rect.top / Math.max(1, section.offsetHeight - vh));
+      const now = performance.now();
+      if (
+        !touch.matches ||
+        shownP < 0 ||
+        rewind ||
+        isScrollJump() ||
+        Math.abs(target - shownP) > TOUCH_SNAP
+      ) {
+        shownP = target;
+      } else {
+        // frame-rate independent: TOUCH_EASE per 60fps frame
+        const dt = Math.min(100, now - lastTime || 16.7);
+        shownP += (target - shownP) * (1 - Math.pow(1 - TOUCH_EASE, dt / 16.7));
+        if (Math.abs(target - shownP) < 0.0002) shownP = target;
+      }
+      lastTime = now;
+      // still catching up with the finger: draw again next frame
+      if (shownP !== target) frame = requestAnimationFrame(update);
+      const p = shownP;
       const at = cycleAt(p, last);
       let cycle = at.cycle;
       const local = at.local;
@@ -236,8 +281,7 @@ export function Book() {
       spreads.forEach((spread, i) => {
         spread.style.zIndex = i === cycle ? "3" : i === cycle + 1 ? "2" : "1";
         spread.style.opacity = i === cycle ? "1" : i === cycle + 1 ? turn.toFixed(4) : "0";
-        const imagePage = spread.querySelector<HTMLElement>("[data-image-page]");
-        const copyPage = spread.querySelector<HTMLElement>("[data-copy-page]");
+        const { imagePage, copyPage, cta } = parts[i];
         const t = i === cycle ? turn : 0;
         if (imagePage) {
           imagePage.style.transform = t
@@ -247,7 +291,6 @@ export function Book() {
         if (copyPage) copyPage.style.opacity = (1 - t * 0.32).toFixed(4);
         // spreads ignore the pointer; only the spread on top, at rest on its
         // page (not zoomed, not turning), lets its "See our work" link be clicked
-        const cta = spread.querySelector<HTMLElement>("[data-page-cta]");
         if (cta) {
           const live = i === cycle && zoom < 0.02 && turn < 0.02;
           cta.style.pointerEvents = live ? "auto" : "none";
@@ -262,7 +305,7 @@ export function Book() {
         shownFrame = -1;
       }
       if (zoom > 0.001) {
-        const printed = spreads[cycle].querySelector<HTMLElement>("[data-photo]");
+        const printed = parts[cycle].printed;
         const live = frames[cycle];
         if (printed && live) {
           const r = printed.getBoundingClientRect();
@@ -444,6 +487,10 @@ export function Book() {
                     alt={spread.alt}
                     fill
                     sizes="(max-width: 991px) 45vw, 30vw"
+                    /* eager: the later spreads sit hidden until their turn,
+                       and a photo still loading or decoding as its page came
+                       into view stalled the turn */
+                    loading="eager"
                     className={styles.photoImg}
                   />
                 </div>

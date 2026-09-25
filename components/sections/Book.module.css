@@ -146,6 +146,9 @@
   opacity: 0;
   pointer-events: none;
   transform-style: preserve-3d;
+  /* each spread fades in under a turning page: its own layer from the start,
+     so the first frame of that fade does not stall on building one */
+  will-change: opacity;
 }
 
 /* the first spread shows before the script has run */
@@ -173,6 +176,9 @@
   box-shadow: inset 18px 0 28px -30px rgba(81, 72, 61, 0.6);
   transform-origin: left center;
   backface-visibility: hidden;
+  /* promoted up front: the turn is a 3D rotation, and a page that only got
+     its layer on the first frame of it hitched as it started to move */
+  will-change: transform;
 }
 
 .pageLabel {
