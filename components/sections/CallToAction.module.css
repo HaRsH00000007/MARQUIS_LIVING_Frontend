@@ -63,7 +63,7 @@
 
 @media (max-width: 991px) {
   /* the reference switches this column to `aspect-ratio: 2/6` below 992 (the
-     footer clip narrows to `inset(4% 32% 4% 32%)` there — see Footer) */
+     footer clip narrows to `inset(4% 12% 4% 12%)` there — see Footer) */
   .inner { aspect-ratio: 2 / 6; }
   .lead { max-width: 100%; }
 }

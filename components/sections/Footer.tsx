@@ -60,19 +60,28 @@ export function Footer() {
       const p = state.p;
       if (clipEl) {
         /* v, h: the clip's inset (%); m: the render's scale once fully in */
-        const [v, h, m] = desktop.matches ? [8, 22, 0.84] : [4, 32, 0.86];
+        const [v, h, m] = desktop.matches ? [8, 22, 0.84] : [4, 12, 0.76];
         clipEl.style.clipPath =
           p > 0 ? `inset(${p * v}% ${p * h}% ${p * v}% ${p * h}%)` : "";
         /*
-         * Uniform, so the render is not squashed, and about the centre, which
-         * is the clip's centre too since the inset is even. `m` is bounded by
-         * the box's height, not its width: the render must still fill the box
-         * top to bottom with the CTA's parallax where it is when the footer
-         * has fully arrived. Measured there, the floor is ~0.78 on the
-         * desktop and ~0.82 on a phone; these leave a margin above it.
+         * Uniform, so the render is not squashed.
+         *
+         * Desktop: about the centre (the clip's centre too, the inset being
+         * even), and bounded by the box's height: the render must still fill
+         * it top to bottom with the CTA's parallax where it is once the footer
+         * is in. The floor measured there is ~0.78; 0.84 leaves a margin.
+         *
+         * Phone: the box is a strip taller than the screen that narrows far
+         * more than it shortens, so a scale bounded by its height (~0.86) read
+         * as no shrink at all. Here the render shrinks with the box's width
+         * (0.76 = 1 - 2 x 12%), about the box's bottom edge — the part on
+         * screen as the footer arrives. What it gives up is the top of the
+         * box, which is above the screen by then.
          */
         if (mediaEl) {
           mediaEl.style.transform = p > 0 ? `scale(${1 - p * (1 - m)})` : "";
+          mediaEl.style.transformOrigin =
+            p > 0 && !desktop.matches ? `50% ${100 - p * v}%` : "";
         }
       }
       inner.style.opacity = String(p);
@@ -112,7 +121,10 @@ export function Footer() {
       gsap.ticker.remove(tick);
       gsap.killTweensOf(state);
       if (clipEl) clipEl.style.clipPath = "";
-      if (mediaEl) mediaEl.style.transform = "";
+      if (mediaEl) {
+        mediaEl.style.transform = "";
+        mediaEl.style.transformOrigin = "";
+      }
     };
   }, []);
 
