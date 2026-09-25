@@ -6,6 +6,7 @@ import { hero } from "@/lib/content";
 import { SplitReveal, FadeIn } from "../ui/Reveal";
 import { ButtonCircle } from "../ui/Buttons";
 import { useReveal } from "@/hooks/useReveal";
+import { gsap } from "@/lib/gsap";
 import {
   COPY_TRAVEL_VH,
   PARALLAX_VH,
@@ -75,7 +76,6 @@ export function Hero() {
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    let frame = 0;
 
     /*
      * A phone composites the render at `--zoom-range` times the screen every
@@ -89,29 +89,35 @@ export function Hero() {
     setZoomRange();
     phone.addEventListener("change", setZoomRange);
 
+    let last = -1;
+
     const update = () => {
-      frame = 0;
       const rect = el.getBoundingClientRect();
+      /* off screen: nothing to place, and nothing to pay for */
+      if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
       const distance = el.offsetHeight - window.innerHeight;
       const p = distance > 0 ? Math.min(1, Math.max(0, -rect.top / distance)) : 0;
+      if (Math.abs(p - last) < 0.0001) return;
+      last = p;
       el.style.setProperty("--hero-p", p.toFixed(4));
       el.style.setProperty("--hero-copy", copyEase(p).toFixed(4));
       el.style.setProperty("--hero-parallax", parallaxEase(p).toFixed(4));
       el.style.setProperty("--hero-zoom", zoomEase(p).toFixed(4));
     };
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(update);
-    };
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    /*
+     * On the ticker, not on scroll events. Lenis moves the page from this same
+     * frame loop, so reading the section's position here places the copy and
+     * the render against the scroll position actually being painted. Driven by
+     * scroll events the two ran a frame or two apart — on a phone, where those
+     * events arrive in bursts, the copy visibly stepped rather than glided.
+     */
+    gsap.ticker.add(update);
     window.addEventListener("resize", update);
     return () => {
       phone.removeEventListener("change", setZoomRange);
-      window.removeEventListener("scroll", onScroll);
+      gsap.ticker.remove(update);
       window.removeEventListener("resize", update);
-      if (frame) cancelAnimationFrame(frame);
     };
   }, []);
 
