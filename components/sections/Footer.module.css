@@ -144,10 +144,22 @@
 /* ---------------------------------------------------------- responsive ---- */
 
 @media (max-width: 991px) {
-  /* a full screen on the reference at 390 too */
-  .section { min-height: var(--vh100); }
+  /*
+   * Sized to its contents, not to a screen: the panel's copy is shorter than
+   * that here, and the difference showed as empty ground under the last line.
+   *
+   * The top padding carries `--footer-overlap` because the panel is pulled up
+   * by exactly that much over the CTA — without it the copy starts inside the
+   * overlapped strip and disappears behind the render.
+   */
+  .section { min-height: 0; }
 
-  .inner { min-height: var(--vh100); padding-block: var(--u-96) var(--u-48); gap: var(--u-96); }
+  .inner {
+    min-height: 0;
+    justify-content: flex-start;
+    padding-block: calc(var(--footer-overlap) + var(--u-64)) var(--u-64);
+    gap: var(--u-64);
+  }
 
   .contact { position: static; inset: auto; }
 

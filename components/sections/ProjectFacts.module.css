@@ -131,7 +131,12 @@
 /* ------------------------------------------------------------- responsive */
 
 @media (max-width: 991px) {
-  .section { padding-block: var(--u-64) var(--u-80); }
+  .section { padding-block: var(--u-32) var(--u-80); }
+
+  /* the rule above the strapline is two grid cells on the desktop — a screenful
+     of empty burgundy over "Delivered, not just promised" at phone scale */
+  .section :global(.divider) { height: var(--u-48); }
+  .section :global(.u-48) { height: var(--u-16); }
 
   .leadWrap { width: 100%; }
 

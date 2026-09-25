@@ -311,13 +311,25 @@
    * direction is a column — was pinning every line to the right edge. Centred
    * instead, with the statements reading as one block above the button.
    */
+  /*
+   * Evenly spaced down the screen rather than pinned to percentages: the copy
+   * layer is already a `space-between` column, so the lockup, the tagline and
+   * the statements each take their share of it, and the top padding clears the
+   * badge and the menu button.
+   */
+  .screen {
+    justify-content: space-between;
+    padding-block: calc(var(--u-96) + var(--u-72)) var(--u-64);
+  }
+
+  .title,
+  .tagline,
+  .straps { position: static; }
+
   .straps {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* the block is anchored lower again, since the button now hangs well
-       below the three statements */
-    inset: auto 0 14%;
     gap: var(--u-32);
     text-align: center;
   }
@@ -325,13 +337,10 @@
   .left,
   .right { text-align: center; }
   /* on phones the CTA follows both statements */
-  /* the button sits clear below the three statements, not tucked under them */
-  .strapCta { order: 1; margin-bottom: 0; margin-top: calc(var(--u-160) + var(--u-48)); }
+  .strapCta { order: 1; margin-bottom: 0; margin-top: var(--u-32); }
 
   /* the three blocks evenly spaced down the screen rather than bunched at the
      top: wordmark, tagline, then the statements and the button */
-  /* clear of the badge and the menu button in the corners above it */
-  .title { inset: 17% 0 auto; }
-  .tagline { inset: 34% 0 auto; padding-inline: var(--offset); }
+  .tagline { padding-inline: var(--offset); }
   .strapLarge { margin-top: var(--u-4); }
 }

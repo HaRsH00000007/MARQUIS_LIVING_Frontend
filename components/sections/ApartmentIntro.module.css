@@ -14,4 +14,14 @@
   /* the full column: `.lead` named no element here, so the desktop 59.5%
      measure was left standing and the statement set in a 205px column */
   .leadWrap { width: 100%; }
+
+  /*
+   * The rule above the strapline is drawn at two grid cells and the run-in
+   * above it at desktop measures — together most of a screen of empty ground
+   * over "The approach" on a phone.
+   */
+  .section { padding-block: var(--u-48) var(--u-64); }
+  .section :global(.divider) { height: var(--u-48); }
+  .section :global(.u-160) { height: var(--u-64); }
+  .section :global(.u-96) { height: var(--u-48); }
 }
