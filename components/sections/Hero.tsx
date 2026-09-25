@@ -63,7 +63,6 @@ export function Hero() {
    * began moving further per pixel.
    */
   const stage = {
-    "--hero-p": 0,
     "--hero-copy": 0,
     "--hero-parallax": 0,
     "--hero-zoom": 0,
@@ -76,6 +75,15 @@ export function Hero() {
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
+    /*
+     * The two layers that move. Each frame's values are written onto these
+     * two as plain transforms. They used to be custom properties set on the
+     * section, and a custom property inherits: every write restyled the whole
+     * hero — each split-reveal word and line included — on every frame, which
+     * a phone could not keep up with.
+     */
+    const render = el.querySelector<HTMLElement>("[data-hero-render]");
+    const screen = el.querySelector<HTMLElement>("[data-hero-screen]");
 
     /*
      * A phone composites the render at `--zoom-range` times the screen every
@@ -84,12 +92,15 @@ export function Hero() {
      * A third of the zoom there keeps the move without the cost.
      */
     const phone = window.matchMedia("(max-width: 991px)");
-    const setZoomRange = () =>
-      el.style.setProperty("--zoom-range", phone.matches ? "0.35" : String(ZOOM_TO - 1));
+    let zoomRange = ZOOM_TO - 1;
+    let last = -1;
+    const setZoomRange = () => {
+      zoomRange = phone.matches ? 0.35 : ZOOM_TO - 1;
+      el.style.setProperty("--zoom-range", String(zoomRange));
+      last = -1; // redraw at the new range
+    };
     setZoomRange();
     phone.addEventListener("change", setZoomRange);
-
-    let last = -1;
 
     const update = () => {
       const rect = el.getBoundingClientRect();
@@ -99,10 +110,17 @@ export function Hero() {
       const p = distance > 0 ? Math.min(1, Math.max(0, -rect.top / distance)) : 0;
       if (Math.abs(p - last) < 0.0001) return;
       last = p;
-      el.style.setProperty("--hero-p", p.toFixed(4));
-      el.style.setProperty("--hero-copy", copyEase(p).toFixed(4));
-      el.style.setProperty("--hero-parallax", parallaxEase(p).toFixed(4));
-      el.style.setProperty("--hero-zoom", zoomEase(p).toFixed(4));
+      /* the same transforms the stylesheet spells with custom properties
+         (Hero.module.css), with the values filled in */
+      if (screen) {
+        screen.style.transform = `translate3d(0, ${(COPY_TRAVEL_VH * 100 * copyEase(p)).toFixed(3)}vh, 0)`;
+      }
+      if (render) {
+        const y = (PARALLAX_VH * 100 * parallaxEase(p)).toFixed(3);
+        const zoom = (1 + zoomRange * zoomEase(p)).toFixed(4);
+        // `--hero-intro` is the preloader's entry scale, set on this element
+        render.style.transform = `translate3d(0, ${y}vh, 0) scale(calc(${zoom} * var(--hero-intro, 1)))`;
+      }
     };
 
     /*
@@ -149,7 +167,7 @@ export function Hero() {
       {/* The mask layer stays put while the copy slides through it, so the
           corner statements dissolve before they reach the fixed header. */}
       <div className={styles.copyMask}>
-      <div className={styles.screen}>
+      <div className={styles.screen} data-hero-screen>
         <div className={styles.title}>
           <HeroLockup />
         </div>
