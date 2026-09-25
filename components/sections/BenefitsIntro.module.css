@@ -61,10 +61,14 @@
 .mark { width: var(--u-48); height: var(--u-48); }
 
 @media (max-width: 991px) {
-  /* the arch climbs the hero here too — 1.23 screens on the reference.
+  /* the arch climbs the hero here too, but only by 85vh against the hero's
+     185vh (Hero.module.css), so the crown starts exactly at the bottom of the
+     first screen: nothing of the dome shows on load, and it rises into view
+     on the first scroll, as on the desktop. At the old 123vh it began 62vh
+     down the page, already on screen before any scroll.
      The crown is 45vw deep at this width, so the arc of type starts below it
      rather than riding over the curve, where `clip` cut its caps off. */
-  .section { margin-top: -123vh; padding-block: 38vw var(--u-24); }
+  .section { margin-top: -85vh; padding-block: 38vw var(--u-24); }
   .lockup { gap: var(--u-24); }
   /*
    * Narrower than the dome: at full width the arc's ends ("DESIGNED", "LIFE")

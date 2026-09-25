@@ -270,9 +270,10 @@
 
 @media (max-width: 991px) {
   /*
-   * The benefits dome is pulled up 123vh over this section, so the crown
-   * appears once 240 - 123 = 117vh has passed — about a swipe and a half.
-   * At 185 it arrives after about 60vh: one swipe.
+   * The benefits dome is pulled up 85vh over this section, so its crown
+   * starts at 185 - 85 = 100vh: just below the first screen. It rises into
+   * view on the first scroll and is well up after about one swipe. Change
+   * the two together, or the dome shows on load (below 100) or lags (above).
    */
   .section { height: 185vh; }
 
