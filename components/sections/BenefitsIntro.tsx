@@ -19,11 +19,14 @@ import styles from "./BenefitsIntro.module.css";
  * layouts are blended by `BALANCE`: equal gaps between the words, and word
  * centres at equal steps mirrored about the crown (even ends, uneven gaps).
  *
- * On a phone the arc is short and the type large, so pivoting on the crown
- * left "DESIGNED AROUND" hanging much further down the left shoulder than
- * "YOUR LIFE" on the right, and the title read as shifted left. There the
- * whole phrase is centred instead, with equal gaps, so both ends sit the same
- * distance from the dome's edge.
+ * The blend alone still left "DESIGNED" reaching further down the left
+ * shoulder than "LIFE" on the right, so the result is then slid along the path
+ * until both ends sit the same distance from the dome's edge.
+ *
+ * On a phone the arc is short and the type large, so the blend is dropped:
+ * equal gaps, the whole phrase centred, then nudged right by `PHONE_NUDGE`.
+ * Even with both ends centred, the heavy "DESIGNED AROUND" half made the
+ * title read as sitting left of the lockup below it.
  *
  * Scroll scrub: as the dome rises, the words start gathered at the crown and
  * stretch apart along the rim until the title runs from the dome's left
@@ -53,6 +56,9 @@ const OPEN_GAP = 0.6;
 const MIN_SCALE = 0.45;
 /* 0 = equal gaps between words, 1 = word centres mirrored about the crown */
 const BALANCE = 0.5;
+/* phone only: optical nudge to the right, as a share of the path length.
+   Must stay under END_PAD or "LIFE" runs off the end of the path. */
+const PHONE_NUDGE = 0.025;
 
 const words = benefitsIntro.curvedTitle.split(" ");
 /* first paint, before measuring: spread the words evenly */
@@ -167,18 +173,24 @@ export function BenefitsIntro() {
     const mirrored = widths.map((_, i) => total / 2 + (i - (n - 1) / 2) * step);
 
     if (phone) {
-      /* equal gaps, whole phrase centred on the path */
+      /* equal gaps, whole phrase centred on the path, then nudged right */
       const used = widths.reduce((sum, w) => sum + w, 0);
       const fullGap = Math.max(TIGHT_GAP, (span - used) / Math.max(1, n - 1));
       const g = mix(TIGHT_GAP, fullGap, spread);
-      let x = (total - (used + g * (n - 1))) / 2;
+      let x = (total - (used + g * (n - 1))) / 2 + total * PHONE_NUDGE;
       offsets = widths.map((w) => {
         const mid = x + w / 2;
         x += w + g;
         return mid;
       });
     } else {
-      offsets = equal.map((e, i) => mix(e, mirrored[i], BALANCE));
+      const blended = equal.map((e, i) => mix(e, mirrored[i], BALANCE));
+      /* slide along the path until both ends are equally far from the crown,
+         keeping the gaps */
+      const start = blended[0] - widths[0] / 2;
+      const end = blended[n - 1] + widths[n - 1] / 2;
+      const shift = (total - end - start) / 2;
+      offsets = blended.map((o) => o + shift);
     }
   }
 
