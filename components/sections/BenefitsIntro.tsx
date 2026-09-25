@@ -24,9 +24,9 @@ import styles from "./BenefitsIntro.module.css";
  * until both ends sit the same distance from the dome's edge.
  *
  * On a phone the arc is short and the type large, so the blend is dropped:
- * equal gaps, the whole phrase centred, then nudged right by `PHONE_NUDGE`.
- * Even with both ends centred, the heavy "DESIGNED AROUND" half made the
- * title read as sitting left of the lockup below it.
+ * equal gaps, the whole phrase centred. On both, the first "D" and the last
+ * "E" sit at mirrored points of the arc, so they are level with each other
+ * (an earlier sideways nudge on the phone dropped the "E" below the "D").
  *
  * Scroll scrub: as the dome rises, the words start gathered at the crown and
  * stretch apart along the rim until the title runs from the dome's left
@@ -56,13 +56,82 @@ const OPEN_GAP = 0.6;
 const MIN_SCALE = 0.45;
 /* 0 = equal gaps between words, 1 = word centres mirrored about the crown */
 const BALANCE = 0.5;
-/* phone only: optical nudge to the right, as a share of the path length.
-   Must stay under END_PAD or "LIFE" runs off the end of the path. */
-const PHONE_NUDGE = 0.025;
 
 const words = benefitsIntro.curvedTitle.split(" ");
 /* first paint, before measuring: spread the words evenly */
 const fallbackOffsets = words.map((_, i) => ((i + 0.5) / words.length) * 100);
+
+/* word centres along the path for a given spread and type size */
+function layoutWords(
+  metrics: { total: number; widths: number[] },
+  spread: number,
+  scale: number,
+): number[] {
+  const { total } = metrics;
+  const widths = metrics.widths.map((w) => w * scale);
+  const span = total * (1 - END_PAD * 2);
+  /* the words stand further apart on a phone, where the arc is short and
+     four words set close together read as one block of type */
+  const phone =
+    typeof window !== "undefined" && window.matchMedia("(max-width: 991px)").matches;
+  const open = phone ? 1 : OPEN_GAP;
+  const n = words.length;
+  const half = Math.max(0.5, (n - 1) / 2); // gaps on each side of the crown
+  const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+
+  /* equal gaps, with the middle of the phrase on the crown */
+  const sideW = (from: number, to: number) => {
+    let w = 0;
+    for (let i = from; i < to; i++) w += widths[i];
+    /* an odd middle word straddles the crown: half of it on each side */
+    return n % 2 ? w + widths[(n - 1) / 2] / 2 : w;
+  };
+  const longSide = Math.max(sideW(0, Math.floor(n / 2)), sideW(Math.ceil(n / 2), n));
+  const maxGap = (span / 2 - longSide) / half;
+  const gap = mix(TIGHT_GAP, Math.max(TIGHT_GAP, mix(TIGHT_GAP, maxGap, open)), spread);
+  const centres: number[] = [];
+  let at = 0;
+  widths.forEach((w) => {
+    centres.push(at + w / 2);
+    at += w + gap;
+  });
+  const pivot =
+    n % 2 ? centres[(n - 1) / 2] : (centres[n / 2 - 1] + centres[n / 2]) / 2;
+  const equal = centres.map((c) => c - pivot + total / 2);
+
+  /* word centres at equal steps, mirrored about the crown */
+  let tightStep = 0;
+  for (let i = 0; i < n - 1; i++) {
+    tightStep = Math.max(tightStep, (widths[i] + widths[i + 1]) / 2 + TIGHT_GAP);
+  }
+  const outer = Math.max(widths[0], widths[n - 1]) / 2;
+  const maxStep = (span / 2 - outer) / half;
+  const step = mix(tightStep, Math.max(tightStep, mix(tightStep, maxStep, open)), spread);
+  const mirrored = widths.map((_, i) => total / 2 + (i - (n - 1) / 2) * step);
+
+  if (phone) {
+    /* equal gaps, whole phrase centred on the path. No sideways nudge: the
+       path is symmetric, so centring puts the first "D" and the last "E" at
+       mirrored points, level with each other. */
+    const used = widths.reduce((sum, w) => sum + w, 0);
+    const fullGap = Math.max(TIGHT_GAP, (span - used) / Math.max(1, n - 1));
+    const g = mix(TIGHT_GAP, fullGap, spread);
+    let x = (total - (used + g * (n - 1))) / 2;
+    return widths.map((w) => {
+      const mid = x + w / 2;
+      x += w + g;
+      return mid;
+    });
+  } else {
+    const blended = equal.map((e, i) => mix(e, mirrored[i], BALANCE));
+    /* slide along the path until both ends are equally far from the crown,
+       keeping the gaps */
+    const start = blended[0] - widths[0] / 2;
+    const end = blended[n - 1] + widths[n - 1] / 2;
+    const shift = (total - end - start) / 2;
+    return blended.map((o) => o + shift);
+  }
+}
 
 export function BenefitsIntro() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,13 +139,35 @@ export function BenefitsIntro() {
   const arcRef = useRef<SVGPathElement>(null);
   const wordRefs = useRef<(SVGTextPathElement | null)[]>([]);
   const [arc, setArc] = useState("M 124,250 A 432,402 0 0 1 876,250");
+  const textRef = useRef<SVGTextElement>(null);
+  /*
+   * Scroll drives the title straight on the DOM, not through React state: a
+   * state update per frame re-rendered the whole section (the strapline's
+   * split reveal included) on every scroll tick, which is what made it lag.
+   */
   /* path length, and each word's width at full type size */
-  const [metrics, setMetrics] = useState<{ total: number; widths: number[] } | null>(null);
-  const [spread, setSpread] = useState(0);
-  const scale = MIN_SCALE + (1 - MIN_SCALE) * spread;
-  /* the scale the words were painted at, so measured widths can be normalised */
-  const scaleRef = useRef(scale);
-  scaleRef.current = scale;
+  const metricsRef = useRef<{ total: number; widths: number[] } | null>(null);
+  const spreadRef = useRef(0);
+  /* the scale the words are painted at, so measured widths can be normalised */
+  const scaleRef = useRef(MIN_SCALE);
+  /* last values written, so an unchanged frame writes nothing */
+  const paintedRef = useRef({ spread: -1, metrics: null as unknown });
+
+  const paint = () => {
+    const metrics = metricsRef.current;
+    const spread = spreadRef.current;
+    const painted = paintedRef.current;
+    if (!metrics || (painted.metrics === metrics && Math.abs(painted.spread - spread) < 0.0005)) {
+      return;
+    }
+    painted.spread = spread;
+    painted.metrics = metrics;
+    const scale = MIN_SCALE + (1 - MIN_SCALE) * spread;
+    scaleRef.current = scale;
+    textRef.current?.style.setProperty("--title-scale", scale.toFixed(3));
+    const offsets = layoutWords(metrics, spread, scale);
+    wordRefs.current.forEach((w, i) => w?.setAttribute("startOffset", offsets[i].toFixed(1)));
+  };
 
   /* trace the dome's rim in the SVG's own coordinates */
   useLayoutEffect(() => {
@@ -121,78 +212,12 @@ export function BenefitsIntro() {
     const path = arcRef.current;
     if (!path) return;
     const s = scaleRef.current;
-    setMetrics({
+    metricsRef.current = {
       total: path.getTotalLength(),
       widths: wordRefs.current.map((w) => (w?.getComputedTextLength() ?? 0) / s),
-    });
-  }, [arc, fontsReady]);
-
-  /* word centres along the path for the current spread and type size */
-  let offsets: number[] | null = null;
-  if (metrics) {
-    const { total } = metrics;
-    const widths = metrics.widths.map((w) => w * scale);
-    const span = total * (1 - END_PAD * 2);
-    /* the words stand further apart on a phone, where the arc is short and
-       four words set close together read as one block of type */
-    const phone =
-      typeof window !== "undefined" && window.matchMedia("(max-width: 991px)").matches;
-    const open = phone ? 1 : OPEN_GAP;
-    const n = words.length;
-    const half = Math.max(0.5, (n - 1) / 2); // gaps on each side of the crown
-    const mix = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    /* equal gaps, with the middle of the phrase on the crown */
-    const sideW = (from: number, to: number) => {
-      let w = 0;
-      for (let i = from; i < to; i++) w += widths[i];
-      /* an odd middle word straddles the crown: half of it on each side */
-      return n % 2 ? w + widths[(n - 1) / 2] / 2 : w;
     };
-    const longSide = Math.max(sideW(0, Math.floor(n / 2)), sideW(Math.ceil(n / 2), n));
-    const maxGap = (span / 2 - longSide) / half;
-    const gap = mix(TIGHT_GAP, Math.max(TIGHT_GAP, mix(TIGHT_GAP, maxGap, open)), spread);
-    const centres: number[] = [];
-    let at = 0;
-    widths.forEach((w) => {
-      centres.push(at + w / 2);
-      at += w + gap;
-    });
-    const pivot =
-      n % 2 ? centres[(n - 1) / 2] : (centres[n / 2 - 1] + centres[n / 2]) / 2;
-    const equal = centres.map((c) => c - pivot + total / 2);
-
-    /* word centres at equal steps, mirrored about the crown */
-    let tightStep = 0;
-    for (let i = 0; i < n - 1; i++) {
-      tightStep = Math.max(tightStep, (widths[i] + widths[i + 1]) / 2 + TIGHT_GAP);
-    }
-    const outer = Math.max(widths[0], widths[n - 1]) / 2;
-    const maxStep = (span / 2 - outer) / half;
-    const step = mix(tightStep, Math.max(tightStep, mix(tightStep, maxStep, open)), spread);
-    const mirrored = widths.map((_, i) => total / 2 + (i - (n - 1) / 2) * step);
-
-    if (phone) {
-      /* equal gaps, whole phrase centred on the path, then nudged right */
-      const used = widths.reduce((sum, w) => sum + w, 0);
-      const fullGap = Math.max(TIGHT_GAP, (span - used) / Math.max(1, n - 1));
-      const g = mix(TIGHT_GAP, fullGap, spread);
-      let x = (total - (used + g * (n - 1))) / 2 + total * PHONE_NUDGE;
-      offsets = widths.map((w) => {
-        const mid = x + w / 2;
-        x += w + g;
-        return mid;
-      });
-    } else {
-      const blended = equal.map((e, i) => mix(e, mirrored[i], BALANCE));
-      /* slide along the path until both ends are equally far from the crown,
-         keeping the gaps */
-      const start = blended[0] - widths[0] / 2;
-      const end = blended[n - 1] + widths[n - 1] / 2;
-      const shift = (total - end - start) / 2;
-      offsets = blended.map((o) => o + shift);
-    }
-  }
+    paint();
+  }, [arc, fontsReady]);
 
   /* scroll progress: 0 as the dome enters from below, 1 when its crown
      reaches the top of the viewport */
@@ -207,7 +232,8 @@ export function BenefitsIntro() {
       const top = el.getBoundingClientRect().top;
       const p = Math.min(1, Math.max(0, (viewH - top) / viewH));
       // ease-out so the stretch settles gently into place
-      setSpread(1 - Math.pow(1 - p, 2));
+      spreadRef.current = 1 - Math.pow(1 - p, 2);
+      paint();
     };
 
     const onScroll = () => {
@@ -240,8 +266,9 @@ export function BenefitsIntro() {
             <path ref={arcRef} id="benefits-arc" d={arc} fill="none" />
           </defs>
           <text
+            ref={textRef}
             className={styles.curvedText}
-            style={{ "--title-scale": scale.toFixed(3) } as React.CSSProperties}
+            style={{ "--title-scale": MIN_SCALE } as React.CSSProperties}
           >
             {words.map((word, i) => (
               <textPath
@@ -250,7 +277,8 @@ export function BenefitsIntro() {
                   wordRefs.current[i] = el;
                 }}
                 href="#benefits-arc"
-                startOffset={offsets ? offsets[i].toFixed(1) : `${fallbackOffsets[i]}%`}
+                /* first paint only: from then on `paint` sets it */
+                startOffset={`${fallbackOffsets[i]}%`}
                 textAnchor="middle"
               >
                 {word}
