@@ -47,6 +47,9 @@ export function Footer() {
     const inner = innerRef.current;
     if (!el || !inner) return;
     const clipEl = document.querySelector<HTMLElement>("[data-footer-clip]");
+    /* the render inside the clip: scaled with it, or the box shrank while the
+       image stayed full size and was only cropped */
+    const mediaEl = clipEl?.querySelector<HTMLElement>("[data-footer-clip-media]") ?? null;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktop = window.matchMedia("(min-width: 992px)");
 
@@ -56,9 +59,21 @@ export function Footer() {
     const apply = () => {
       const p = state.p;
       if (clipEl) {
-        const [v, h] = desktop.matches ? [8, 22] : [4, 32];
+        /* v, h: the clip's inset (%); m: the render's scale once fully in */
+        const [v, h, m] = desktop.matches ? [8, 22, 0.84] : [4, 32, 0.86];
         clipEl.style.clipPath =
           p > 0 ? `inset(${p * v}% ${p * h}% ${p * v}% ${p * h}%)` : "";
+        /*
+         * Uniform, so the render is not squashed, and about the centre, which
+         * is the clip's centre too since the inset is even. `m` is bounded by
+         * the box's height, not its width: the render must still fill the box
+         * top to bottom with the CTA's parallax where it is when the footer
+         * has fully arrived. Measured there, the floor is ~0.78 on the
+         * desktop and ~0.82 on a phone; these leave a margin above it.
+         */
+        if (mediaEl) {
+          mediaEl.style.transform = p > 0 ? `scale(${1 - p * (1 - m)})` : "";
+        }
       }
       inner.style.opacity = String(p);
       inner.style.transform = `scale(${0.75 + p * 0.25})`;
@@ -70,6 +85,7 @@ export function Footer() {
           target = state.p = 1;
           apply();
           if (clipEl) clipEl.style.clipPath = "";
+          if (mediaEl) mediaEl.style.transform = "";
         }
         return;
       }
@@ -96,6 +112,7 @@ export function Footer() {
       gsap.ticker.remove(tick);
       gsap.killTweensOf(state);
       if (clipEl) clipEl.style.clipPath = "";
+      if (mediaEl) mediaEl.style.transform = "";
     };
   }, []);
 

@@ -63,7 +63,9 @@ export function CallToAction() {
           `[data-footer-clip]` wraps both on the reference. The clip-path itself
           is driven by the Footer's timeline, which owns the trigger. */}
       <div data-footer-clip="" className={styles.clip}>
-        <div className={styles.bg} aria-hidden>
+        {/* `data-footer-clip-media`: the Footer scales this layer down with the
+            clip, so the render shrinks with the box instead of being cropped */}
+        <div data-footer-clip-media="" className={styles.bg} aria-hidden>
           <span className={styles.imgWrap}>
             <Image src={callToAction.image} alt="" fill sizes="100vw" className={styles.img} />
           </span>
