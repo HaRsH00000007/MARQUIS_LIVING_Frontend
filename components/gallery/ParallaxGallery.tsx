@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { galleryCategories, galleryItems, type GalleryCategory } from "@/lib/content";
 import { ArrowLeft, ArrowRight } from "../ui/Icons";
+import { requestHomeReturn } from "../HomeScrollMemory";
 import styles from "./ParallaxGallery.module.css";
 
 /*
@@ -90,11 +91,11 @@ export function ParallaxGallery({ category }: { category: GalleryCategory }) {
   const meta = galleryCategories[category];
   const router = useRouter();
 
-  /* back to the Explore slides on the home page. Not `history.back()`: the
-     home page's pinned sections settle after load, so a restored scroll
-     position lands well past the slides — ApartmentTypes picks up the hash
-     and settles on itself instead. */
-  const goBack = () => router.push("/#apartments");
+  /* back to wherever the visitor left the home page (HomeScrollMemory puts
+     it back once the pinned sections have settled). Reached directly, with
+     nothing saved, it falls back to the Explore slides, which ApartmentTypes
+     settles on from the hash. */
+  const goBack = () => router.push(requestHomeReturn() ? "/" : "/#apartments");
 
   /*
    * Full-screen view. Clicking a card opens its photograph: a box at the

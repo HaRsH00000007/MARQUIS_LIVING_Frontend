@@ -18,6 +18,9 @@ const WIPE = 1.1;
  */
 const HOLD = 1.8;
 
+/** Milliseconds each amenity holds on phones before the next one wipes in. */
+const PHONE_ADVANCE = 5000;
+
 /*
  * The wipe is a full-width band anchored on the bottom edge. It starts collapsed
  * onto that edge (inset 100% from the top) and grows until it reaches the top,
@@ -95,6 +98,25 @@ export function Amenities() {
       if (frame) cancelAnimationFrame(frame);
     };
   }, [isDesktop]);
+
+  /*
+   * Phones: the section has no scroll span for the options, so scroll never
+   * advances them — they step on a timer instead, through the same wipe, and
+   * only while the section is on screen. Keyed on `index`, so a tapped tab
+   * restarts the hold. Reduced motion leaves them where they are.
+   */
+  useEffect(() => {
+    if (isDesktop) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer = 0;
+    const tick = () => {
+      // off screen: hold this one and check again after another interval
+      if (inViewRef.current) setIndex((index + 1) % amenities.length);
+      else timer = window.setTimeout(tick, PHONE_ADVANCE);
+    };
+    timer = window.setTimeout(tick, PHONE_ADVANCE);
+    return () => window.clearTimeout(timer);
+  }, [isDesktop, index, setIndex]);
 
   /*
    * Switches the stage into wipe mode (motion allowed) and starts watching

@@ -14,6 +14,7 @@ import { Book } from "@/components/sections/Book";
 import { Faq } from "@/components/sections/Faq";
 import { CallToAction } from "@/components/sections/CallToAction";
 import { Footer } from "@/components/sections/Footer";
+import { HomeScrollMemory } from "@/components/HomeScrollMemory";
 import { site } from "@/lib/content";
 
 const jsonLd = {
@@ -46,6 +47,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <HomeScrollMemory />
       <Hero />
       <BenefitsIntro />
       <Benefits />

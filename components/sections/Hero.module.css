@@ -278,10 +278,14 @@
   .section { height: 185vh; }
 
   /*
-   * A shorter render layer: at 144vh, scaled, a phone was compositing a
-   * surface close to three screens tall on every frame of the scroll.
+   * Tall enough to cover the screen for the whole scroll, and no taller. The
+   * layer parallaxes up 44.44vh and zooms to 1.35 about a point below its foot
+   * (106.8%), which lifts its bottom edge to 0.976 x height - 44.44vh. At the
+   * old 116vh that stopped at 69vh, and the section's bare plum showed either
+   * side of the benefits dome as it climbed; 150vh keeps the render down to
+   * 102vh, just past the foot of the screen.
    */
-  .bgInner { height: 116vh; }
+  .bgInner { height: 150vh; }
 
   /*
    * No mask at all here. The band that keeps the centre column clear is a

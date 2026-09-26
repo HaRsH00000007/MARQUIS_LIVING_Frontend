@@ -130,6 +130,7 @@ export function Book() {
       printed: spread.querySelector<HTMLElement>("[data-photo]"),
     }));
     const touch = window.matchMedia("(pointer: coarse)");
+    const phone = window.matchMedia("(max-width: 991px)");
     /* the progress drawn, eased toward the scroll's on touch; -1 = snap next */
     let shownP = -1;
     let lastTime = 0;
@@ -277,10 +278,21 @@ export function Book() {
         zoomIn = zoomOut = zoom = 0;
       }
 
+      /*
+       * Phones: the words change with the page, not across the whole turn. The
+       * next spread is laid out under the turning page almost at once, and the
+       * old left page's copy gives way to it as the turning page crosses the
+       * spine (90deg of the 164 is 0.55 of the turn). Faded across the turn,
+       * the two blocks of copy showed through each other for its second half
+       * and the old one only dropped out once the page had landed.
+       */
+      const syncCopy = phone.matches;
+      const nextIn = syncCopy ? smooth(turn, 0, 0.12) : turn;
+
       // the active spread on top, the next one fading in under the turning page
       spreads.forEach((spread, i) => {
         spread.style.zIndex = i === cycle ? "3" : i === cycle + 1 ? "2" : "1";
-        spread.style.opacity = i === cycle ? "1" : i === cycle + 1 ? turn.toFixed(4) : "0";
+        spread.style.opacity = i === cycle ? "1" : i === cycle + 1 ? nextIn.toFixed(4) : "0";
         const { imagePage, copyPage, cta } = parts[i];
         const t = i === cycle ? turn : 0;
         if (imagePage) {
@@ -288,7 +300,10 @@ export function Book() {
             ? `perspective(1700px) rotateY(${(-TURN_DEG * t).toFixed(2)}deg) translateZ(${(t * 2).toFixed(2)}px)`
             : "";
         }
-        if (copyPage) copyPage.style.opacity = (1 - t * 0.32).toFixed(4);
+        if (copyPage) {
+          const copyOut = syncCopy ? smooth(t, 0.47, 0.6) : t * 0.32;
+          copyPage.style.opacity = (1 - copyOut).toFixed(4);
+        }
         // spreads ignore the pointer; only the spread on top, at rest on its
         // page (not zoomed, not turning), lets its "See our work" link be clicked
         if (cta) {

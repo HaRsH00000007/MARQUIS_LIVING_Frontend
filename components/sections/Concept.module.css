@@ -190,6 +190,21 @@
 }
 .placeImgTag { width: 100%; height: 100%; object-fit: cover; }
 
+/*
+ * Desktop: the render is three interiors stacked in one near-square 1181 x 1331
+ * image. In the 26% column `cover` cut deep into both sides of every room, so
+ * the frame keeps its full height but widens to fill the whole gap between
+ * "Ambition" (clear of it at the far end of its drift) and the copy column at
+ * 69.78%. Only a thin edge is trimmed now. Phones keep their own frame (see the
+ * responsive block).
+ */
+@media (min-width: 992px) {
+  .placeImg {
+    left: 34%;
+    width: 34.5%;
+  }
+}
+
 .placeCopy {
   position: absolute;
   left: 69.78%;
